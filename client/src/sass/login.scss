@@ -1,0 +1,98 @@
+.container_login {
+    width: 75em;
+    margin: auto;
+    padding-top: 10em;
+    .content_login {
+        background-color: white;
+        width: 30em;
+        height: 35em;
+        margin: auto;
+        border-radius: 0.5em;
+        border: 1px solid #ccc;
+        background-color: white;
+        box-shadow: 5px 5px 5px #D9D9D9;
+        .header_login {
+            width: 10em;
+            height: 15em;
+            margin: auto;
+            .logo_login {
+                height: 4em;
+                width: 10em;
+                margin-top: 2em;
+                ;
+                margin-bottom: 2em;
+            }
+            label {
+                font-weight: bold;
+                font-size: 2em;
+                color: #656A7A;
+            }
+        }
+        .form {
+            margin: auto;
+            width: 20em;
+            height: 10em;
+            padding: auto;
+            .acount {
+                height: 5em
+            }
+            .password {
+                height: 5em
+            }
+        }
+        .option_login {
+            width: 21em;
+            margin: auto;
+            margin-bottom: 2em;
+        }
+        .remember_login {
+            color: #656A7A
+        }
+        .forgotpassword_login {
+            color: #656A7A;
+            margin-left: 5em;
+            cursor: pointer
+        }
+        .button_login {
+            width: 8em;
+            margin: auto;
+        }
+    }
+}
+
+@media screen and (max-width:75em) {
+    .container_login {
+        width: 30em;
+    }
+}
+
+@media screen and (max-width:32.125em) {
+    .container_login {
+        width: 22em;
+        .content_login {
+            width: 90%;
+            .form {
+                width: 90%;
+            }
+            .option_login {
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:23.125em) {
+    .container_login {
+        width: 18em;
+        .content_login {
+            width: 90%;
+            .form {
+                width: 90%;
+            }
+            .option_login {
+                width: 100%;
+                font-size: 0.75em;
+            }
+        }
+    }
+}
