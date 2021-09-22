@@ -1,4 +1,6 @@
 import Login from "../screens/AdminScreens/Login";
+import SignUp from "../screens/AdminScreens/SignUp";
+
 enum ETYPE {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -19,6 +21,13 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     name: "login",
     path: "/admin/login",
     component: Login,
+    exact: true,
+    type: ETYPE.ADMIN,
+  },
+  {
+    name: "Sign Up",
+    path: "/admin/sign-up",
+    component: SignUp,
     exact: true,
     type: ETYPE.ADMIN,
   },

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: any) => {
       position: "relative",
     },
     background: {
-      background: `url('${img.banner}')center center /cover no-repeat`,
+      background: `url('${img.banner.banner_1}')center center /cover no-repeat`,
       width: "100%",
       height: "100vh",
       position: "absolute",
@@ -145,7 +145,8 @@ const Login: React.FC<any> = () => {
           </Box>
           <Box textAlign="center" mt={2}>
             <Typography variant="caption">
-              You don't have account. Please sign up <Link to="/">Sign up</Link>
+              You don't have account. Please sign up{" "}
+              <Link to="/admin/sign-up">Sign up</Link>
             </Typography>
           </Box>
           <Grid container justifyContent="center" style={{ marginTop: "10px" }}>

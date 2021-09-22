@@ -5,9 +5,8 @@ import { store } from "./redux/store";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./sass/index.scss";
 import { AppRouterConfig } from "./core/AppRouterConstant";
-import Login from "./screens/AdminScreens/Login";
-import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
-import { green, red } from "@material-ui/core/colors";
+import { ThemeProvider } from "@material-ui/styles";
+import { createTheme, CssBaseline } from "@material-ui/core";
 
 export const theme = createTheme({
   palette: {
