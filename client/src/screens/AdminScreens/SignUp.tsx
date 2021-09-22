@@ -52,10 +52,6 @@ const useStyles = makeStyles((theme: any) => {
 export default function SignUp() {
   const classes = useStyles();
   const [values, setValues] = useState({});
-  const [isShowPass, setIsShowPass] = useState<Boolean>(false);
-  const handleShowPass = () => {
-    setIsShowPass(!isShowPass);
-  };
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
@@ -110,57 +106,6 @@ export default function SignUp() {
                   required
                   onChange={handleOnchange}
                   name="password"
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid container spacing={4} alignItems="flex-end">
-            <Grid item>
-              <InputLabel htmlFor="address">Address</InputLabel>
-            </Grid>
-            <Grid
-              item
-              md={true}
-              sm={true}
-              xs={true}
-              className={classes.textRight}
-            >
-              <FormControl fullWidth size="small" className={classes.input}>
-                <OutlinedInput
-                  id="address"
-                  type="text"
-                  autoFocus
-                  required
-                  onChange={handleOnchange}
-                  name="address"
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={4}
-            alignItems="flex-end"
-            justifyContent="space-between"
-          >
-            <Grid item>
-              <InputLabel htmlFor="phone">Phone</InputLabel>
-            </Grid>
-            <Grid
-              item
-              md={true}
-              sm={true}
-              xs={true}
-              className={classes.textRight}
-            >
-              <FormControl fullWidth size="small" className={classes.input}>
-                <OutlinedInput
-                  id="phone"
-                  type="text"
-                  autoFocus
-                  required
-                  onChange={handleOnchange}
-                  name="phone"
                 />
               </FormControl>
             </Grid>
