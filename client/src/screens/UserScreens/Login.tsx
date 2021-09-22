@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../sass/login.scss";
 import { img } from "../../assets/index";
 import { string } from "../../assets/string";
+import { NavLink } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -91,8 +92,14 @@ const Login = () => {
         </div>
         <div className="button_login">
           <Button variant="contained" color="primary">
-            Đăng nhập
+            {string.Login}
           </Button>
+        </div>
+        <div className="option_resigter">
+          <label className="resigter_login">{string.ComentResigter}</label>
+          <NavLink exact to="/resigter" style={{ textDecoration: "none" }}>
+            <label className="resigter">{string.Resigter}</label>
+          </NavLink>
         </div>
       </div>
     </div>

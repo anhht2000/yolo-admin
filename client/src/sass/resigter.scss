@@ -1,0 +1,75 @@
+.container_resigter {
+    width: 75em;
+    margin: auto;
+    padding-top: 1em;
+    .content_resigter {
+        background-color: white;
+        width: 30em;
+        height: 55em;
+        margin: auto;
+        border-radius: 0.5em;
+        border: 1px solid #ccc;
+        background-color: white;
+        box-shadow: 5px 5px 5px #D9D9D9;
+        .header_resigter {
+            width: 10em;
+            height: 15em;
+            margin: auto;
+            .logo_resigter {
+                height: 4em;
+                width: 10em;
+                margin-top: 2em;
+                ;
+                margin-bottom: 2em;
+            }
+            label {
+                font-weight: bold;
+                font-size: 2em;
+                color: #656A7A;
+            }
+        }
+        .form_resigter {
+            margin: auto;
+            width: 20em;
+            height: 35em;
+            padding: auto;
+            .acount_resigter {
+                height: 5em
+            }
+        }
+        .button_resigter {
+            width: 8em;
+            margin: auto;
+        }
+    }
+}
+
+@media screen and (max-width:75em) {
+    .container_resigter {
+        width: 30em;
+    }
+}
+
+@media screen and (max-width:32.125em) {
+    .container_resigter {
+        width: 22em;
+        .content_resigter {
+            width: 90%;
+            .form_resigter {
+                width: 90%;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:23.125em) {
+    .container_resigter {
+        width: 18em;
+        .content_login {
+            width: 90%;
+            .form_resigter {
+                width: 90%;
+            }
+        }
+    }
+}

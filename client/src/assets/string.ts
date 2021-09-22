@@ -1,8 +1,16 @@
 export const string = {
   Acount: "Tài khoản",
   Password: "Mật khẩu",
+  ConfirmPassword: "Xác nhận mật khẩu",
+  Name: "Tên",
+  Sex: "Giới tính",
+  DateOfBirth: "Ngày sinh",
+  Phone: "Số điện thoại",
+  Confirm: "Xác nhận",
   Login: "Đăng nhập",
   Logout: "Đăng xuất",
   ForgetPassword: "Quên mật khẩu",
   RememberPassword: "Lưu mật khẩu",
+  ComentResigter: "Nếu bạn chưa có tài khoản thì?",
+  Resigter: "Đăng ký",
 };
