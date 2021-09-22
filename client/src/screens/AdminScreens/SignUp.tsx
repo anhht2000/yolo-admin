@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme: any) => {
     },
     link: { textDecoration: "none", color: "blue" },
     textRight: { textAlign: "right" },
-    mTop: {
-      marginTop: "15px",
+    input: {
+      width: "240px",
     },
     errText: {
       color: "red",
@@ -54,45 +54,56 @@ const useStyles = makeStyles((theme: any) => {
   };
 });
 
-export default function ForgetPass() {
+export default function SignUp() {
   const classes = useStyles();
-  const [values, setValues] = useState({ username: "" });
-  const [error, setError] = useState({ username: "" });
+  const [values, setValues] = useState({ username: "", password: "" });
+  const [error, setError] = useState({ username: "", password: "" });
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
-  const handleOnFocus = (e: any): void => {
-    const { name, value } = e.target;
-    setError({ ...error, [name]: "" });
-  };
   const handleSubmit = () => {
+    //username
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!values.username) {
-      setError({ ...error, username: "You must typing data!!!!" });
+      setError({ ...error, username: "You must typing username!" });
     } else if (!re.test(values.username)) {
-      setError({ ...error, username: "You must typing email!!" });
+      setError({ ...error, username: "You must enter type is email!!" });
     } else {
-      console.log(values);
+      setError({ ...error, username: "" });
     }
+    //pass
+    if (!values.password) {
+      setError((prev) => {
+        return { ...prev, password: "You must typing password!" };
+      });
+    } else {
+      setError((prev) => {
+        return { ...prev, password: "" };
+      });
+    }
+    //check
+    setError((prev) => {
+      if (!prev.username && !prev.password) {
+        console.log("ok", prev);
+      }
+      return prev;
+    });
+  };
+  const handleOnFocus = (e: any): void => {
+    const { name, value } = e.target;
+    setError({ ...error, [name]: "" });
   };
   return (
     <div className={classes.root}>
       <div className={classes.background}></div>
       <Paper className={classes.paper} elevation={3}>
         <div>
-          <Box textAlign="center">
-            <Typography variant="h6" color="primary">
-              Enter your email to get password
-            </Typography>
-          </Box>
-          <Grid
-            container
-            spacing={4}
-            alignItems="flex-end"
-            className={classes.mTop}
-          >
+          <Grid container spacing={4} alignItems="flex-end">
+            <Grid item>
+              <InputLabel htmlFor="username">UserName</InputLabel>
+            </Grid>
             <Grid
               item
               md={true}
@@ -100,28 +111,55 @@ export default function ForgetPass() {
               xs={true}
               className={classes.textRight}
             >
-              <FormControl fullWidth size="small">
+              <FormControl fullWidth size="small" className={classes.input}>
                 <OutlinedInput
                   id="username"
                   type="text"
                   autoFocus
                   required
-                  onFocus={handleOnFocus}
                   onChange={handleOnchange}
                   name="username"
                 />
-                <FormHelperText className={classes.errText}>
-                  {error?.username}
-                </FormHelperText>
-              </FormControl>{" "}
+              </FormControl>
+              <FormHelperText className={classes.errText}>
+                {error?.username}
+              </FormHelperText>
             </Grid>
           </Grid>
-          <Box mt={2} textAlign="right">
-            <Link className={classes.link} to="/admin/login">
-              Login
-            </Link>
+          <Grid container spacing={4} alignItems="flex-end">
+            <Grid item>
+              <InputLabel htmlFor="password">Password</InputLabel>
+            </Grid>
+            <Grid
+              item
+              md={true}
+              sm={true}
+              xs={true}
+              className={classes.textRight}
+            >
+              <FormControl fullWidth size="small" className={classes.input}>
+                <OutlinedInput
+                  id="password"
+                  type="text"
+                  autoFocus
+                  required
+                  onChange={handleOnchange}
+                  name="password"
+                />
+              </FormControl>
+              <FormHelperText className={classes.errText}>
+                {error?.password}
+              </FormHelperText>
+            </Grid>
+          </Grid>
+
+          <Box textAlign="center" mt={2}>
+            <Typography variant="caption">
+              You have account. Please sign in{" "}
+              <Link to="/admin/login">Sign in</Link>
+            </Typography>
           </Box>
-          <Grid container justifyContent="center" className={classes.mTop}>
+          <Grid container justifyContent="center" style={{ marginTop: "10px" }}>
             <Button
               variant="outlined"
               color="primary"
@@ -129,7 +167,7 @@ export default function ForgetPass() {
               size="large"
               onClick={handleSubmit}
             >
-              Submit
+              Sign Up
             </Button>
           </Grid>
         </div>
