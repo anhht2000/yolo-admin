@@ -9,7 +9,7 @@ export const string = {
   Confirm: "Xác nhận",
   Login: "Đăng nhập",
   Logout: "Đăng xuất",
-  ForgetPassword: "Quên mật khẩu",
+  ForgotPassword: "Quên mật khẩu",
   RememberPassword: "Lưu mật khẩu",
   ComentResigter: "Nếu bạn chưa có tài khoản thì?",
   Resigter: "Đăng ký",

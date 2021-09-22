@@ -1,6 +1,7 @@
 import Homepage from "../screens/UserScreens/Homepage";
-import Login from "../screens/UserScreens/Login";
-import Resigter from "../screens/UserScreens/Resigter";
+import LoginEndUser from "../screens/UserScreens/Login";
+import ResigterEndUser from "../screens/UserScreens/Resigter";
+import ForgotPasswordEndUser from "../screens/UserScreens/ForgotPassword";
 enum ETYPE {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -25,14 +26,21 @@ export const AppRouterConfig: IAppRouterConfig[] = [
   {
     name: "login",
     path: "/login",
-    component: Login,
+    component: LoginEndUser,
     exact: false,
     type: ETYPE.USER,
   },
   {
     name: "resigter",
     path: "/resigter",
-    component: Resigter,
+    component: ResigterEndUser,
+    exact: false,
+    type: ETYPE.USER,
+  },
+  {
+    name: "forgotpass",
+    path: "/forgotpass",
+    component: ForgotPasswordEndUser,
     exact: false,
     type: ETYPE.USER,
   },

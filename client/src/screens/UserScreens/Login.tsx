@@ -86,9 +86,11 @@ const Login = () => {
             inputProps={{ "aria-label": "Checkbox A" }}
           />
           <label className="remember_login">{string.RememberPassword}</label>
-          <label className="forgotpassword_login">
-            {string.ForgetPassword}
-          </label>
+          <NavLink exact to="/forgotpass" style={{ textDecoration: "none" }}>
+            <label className="forgotpassword_login">
+              {string.ForgotPassword}
+            </label>
+          </NavLink>
         </div>
         <div className="button_login">
           <Button variant="contained" color="primary">
