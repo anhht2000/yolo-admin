@@ -40,7 +40,11 @@ const Login = () => {
       <div className="content_login">
         <div className="header_login">
           <div>
-            <img src={img.logo} alt="Logo Login" className="logo_login" />
+            <img
+              src={img.banner.logo_2}
+              alt="Logo Login"
+              className="logo_login"
+            />
           </div>
           <label>{string.Login}</label>
         </div>

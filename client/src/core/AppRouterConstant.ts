@@ -1,6 +1,9 @@
-import Homepage from "../screens/UserScreens/Homepage";
-import Login from "../screens/UserScreens/Login";
-import Resigter from "../screens/UserScreens/Resigter";
+import HomepageEndUser from "../screens/UserScreens/Homepage";
+import LoginEndUser from "../screens/UserScreens/Login";
+import ResigterEndUser from "../screens/UserScreens/Resigter";
+import Login from "../screens/AdminScreens/Login";
+import SignUp from "../screens/AdminScreens/SignUp";
+
 enum ETYPE {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -18,22 +21,37 @@ export const AppRouterConfig: IAppRouterConfig[] = [
   {
     name: "home",
     path: "/home",
-    component: Homepage,
+    component: HomepageEndUser,
     exact: true,
     type: ETYPE.USER,
   },
   {
     name: "login",
     path: "/login",
-    component: Login,
+    component: LoginEndUser,
     exact: false,
     type: ETYPE.USER,
   },
   {
     name: "resigter",
     path: "/resigter",
-    component: Resigter,
+    component: ResigterEndUser,
     exact: false,
     type: ETYPE.USER,
+  },
+  // admin
+  {
+    name: "login",
+    path: "/admin/login",
+    component: Login,
+    exact: true,
+    type: ETYPE.ADMIN,
+  },
+  {
+    name: "Sign Up",
+    path: "/admin/sign-up",
+    component: SignUp,
+    exact: true,
+    type: ETYPE.ADMIN,
   },
 ];

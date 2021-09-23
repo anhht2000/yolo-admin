@@ -50,7 +50,11 @@ const Resigter = () => {
       <div className="content_resigter">
         <div className="header_resigter">
           <div>
-            <img src={img.logo} alt="Logo resigter" className="logo_resigter" />
+            <img
+              src={img.banner.logo_2}
+              alt="Logo resigter"
+              className="logo_resigter"
+            />
           </div>
           <label>{string.Resigter}</label>
         </div>
