@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "../../sass/login.scss";
 import { checkEmail } from "../../lib/FunctHelper";
-import { img } from "../../assets/index";
-import { string } from "../../assets/string";
 import { NavLink } from "react-router-dom";
 import {
   TextField,
@@ -15,6 +13,8 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { AccountCircle, Visibility, VisibilityOff } from "@material-ui/icons";
+import { imgBanner, imgLogo } from "../../assets";
+import { string } from "../../assets/string";
 const Login = () => {
   const [values, setValues] = useState({
     amount: "",
@@ -47,11 +47,7 @@ const Login = () => {
       <div className="content_login">
         <div className="header_login">
           <div>
-            <img
-              src={img.banner.logo_2}
-              alt="Logo Login"
-              className="logo_login"
-            />
+            <img src={imgLogo.logo_2} alt="Logo Login" className="logo_login" />
           </div>
           <label>{string.Login}</label>
         </div>

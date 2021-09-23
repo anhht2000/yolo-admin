@@ -1,10 +1,10 @@
 import ForgetPass from "../screens/AdminScreens/ForgetPass";
-import HomepageEndUser from "../screens/UserScreens/Homepage";
-import LoginEndUser from "../screens/UserScreens/Login";
-import ResigterEndUser from "../screens/UserScreens/Resigter";
 import Login from "../screens/AdminScreens/Login";
 import SignUp from "../screens/AdminScreens/SignUp";
 import ForgotPasswordEndUser from "../screens/UserScreens/ForgotPassword";
+import LoginEndUser from "../screens/UserScreens/Login";
+import ProductPage from "../screens/UserScreens/ProductPage";
+import ResigterEndUser from "../screens/UserScreens/Resigter";
 enum ETYPE {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -20,9 +20,9 @@ interface IAppRouterConfig {
 // name => path => component => exact => type
 export const AppRouterConfig: IAppRouterConfig[] = [
   {
-    name: "home",
+    name: "HOME",
     path: "/home",
-    component: HomepageEndUser,
+    component: ProductPage,
     exact: true,
     type: ETYPE.USER,
   },
@@ -47,6 +47,7 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     exact: false,
     type: ETYPE.USER,
   },
+
   // admin
 
   {

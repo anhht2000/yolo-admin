@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import "./sass/index.scss";
+import "./sass/style.scss";
 import { AppRouterConfig } from "./core/AppRouterConstant";
 import { ThemeProvider } from "@material-ui/styles";
 import { createTheme, CssBaseline } from "@material-ui/core";

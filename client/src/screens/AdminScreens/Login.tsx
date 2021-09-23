@@ -16,9 +16,9 @@ import {
 import { Face, Fingerprint } from "@material-ui/icons";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { img } from "../../assets/index";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import { imgSlider } from "../../assets";
 
 const useStyles = makeStyles((theme: any) => {
   return {
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: any) => {
       position: "relative",
     },
     background: {
-      background: `url('${img.banner.banner_1}')center center /cover no-repeat`,
+      background: `url('${imgSlider.slide_1}')center center /cover no-repeat`,
       width: "100%",
       height: "100vh",
       position: "absolute",

@@ -1,0 +1,115 @@
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: $--header-height;
+  padding: 2rem;
+  &__mb-menu {
+    display: none;
+    @media screen and (max-width:849px) {
+      display: block;
+      font-size: 2.5rem;
+      cursor: pointer;
+      padding-left: 0;
+    }
+  }
+
+  &__link {
+    @media screen and (max-width:850px) {
+      position: absolute;
+      flex-direction: column;
+      top: 70%;
+      @media screen and (max-width:564px) {
+        left: 2rem;
+      }
+      gap: 1rem;
+      padding: 1rem 2rem;
+      background-color: rgb(226, 226, 226);
+      transition: all 0.4s ease-in-out;
+      z-index: 99;
+      transform-origin: top;
+      &.active {
+        visibility: visible;
+      }
+      &.close {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+    cursor: pointer;
+    display: flex;
+    gap: 2rem;
+    font-weight: 600;
+    &-active {
+      color: blue!important;
+    }
+  }
+
+  &__icon {
+    @media screen and (max-width:850px) {
+      display: none;
+    }
+    display: flex;
+    gap: 2rem;
+    font-size: 2.5rem;
+    & li {
+      z-index: 99;
+      cursor: pointer;
+    }
+  }
+
+  &__logo{
+    cursor: pointer;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    &--img {
+      width: 8rem;
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 4rem;
+  & > div {
+    width: 25%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    @media screen and (max-width: 800px) {
+      margin-top: 2rem;
+      width: 50%;
+    }
+    @media screen and (max-width: 620px) {
+      margin-top: 2rem;
+      font-size: 1.6rem;
+    }
+
+    font-size: 1.2rem;
+    &:not(:last-child){
+      line-height: 2;
+      & > div:hover {
+        &:not(:first-child){
+          color: blue;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  &__content {
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  &__img {
+    width: 10rem;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+}
+
+.wapper {
+  display: flex;
+}

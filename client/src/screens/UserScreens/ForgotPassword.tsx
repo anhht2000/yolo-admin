@@ -1,8 +1,8 @@
 import React from "react";
 import "../../sass/forgotpass.scss";
-import { img } from "../../assets/index";
 import { string } from "../../assets/string";
 import { TextField, Button } from "@material-ui/core";
+import { imgLogo } from "../../assets";
 const ForgotPassword = () => {
   return (
     <div className="container_forgotpass">
@@ -10,7 +10,7 @@ const ForgotPassword = () => {
         <div className="header_forgotpass">
           <div>
             <img
-              src={img.banner.logo_2}
+              src={imgLogo.logo_2}
               alt="Logo forgotpass"
               className="logo_forgotpass"
             />

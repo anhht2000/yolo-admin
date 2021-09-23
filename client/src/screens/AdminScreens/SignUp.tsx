@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { img } from "../../assets";
+import { imgSlider } from "../../assets";
 
 const useStyles = makeStyles((theme: any) => {
   return {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: any) => {
       position: "relative",
     },
     background: {
-      background: `url('${img.banner.banner_1}')center center /cover no-repeat`,
+      background: `url('${imgSlider.slide_1}')center center /cover no-repeat`,
       width: "100%",
       height: "100vh",
       position: "absolute",

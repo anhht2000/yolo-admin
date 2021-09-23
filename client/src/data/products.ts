@@ -1,24 +1,22 @@
-import { img } from "../assets";
+import { imgProduct } from "../assets";
 
-export interface IProduct {
+export interface IProducts {
   title: string;
   price: string;
-  image: string[];
+  image01: string;
+  image02: string;
   categorySlug: string;
   colors: string[];
   slug: string;
   size: string[];
 }
 
-const products: IProduct[] = [
+export const products: IProducts[] = [
   {
     title: "Áo thun Dinosaur 01",
     price: "189000",
-    image: [
-      img.product.product_1_1,
-      img.product.product_1_2,
-      img.product.product_1_3,
-    ],
+    image01: imgProduct.product_01_image_01,
+    image02: imgProduct.product_01_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "red", "orange"],
     slug: "ao-thun-dinosaur-01",
@@ -27,7 +25,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Dinosaur 02",
     price: "159000",
-    image: [img.product.product_2_1, img.product.product_2_2],
+    image01: imgProduct.product_02_image_01,
+    image02: imgProduct.product_02_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "red", "blue"],
     slug: "ao-thun-dinosaur-02",
@@ -36,7 +35,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Dinosaur 03",
     price: "190000",
-    image: [img.product.product_3_1, img.product.product_3_2],
+    image01: imgProduct.product_03_image_01,
+    image02: imgProduct.product_03_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "red", "orange", "yellow"],
     slug: "ao-thun-dinosaur-03",
@@ -45,7 +45,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Polo 04",
     price: "194000",
-    image: [img.product.product_4_1, img.product.product_4_2],
+    image01: imgProduct.product_04_image_01,
+    image02: imgProduct.product_04_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "orange", "blue"],
     slug: "ao-thun-polo-04",
@@ -54,7 +55,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Polo 05",
     price: "194000",
-    image: [img.product.product_5_1, img.product.product_5_2],
+    image01: imgProduct.product_05_image_01,
+    image02: imgProduct.product_05_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "pink"],
     slug: "ao-thun-polo-05",
@@ -63,7 +65,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Polo 06",
     price: "194000",
-    image: [img.product.product_6_1, img.product.product_6_2],
+    image01: imgProduct.product_06_image_01,
+    image02: imgProduct.product_06_image_02,
     categorySlug: "ao-thun",
     colors: ["black"],
     slug: "ao-thun-polo-06",
@@ -72,7 +75,8 @@ const products: IProduct[] = [
   {
     title: "Áo somi caro 07",
     price: "194000",
-    image: [img.product.product_7_1, img.product.product_7_2],
+    image01: imgProduct.product_07_image_01,
+    image02: imgProduct.product_07_image_02,
     categorySlug: "ao-somi",
     colors: ["white", "red", "orange", "blue"],
     slug: "ao-somi-caro-07",
@@ -81,7 +85,8 @@ const products: IProduct[] = [
   {
     title: "Áo somi dài tay 08",
     price: "194000",
-    image: [img.product.product_8_1, img.product.product_8_2],
+    image01: imgProduct.product_08_image_01,
+    image02: imgProduct.product_08_image_02,
     categorySlug: "ao-somi",
     colors: ["white", "red", "black"],
     slug: "ao-somi-dai-tay-08",
@@ -90,7 +95,8 @@ const products: IProduct[] = [
   {
     title: "Áo somi tay dài 09",
     price: "194000",
-    image: [img.product.product_9_1, img.product.product_9_2],
+    image01: imgProduct.product_09_image_01,
+    image02: imgProduct.product_09_image_02,
     categorySlug: "ao-somi",
     colors: ["white", "blue"],
     slug: "ao-somi-tay-dai-09",
@@ -99,7 +105,8 @@ const products: IProduct[] = [
   {
     title: "Quần jean phong cách 10",
     price: "194000",
-    image: [img.product.product_10_1, img.product.product_10_2],
+    image01: imgProduct.product_10_image_01,
+    image02: imgProduct.product_10_image_02,
     categorySlug: "quan-jean",
     colors: ["blue", "black"],
     slug: "quan-jean-phong-cach-10",
@@ -108,7 +115,8 @@ const products: IProduct[] = [
   {
     title: "Quần jean 11",
     price: "194000",
-    image: [img.product.product_11_1, img.product.product_11_2],
+    image01: imgProduct.product_11_image_01,
+    image02: imgProduct.product_11_image_02,
     categorySlug: "quan-jean",
     colors: ["blue", "black"],
     slug: "quan-jean-11",
@@ -117,7 +125,8 @@ const products: IProduct[] = [
   {
     title: "Quần jean 12",
     price: "194000",
-    image: [img.product.product_12_1, img.product.product_12_2],
+    image01: imgProduct.product_12_image_01,
+    image02: imgProduct.product_12_image_02,
     categorySlug: "quan-jean",
     colors: ["blue"],
     slug: "quan-jean-12",
@@ -126,11 +135,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Dinosaur 13",
     price: "189000",
-    image: [
-      img.product.product_1_1,
-      img.product.product_1_2,
-      img.product.product_1_3,
-    ],
+    image01: imgProduct.product_01_image_01,
+    image02: imgProduct.product_01_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "red"],
     slug: "ao-thun-dinosaur-13",
@@ -139,7 +145,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Dinosaur 14",
     price: "159000",
-    image: [img.product.product_2_1, img.product.product_2_2],
+    image01: imgProduct.product_02_image_01,
+    image02: imgProduct.product_02_image_02,
     categorySlug: "ao-thun",
     colors: ["white", "blue"],
     slug: "ao-thun-dinosaur-14",
@@ -148,7 +155,8 @@ const products: IProduct[] = [
   {
     title: "Áo thun Dinosaur 15",
     price: "190000",
-    image: [img.product.product_3_1, img.product.product_3_2],
+    image01: imgProduct.product_03_image_01,
+    image02: imgProduct.product_03_image_02,
     categorySlug: "ao-thun",
     colors: ["red", "blue"],
     slug: "ao-thun-dinosaur-15",
@@ -157,7 +165,8 @@ const products: IProduct[] = [
   {
     title: "Áo somi dài tay 16",
     price: "194000",
-    image: [img.product.product_8_1, img.product.product_8_2],
+    image01: imgProduct.product_08_image_01,
+    image02: imgProduct.product_08_image_02,
     categorySlug: "ao-somi",
     colors: ["blue", "black"],
     slug: "ao-somi-dai-tay-16",
@@ -166,7 +175,8 @@ const products: IProduct[] = [
   {
     title: "Áo somi tay dài 17",
     price: "194000",
-    image: [img.product.product_9_1, img.product.product_9_2],
+    image01: imgProduct.product_09_image_01,
+    image02: imgProduct.product_09_image_02,
     categorySlug: "ao-somi",
     colors: ["white", "blue"],
     slug: "ao-somi-tay-dai-17",
@@ -175,12 +185,11 @@ const products: IProduct[] = [
   {
     title: "Quần jean phong cách 18",
     price: "194000",
-    image: [img.product.product_10_1, img.product.product_10_2],
+    image01: imgProduct.product_10_image_01,
+    image02: imgProduct.product_10_image_02,
     categorySlug: "quan-jean",
     colors: ["blue", "black"],
     slug: "quan-jean-phong-cach-18",
     size: ["s", "m", "l", "xl"],
   },
 ];
-
-export default products;

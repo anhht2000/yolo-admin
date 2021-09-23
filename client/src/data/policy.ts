@@ -1,30 +1,28 @@
 interface IPolicy {
-  name: string;
-  description: string;
-  icon: string;
+  name:string,
+  description:string,
+  icon:string
 }
 
-const policyData: IPolicy[] = [
+export const policy: IPolicy[] = [
   {
     name: "Miễn phí giao hàng",
     description: "Miễn phí ship với đơn hàng > 239K",
-    icon: "bx bx-shopping-bag",
+    icon: "bx bx-shopping-bag"
   },
   {
     name: "Thanh toán COD",
     description: "Thanh toán khi nhận hàng (COD)",
-    icon: "bx bx-credit-card",
+    icon: "bx bx-credit-card"
   },
   {
     name: "Khách hàng VIP",
     description: "Ưu đãi dành cho khách hàng VIP",
-    icon: "bx bx-diamond",
+    icon: "bx bx-diamond"
   },
   {
     name: "Hỗ trợ bảo hành",
     description: "Đổi, sửa đồ tại tất cả store",
-    icon: "bx bx-donate-heart",
-  },
-];
-
-export default policyData;
+    icon: "bx bx-donate-heart"
+  }
+]

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import "../../sass/resigter.scss";
-import { img } from "../../assets/index";
 import { string } from "../../assets/string";
 import {
   TextField,
@@ -13,6 +12,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { imgLogo } from "../../assets";
 // interface PropResigter {
 //   Sex?: string | any;
 // }
@@ -62,7 +62,7 @@ const Resigter = () => {
         <div className="header_resigter">
           <div>
             <img
-              src={img.banner.logo_2}
+              src={imgLogo.logo_2}
               alt="Logo resigter"
               className="logo_resigter"
             />
