@@ -4,6 +4,7 @@
   flex-wrap: wrap;
   &__list {
     @media screen and (max-width:900px){
+      padding: 0 2rem;
       width: 20%;
     }
     @media screen and (max-width:564px){
@@ -116,7 +117,7 @@
     @media screen and (max-width:564px){
       padding: 0 2rem;
     }
-    
+
     &--header {
       margin-top: 3rem;
       margin-bottom: 2rem;
@@ -154,7 +155,7 @@
     @media screen and (max-width:564px){
       font-size: 1.6rem;
     }
-    
+
   }
 }
 

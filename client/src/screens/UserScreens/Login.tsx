@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../../sass/login.scss";
-import { checkEmail } from "../../lib/FunctHelper";
 import { NavLink } from "react-router-dom";
 import {
   TextField,
@@ -13,7 +12,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { AccountCircle, Visibility, VisibilityOff } from "@material-ui/icons";
-import { imgBanner, imgLogo } from "../../assets";
+import { imgLogo } from "../../assets";
 import { string } from "../../assets/string";
 const Login = () => {
   const [values, setValues] = useState({
