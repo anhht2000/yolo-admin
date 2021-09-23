@@ -2,6 +2,7 @@ import ForgetPass from "../screens/AdminScreens/ForgetPass";
 import Login from "../screens/AdminScreens/Login";
 import SignUp from "../screens/AdminScreens/SignUp";
 import ForgotPasswordEndUser from "../screens/UserScreens/ForgotPassword";
+import LandingPage from "../screens/UserScreens/LandingPage";
 import LoginEndUser from "../screens/UserScreens/Login";
 import ProductPage from "../screens/UserScreens/ProductPage";
 import ResigterEndUser from "../screens/UserScreens/Resigter";
@@ -21,8 +22,8 @@ interface IAppRouterConfig {
 export const AppRouterConfig: IAppRouterConfig[] = [
   {
     name: "HOME",
-    path: "/home",
-    component: ProductPage,
+    path: "/",
+    component: LandingPage,
     exact: true,
     type: ETYPE.USER,
   },
