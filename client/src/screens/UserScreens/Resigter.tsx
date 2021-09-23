@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "../../sass/resigter.scss";
 import { img } from "../../assets/index";
 import { string } from "../../assets/string";
@@ -13,8 +13,15 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+// interface PropResigter {
+//   Sex?: string | any;
+// }
+
 const Resigter = () => {
-  const [age, setAge] = React.useState("");
+  const [sex, setSex] = useState({
+    showSex: "10",
+  });
+  const sexRef = useRef(null);
   const [values, setValues] = useState({
     amount: "",
     password: "",
@@ -30,7 +37,11 @@ const Resigter = () => {
     setValues({ ...values, [prop]: event.target.value });
   };
   const handleChangeAge = (event: any) => {
-    setAge(event.target.value);
+    setSex({
+      ...sex,
+      showSex: event.target.value,
+    });
+    console.log(event.target.value);
   };
 
   const handleClickShowPassword = () => {
@@ -60,17 +71,21 @@ const Resigter = () => {
         </div>
         <div className="form_resigter">
           <div className="acount_resigter">
-            <TextField label={string.Acount} fullWidth={true} />
+            <TextField
+              label={string.Acount}
+              fullWidth={true}
+              placeholder={string.HolderEmail}
+            />
           </div>
           <div className="acount_resigter">
             <TextField label={string.Name} fullWidth={true} />
           </div>
-          <div className="acount_resigter">
+          <div className="acount_resigter" ref={sexRef}>
             <TextField
               label={string.Sex}
               fullWidth={true}
               onChange={handleChangeAge}
-              value={age}
+              value={sex.showSex}
               select
             >
               <MenuItem value="10">Nam</MenuItem>
@@ -82,7 +97,7 @@ const Resigter = () => {
               label={string.DateOfBirth}
               type="date"
               fullWidth={true}
-              defaultValue="24/05/2017"
+              defaultValue="2017-05-18"
               InputLabelProps={{
                 shrink: true,
               }}

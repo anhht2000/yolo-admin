@@ -1,6 +1,7 @@
 export const string = {
   Acount: "Tài khoản",
   Password: "Mật khẩu",
+  HolderEmail: "@gmail.com",
   ConfirmPassword: "Xác nhận mật khẩu",
   Name: "Tên",
   Sex: "Giới tính",
@@ -9,7 +10,7 @@ export const string = {
   Confirm: "Xác nhận",
   Login: "Đăng nhập",
   Logout: "Đăng xuất",
-  ForgetPassword: "Quên mật khẩu",
+  ForgotPassword: "Quên mật khẩu",
   RememberPassword: "Lưu mật khẩu",
   ComentResigter: "Nếu bạn chưa có tài khoản thì?",
   Resigter: "Đăng ký",
