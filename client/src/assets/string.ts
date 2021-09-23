@@ -1,6 +1,7 @@
 export const string = {
   Acount: "Tài khoản",
   Password: "Mật khẩu",
+  HolderEmail: "@gmail.com",
   ConfirmPassword: "Xác nhận mật khẩu",
   Name: "Tên",
   Sex: "Giới tính",

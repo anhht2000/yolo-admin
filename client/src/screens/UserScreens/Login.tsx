@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../sass/login.scss";
+import { checkEmail } from "../../lib/FunctHelper";
 import { img } from "../../assets/index";
 import { string } from "../../assets/string";
 import { NavLink } from "react-router-dom";
@@ -22,11 +23,17 @@ const Login = () => {
     weightRange: "",
     showPassword: false,
   });
-
+  const handleEmail = (event: any) => {
+    setValues({
+      ...values,
+      amount: event.target.value,
+    });
+  };
   const handleChange = (prop: any) => (event: any) => {
     setValues({ ...values, [prop]: event.target.value });
     // console.log(event);
   };
+  console.log(values.amount);
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -49,6 +56,10 @@ const Login = () => {
             <TextField
               label={string.Acount}
               fullWidth={true}
+              error={false}
+              value={values.amount}
+              onChange={handleEmail}
+              placeholder={string.HolderEmail}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

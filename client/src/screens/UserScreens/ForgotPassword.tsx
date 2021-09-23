@@ -19,7 +19,11 @@ const ForgotPassword = () => {
         </div>
         <div className="form_forgotpass">
           <div className="acount_forgotpass">
-            <TextField label={string.Acount} fullWidth={true} />
+            <TextField
+              label={string.Acount}
+              fullWidth={true}
+              placeholder={string.HolderEmail}
+            />
           </div>
         </div>
         <div className="button_forgotpass">
