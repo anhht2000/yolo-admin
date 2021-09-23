@@ -35,7 +35,6 @@ import * as product_11_1 from "./img/products/product-11 (1).jpg";
 import * as product_11_2 from "./img/products/product-11 (2).jpg";
 import * as product_12_1 from "./img/products/product-12 (1).jpg";
 import * as product_12_2 from "./img/products/product-12 (2).jpg";
-
 export const img = {
   banner: {
     banner_1: banner_1.default,
