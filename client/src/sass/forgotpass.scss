@@ -1,12 +1,23 @@
 .container_forgotpass {
-    width: 75em;
-    margin: auto;
-    padding-top: 10em;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    .background_img {
+        width: 100%;
+        filter: blur(10px);
+        height: 150vh;
+        position: absolute;
+        background: url("../assets/png//background/background.jpg")center center /cover no-repeat;
+    }
     .content_forgotpass {
         background-color: white;
         width: 30em;
         height: 35em;
         margin: auto;
+        z-index: 99;
         border-radius: 0.5em;
         border: 1px solid #ccc;
         background-color: white;
@@ -35,25 +46,32 @@
             height: 10em;
             padding: auto;
             .acount_forgotpass {
-                height: 5em
+                height: 5em;
+                .MuiSvgIcon-root {
+                    font-size: 2em;
+                }
+                .MuiFormLabel-root {
+                    font-size: 1.2em;
+                }
+                .MuiInputBase-input {
+                    font-size: 1.5em;
+                }
             }
         }
         .button_forgotpass {
-            width: 8em;
+            width: 6em;
             margin: auto;
+            .MuiButton-root {
+                font-size: 1em;
+            }
         }
     }
 }
 
-@media screen and (max-width:75em) {
-    .container_forgotpass {
-        width: 30em;
-    }
-}
+@media screen and (max-width:75em) {}
 
 @media screen and (max-width:32.125em) {
     .container_forgotpass {
-        width: 22em;
         .content_forgotpass {
             width: 90%;
             .form_forgotpass {
@@ -65,9 +83,13 @@
 
 @media screen and (max-width:23.125em) {
     .container_forgotpass {
-        width: 18em;
         .content_forgotpass {
             width: 90%;
+            .header_forgotpass {
+                label {
+                    font-size: 1.8em;
+                }
+            }
             .form_forgotpass {
                 width: 90%;
             }
