@@ -3,6 +3,7 @@ import { useLayoutEffect } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { IProducts } from '../../data/products';
+import { FormatMoney } from '../../lib/FunctHelper';
 
 interface IProductDetailProps {
   source: IProducts;
@@ -20,7 +21,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   //static data
   const [active,setActive] = useState(false);
   const [seller,setSeller] = useState(false);
-  const toggleActive = () => {setSeller(!seller);toggleOverLay();};
+  const toggleActive = () => {setSeller(!seller); toggleOverLay();};
   const setInputChange = (e:ChangeEvent<HTMLInputElement>) => {
     if(isNaN(parseInt(e.target.value)) || parseInt(e.target.value) < 1) {
       setNumber(1);
@@ -44,10 +45,12 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
       price: string,
       number: number
     }[];
-    if(data) {
+
+    if (data) {
       let flag = false;
+
       let temp = data.map((e) => {
-        if(
+        if (
           JSON.stringify({title: e.title, variant: e.variant, variant_value: e.variant_value}) ===
           JSON.stringify({title: source.title, variant: ['color','size'], variant_value: [color,size]})
         ){
@@ -56,7 +59,8 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         }
         return e;
       })
-      if(flag) {
+
+      if (flag) {
         localStorage.setItem('cartProduct',JSON.stringify([...temp]))
       } else {
         localStorage.setItem('cartProduct',JSON.stringify([
@@ -80,16 +84,17 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         }
       ]))
     }
+    toggleActive();
   }
   useLayoutEffect(()=> {
     window.scrollTo(0,0);
-  },[props])
+  },[props.source])
 
   useEffect(()=>{
     setImgCore(props.source.image01);
     props.source.colors && setColor(props.source.colors[0]);
     props.source.size && setSize(props.source.size[0]);
-  },[props])
+  },[props.source])
 
   return (
     <div className="product-detail">
@@ -103,7 +108,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
       <div className={`product-detail__price-option ${seller? 'active' : ''}`}>
         <i className="bx bx-x product-detail__price-option--mb-icon" onClick={toggleActive}></i>
         <div className="product-detail__price-option--title">{source.title}</div>
-        <div className="product-detail__price-option--price">{source.price}</div>
+        <div className="product-detail__price-option--price">{source.price && FormatMoney(source.price)}</div>
         <div className="price-option__title">Màu sắc</div>
         <div className="product-detail__price-option--circle">
           {
@@ -162,7 +167,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
           consequatur rerum maxime quas laudantium repellendus, nam, id aliquid illum.
         </div>
         <div className="product-detail__btn-wapper">
-          <div className="product-detail--btn" onClick={()=>{setActive(!active)}}>{active?'Thu gọn':'Mở rộng'}</div>
+          <div className="product-detail--btn" onClick={()=>{setActive(!active)}}>{active ? 'Thu gọn':'Mở rộng'}</div>
         </div>
       </div>
     </div>
