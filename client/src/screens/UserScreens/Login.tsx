@@ -78,7 +78,7 @@ const Login = () => {
   }, [values.password]);
   return (
     <div className="container_login">
-      <div className="background_Img"></div>
+      <div className="background_img"></div>
       <div className="content_login">
         <div className="header_login">
           <div>

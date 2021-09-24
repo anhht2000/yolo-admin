@@ -151,7 +151,7 @@ const Resigter = () => {
 
   return (
     <div className="container_resigter">
-      <div className="background_Img"></div>
+      <div className="background_img"></div>
       <div className="content_resigter">
         <div className="header_resigter">
           <div>

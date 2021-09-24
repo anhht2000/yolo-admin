@@ -32,7 +32,7 @@ const ForgotPassword = () => {
   }, [values.amount]);
   return (
     <div className="container_forgotpass">
-      <div className="background_Img"></div>
+      <div className="background_img"></div>
       <div className="content_forgotpass">
         <div className="header_forgotpass">
           <div>

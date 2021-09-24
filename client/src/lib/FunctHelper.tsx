@@ -3,8 +3,6 @@ const REG_PASS = /[A-Za-z0-9\d]{6,}$/;
 const REG_PHONE = /[0-9]$/;
 function validateEmail(Email: string) {
   if (!Email) return false;
-  if (REG_EMAIL.test(Email)) {
-  }
   return REG_EMAIL.test(Email);
 }
 function validatePassword(Password: string) {
