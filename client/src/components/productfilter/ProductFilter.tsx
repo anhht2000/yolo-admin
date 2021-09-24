@@ -1,12 +1,17 @@
+import { ChangeEvent } from 'react';
 import React from 'react'
 import { useState } from 'react';
+import { FilterInterFace } from '../../data/FilterDataPage';
 
 interface IProductFilter {
-  filter?: {content:string,filter:string[]}[]
+  helper?: string[];
+  filter?: FilterInterFace;
+  onChange?: ( {target}: ChangeEvent<HTMLInputElement>) => void;
+  onDelete?: () => void;
 }
 
 const ProductFilter: React.FC<IProductFilter> = (props) => {
-  const {filter} = props;
+  const {filter, helper, onChange, onDelete} = props;
   const [active,setActive] = useState(false);
   const toggleActive = () => setActive(!active)
   return (
@@ -14,14 +19,20 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
     <i className='bx bx-filter product-filter-mb' onClick={toggleActive}></i>
     <div className={`product-filter ${active ? '' : 'hidden' }`}>
       {
-        filter && filter.map((element) => {
+        helper && helper.map((element,index) => {
           return (
-            <div className="product-filter__header" key={element.content}>
-              {element.content}
+            <div className="product-filter__header" key={index}>
+              {element}
               <div className="product-filter__content">
-                {element.filter.map((e)=>(
-                  <div className="product-filter__content-child" key={e}>
-                    <input type="checkbox" name={e} /> &nbsp; {e}
+                {filter && filter[element].map((e,index)=>(
+                  <div className="product-filter__content-child" key={index}>
+                    <input
+                      type="checkbox"
+                      name={e.content}
+                      value={element}
+                      checked={e.use as boolean}
+                      onChange={onChange}
+                    /> &nbsp; {e.content}
                   </div>
                 ))}
               </div>
@@ -29,9 +40,11 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
           );
         })
       }
-      <div className="product-filter-button">
-        Xoá tất cả
-      </div>
+      {helper && helper.length > 0 && (
+        <div className="product-filter-button" onClick={onDelete}>
+          Xoá tất cả
+        </div>
+      )}
     </div>
     </>
   )

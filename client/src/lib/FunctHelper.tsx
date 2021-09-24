@@ -5,4 +5,8 @@ const checkEmail = (Email: string) => {
   return REG_EMAIL.test(Email);
 };
 
-export { checkEmail };
+
+const FormatMoney = (data: string) => {
+  return data.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
+export { checkEmail, FormatMoney};

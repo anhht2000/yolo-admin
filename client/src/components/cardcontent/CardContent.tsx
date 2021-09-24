@@ -1,5 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom';
+import { FormatMoney } from '../../lib/FunctHelper';
 
 interface ICardContentProps {
   img?: string,
@@ -14,7 +15,7 @@ const CardContent: React.FC<ICardContentProps> = (props) => {
   return (
     <div className={`${layout_3?'card__content-1':'card__content'}`}>
       <div className="card__content--img">
-        <img 
+        <img
           src={img} alt="img" className="card__content--img-content"
           onClick={()=> { history.push(`/product/${title}`) }}
           style={{cursor:'pointer'}}
@@ -22,7 +23,7 @@ const CardContent: React.FC<ICardContentProps> = (props) => {
       </div>
       <div className="card__content--title">{title}</div>
       <div className="card__content--price">
-        <div className="card__content--price-current">{(price as string).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+        <div className="card__content--price-current">{FormatMoney(price as string)}</div>
         <div className="card__content--price-discount"> 399,000 </div>
       </div>
       <div className="card__content--button-wapper">
