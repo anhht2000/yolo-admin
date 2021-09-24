@@ -14,7 +14,9 @@ const ProductPage: React.FC = (props) => {
       content: "Màu Sắc",
       filter: ["Trắng", "Hồng", "Đen", "Vàng", "Cam", "Xanh dương"],
     },
-    { content: "Kích Cỡ", filter: ["S", "M", "L", "XL", "XXL"] },
+    { content: "Kích Cỡ",
+      filter: ["S", "M", "L", "XL", "XXL"]
+    },
   ];
   return (
     <LayoutContainer>
