@@ -7,12 +7,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@material-ui/core";
-import {
-  AccountCircle,
-  Visibility,
-  VisibilityOff,
-  Fingerprint,
-} from "@material-ui/icons";
+import { AccountCircle, Visibility, VisibilityOff,Fingerprint} from "@material-ui/icons";
 import { imgLogo } from "../../assets";
 import { string } from "../../assets/string";
 import { validateEmail, validatePassword } from "../../lib/FunctHelper";
