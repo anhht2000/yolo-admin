@@ -109,6 +109,20 @@
             color: #5d78ff;
             cursor: pointer
         }
+        .option_resigter {
+            width: 18em;
+            margin: auto;
+            margin-top: 1em;
+        }
+        .resigter_login {
+            font-weight: bold;
+            color: #656A7A;
+        }
+        .resigter {
+            font-weight: bold;
+            color: #5d78ff;
+            cursor: pointer
+        }
         .button_login {
             width: 6em;
             margin: auto;
@@ -166,6 +180,10 @@
             .option_resigter {
                 width: 90%;
                 font-size: 0.65em;
+            }
+            .option_resigter {
+                width: 90%;
+                font-size: 0.75em;
             }
         }
     }
