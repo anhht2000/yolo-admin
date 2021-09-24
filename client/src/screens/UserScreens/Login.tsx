@@ -18,7 +18,6 @@ const Login = () => {
     weight: "",
     weightRange: "",
     showPassword: false,
-    type: "password",
     errorE: false,
     erroremail: "",
     errorP: false,
@@ -59,7 +58,7 @@ const Login = () => {
     });
   };
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword, type: "text" });
+    setValues({ ...values, showPassword: !values.showPassword});
   };
 
   const handleMouseDownPassword = (event: any) => {
@@ -67,9 +66,11 @@ const Login = () => {
   };
   useEffect(() => {
     CheckEmail(values.amount);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.amount]);
   useEffect(() => {
     CheckPassword(values.password);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.password]);
   return (
     <div className="container_login">
@@ -102,13 +103,14 @@ const Login = () => {
           </div>
           <div className="password">
             <TextField
-              type={values.type}
+              type={values.showPassword?"text" : "password"}
               label={string.Password}
               fullWidth={true}
               error={values.errorP}
               helperText={values.errorpassword}
               value={values.password}
               onChange={handlePassword}
+              placeholder={string.HolderPass}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
