@@ -132,14 +132,11 @@ const Login = () => {
         <div className="option_login">
           <input type="checkbox" />
           <label className="remember_login">{string.RememberPassword}</label>
-          {/* <NavLink exact to="/forgotpass" style={{ textDecoration: "none" }}>
+          <NavLink exact to="/forgotpass" style={{ textDecoration: "none" }}>
             <label className="forgotpassword_login">
               {string.ForgotPassword}
             </label>
-          </NavLink> */}
-          <label className="forgotpassword_login">
-            {string.ForgotPassword}
-          </label>
+          </NavLink>
         </div>
         <div className="button_login">
           <Button variant="contained" color="primary">
@@ -148,12 +145,11 @@ const Login = () => {
         </div>
         <div className="option_resigter">
           <label className="resigter_login">{string.ComentResigter}</label>
-          {/* <NavLink
+          <NavLink
           exact to="/resigter"
           style={{ textDecoration: "none" }}>
             <label className="resigter">{string.SignIn}</label>
-          </NavLink> */}
-          <label className="resigter">{string.SignIn}</label>
+          </NavLink>
         </div>
       </div>
     </div>
