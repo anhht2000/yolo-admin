@@ -1,0 +1,45 @@
+.support__card {
+  &-container {
+    padding: 2rem;
+    margin-top: 5rem;
+    display: flex;
+    justify-content: space-between;
+    @media screen and (max-width: 1050px) {
+      flex-wrap: wrap;
+    }
+    gap: 2rem;
+  }
+
+  &-item {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    @media screen and (max-width: 1050px) {
+      width: 48%;
+    }
+    @media screen and (max-width: 650px) {
+      width: 100%;
+      justify-content: center;
+    }
+    box-shadow: 0px 0px 2rem 1px #d6d6d6;
+    &-icon {
+      padding: 1rem;
+      font-size: 3rem;
+      color: blue;
+    }
+
+    &-info {
+      align-self: start;
+      &-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+      }
+      &-description {
+        font-size: 1.4rem;
+        color: rgb(142, 142, 145);
+      }
+    }
+  }
+
+}

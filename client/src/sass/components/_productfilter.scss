@@ -1,0 +1,76 @@
+.product-filter {
+  margin-top: 4rem;
+  width: 20%;
+  transition: all 0.4s ease-in-out;
+  transform-origin: top left;
+  @media screen and (max-width:564px) {
+    position: absolute;
+    width: 35%;
+    background-color: #e2e2e2;
+    height: 30rem;
+    overflow-y: scroll;
+    padding-left: 1rem;
+  }
+  @media screen and (max-width:360px) {
+    width: 45%;
+  }
+  &.hidden {
+    @media screen and (max-width:564px) {
+      transform: translateX(-50px);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  &__header {
+    font-size: 1.5rem;
+    font-weight: 600;
+    &:not(:first-child){
+      margin-top: 2.5rem;
+    }
+  }
+  &__content {
+    &-child {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #777777;
+      @media screen and (max-width:564px) {
+        color: black;
+      }
+      input {
+        border-radius: none;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.product-content{
+  width: 80%;
+  @media screen and (max-width: 564px) {
+    width: 100%;
+  }
+}
+
+.product-filter-mb {
+  position: absolute;
+  visibility: hidden;
+  font-size: 3rem;
+  cursor: pointer;
+  @media screen and (max-width: 564px) {
+    visibility: visible;
+  }
+}
+
+.product-filter-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: blue;
+  display: inline-block;
+  cursor: pointer;
+} 
