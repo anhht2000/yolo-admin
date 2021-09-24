@@ -22,7 +22,7 @@ interface IAppRouterConfig {
 // name => path => component => exact => type
 export const AppRouterConfig: IAppRouterConfig[] = [
   {
-    name: 'Landing Pages',
+    name: "Landing Pages",
     path: "/",
     component: LandingPage,
     exact: true,

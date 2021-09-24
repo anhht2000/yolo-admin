@@ -8,63 +8,18 @@ import {
   Grid,
   Input,
   InputLabel,
-  makeStyles,
   Paper,
   TextField,
   Typography,
 } from "@material-ui/core";
 import { Face, Fingerprint } from "@material-ui/icons";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
-import { imgSlider } from "../../assets";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useStyleLogin } from "../../sass/makeStyles/login";
 
-const useStyles = makeStyles((theme: any) => {
-  return {
-    root: {
-      width: "100%",
-      height: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      position: "relative",
-    },
-    background: {
-      background: `url('${imgSlider.slide_1}')center center /cover no-repeat`,
-      width: "100%",
-      height: "100vh",
-      position: "absolute",
-      filter: "blur(10px)",
-    },
-    paper: {
-      border: "1px solid blue",
-      backgroundColor: "white",
-      position: "relative",
-      width: "400px",
-      maxWidth: "100%",
-      padding: theme.spacing(3),
-      [theme.breakpoints.down("xs")]: {
-        width: "300px",
-      },
-    },
-    fogetPass: {
-      textAlign: "right",
-      [theme.breakpoints.down("xs")]: {
-        textAlign: "left",
-        paddingLeft: "5px",
-      },
-    },
-    link: { textDecoration: "none", color: "blue" },
-    iconPass: {
-      cursor: "pointer",
-    },
-    errText: {
-      color: "red",
-      paddingLeft: "10px",
-    },
-  };
-});
+const useStyles = useStyleLogin;
 
 const Login: React.FC<any> = () => {
   const classes = useStyles();
@@ -117,6 +72,7 @@ const Login: React.FC<any> = () => {
       <div className={classes.background}></div>
       <Paper className={classes.paper} elevation={3}>
         <div>
+          <Typography variant="h6">Login</Typography>
           <Grid container spacing={4} alignItems="flex-end">
             <Grid item>
               <Face />
@@ -132,6 +88,8 @@ const Login: React.FC<any> = () => {
                 onFocus={handleOnFocus}
                 onChange={handleOnchange}
                 name="username"
+                inputProps={{ style: { fontSize: 16 } }}
+                InputLabelProps={{ style: { fontSize: 16 } }}
               />
               <FormHelperText className={classes.errText}>
                 {error?.username}
@@ -152,6 +110,7 @@ const Login: React.FC<any> = () => {
                   onFocus={handleOnFocus}
                   onChange={handleOnchange}
                   name="password"
+                  inputProps={{ style: { fontSize: 16 } }}
                   endAdornment={
                     isShowPass ? (
                       <VisibilityOffIcon
@@ -176,7 +135,8 @@ const Login: React.FC<any> = () => {
             <Grid container alignItems="center" justifyContent="space-between">
               <Grid item xs={12} sm={6}>
                 <FormControlLabel
-                  control={<Checkbox color="primary" size="small" />}
+                  className={classes.check}
+                  control={<Checkbox color="primary" />}
                   label="Remember me"
                 />
               </Grid>
@@ -189,15 +149,14 @@ const Login: React.FC<any> = () => {
           </Box>
           <Box textAlign="center" mt={2}>
             <Typography variant="caption">
-              You don't have account. Please sign up{" "}
+              You don't have account. Please{" "}
               <Link to="/admin/sign-up">Sign up</Link>
             </Typography>
           </Box>
-          <Grid container justifyContent="center" style={{ marginTop: "10px" }}>
+          <Grid container justifyContent="center" className={classes.grid}>
             <Button
               variant="outlined"
               color="primary"
-              style={{ textTransform: "none" }}
               size="large"
               onClick={handleSubmit}
             >
