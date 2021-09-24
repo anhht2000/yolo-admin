@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import { imgSlider } from "../../assets";
+import { imgBackground } from "./../../assets/index";
 export const useStyleLogin = makeStyles((theme: any) => {
   return {
     root: {
@@ -22,7 +22,7 @@ export const useStyleLogin = makeStyles((theme: any) => {
       },
     },
     background: {
-      background: `url('${imgSlider.slide_1}')center center /cover no-repeat`,
+      background: `url('${imgBackground.background}')center center /cover no-repeat`,
       width: "100%",
       height: "100vh",
       position: "absolute",

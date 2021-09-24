@@ -1,5 +1,5 @@
-import { imgSlider } from "./../../assets/index";
 import { makeStyles } from "@material-ui/core";
+import { imgBackground } from "./../../assets/index";
 export const useStyleForget = makeStyles((theme: any) => {
   return {
     root: {
@@ -15,9 +15,12 @@ export const useStyleForget = makeStyles((theme: any) => {
       "& .MuiButton-outlinedSizeLarge": {
         fontSize: "1.6rem",
       },
+      "& .MuiFormHelperText-root": {
+        fontSize: "1.35rem",
+      },
     },
     background: {
-      background: `url('${imgSlider.slide_1}')center center /cover no-repeat`,
+      background: `url('${imgBackground.background}')center center /cover no-repeat`,
       width: "100%",
       height: "100vh",
       position: "absolute",
