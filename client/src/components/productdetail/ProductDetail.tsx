@@ -46,7 +46,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
       number: number
     }[];
 
-    if( data ) {
+    if(data) {
       let flag = false;
 
       let temp = data.map((e) => {
