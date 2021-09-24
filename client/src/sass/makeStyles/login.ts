@@ -20,6 +20,23 @@ export const useStyleLogin = makeStyles((theme: any) => {
         textAlign: "center",
         color: "#386591",
       },
+      "& .makeStyles-root-1": {
+        fontSize: "2.5rem",
+      },
+      "& .MuiFormLabel-root": {
+        fontSize: "1.6rem ",
+      },
+      "& .MuiTypography-caption": {
+        fontSize: "1.4rem ",
+      },
+      "& .MuiButton-outlinedSizeLarge": {
+        fontSize: "1.4rem ",
+      },
+      "& a": {
+        display: "inline-block",
+        color: "blue",
+        textDecoration: "underline",
+      },
     },
     background: {
       background: `url('${imgBackground.background}')center center /cover no-repeat`,
@@ -62,6 +79,7 @@ export const useStyleLogin = makeStyles((theme: any) => {
       paddingLeft: "10px",
       fontSize: "1.4rem",
     },
+    grid: { marginTop: "10px" },
     check: {},
   };
 });

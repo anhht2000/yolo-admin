@@ -18,6 +18,11 @@ export const useStyleForget = makeStyles((theme: any) => {
       "& .MuiFormHelperText-root": {
         fontSize: "1.35rem",
       },
+      "& a": {
+        display: "inline-block",
+        color: "blue",
+        textDecoration: "underline",
+      },
     },
     background: {
       background: `url('${imgBackground.background}')center center /cover no-repeat`,

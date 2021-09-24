@@ -15,7 +15,7 @@ export const useStyleSignUp = makeStyles((theme: any) => {
         fontSize: "1.6rem",
       },
       "& .MuiTypography-caption": {
-        fontSize: "1.25rem",
+        fontSize: "1.4rem",
       },
       "& .MuiButton-outlinedSizeLarge": {
         fontSize: "1.4rem",
@@ -24,6 +24,14 @@ export const useStyleSignUp = makeStyles((theme: any) => {
         fontSize: "2rem",
         textAlign: "center",
         color: "#386591",
+      },
+      "& .MuiGrid-justify-content-xs-center": {
+        marginTop: "1rem",
+      },
+      "& a": {
+        display: "inline-block",
+        color: "blue",
+        textDecoration: "underline",
       },
     },
     background: {

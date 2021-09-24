@@ -75,7 +75,7 @@ const Login: React.FC<any> = () => {
           <Typography variant="h6">Login</Typography>
           <Grid container spacing={4} alignItems="flex-end">
             <Grid item>
-              <Face style={{ fontSize: 16 }} />
+              <Face />
             </Grid>
             <Grid item md={true} sm={true} xs={true}>
               <TextField
@@ -102,9 +102,7 @@ const Login: React.FC<any> = () => {
             </Grid>
             <Grid item md={true} sm={true} xs={true}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="password" style={{ fontSize: 16 }}>
-                  Password *
-                </InputLabel>
+                <InputLabel htmlFor="password">Password *</InputLabel>
                 <Input
                   id="password"
                   type={isShowPass ? "text" : "password"}
@@ -150,16 +148,15 @@ const Login: React.FC<any> = () => {
             </Grid>
           </Box>
           <Box textAlign="center" mt={2}>
-            <Typography variant="caption" style={{ fontSize: 14 }}>
+            <Typography variant="caption">
               You don't have account. Please{" "}
               <Link to="/admin/sign-up">Sign up</Link>
             </Typography>
           </Box>
-          <Grid container justifyContent="center" style={{ marginTop: "10px" }}>
+          <Grid container justifyContent="center" className={classes.grid}>
             <Button
               variant="outlined"
               color="primary"
-              style={{ textTransform: "none", fontSize: 14 }}
               size="large"
               onClick={handleSubmit}
             >

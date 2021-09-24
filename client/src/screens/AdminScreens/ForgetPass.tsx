@@ -86,7 +86,6 @@ export default function ForgetPass() {
             <Button
               variant="outlined"
               color="primary"
-              style={{ textTransform: "none" }}
               size="large"
               onClick={handleSubmit}
             >

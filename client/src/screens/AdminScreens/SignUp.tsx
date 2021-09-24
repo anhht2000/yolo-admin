@@ -123,11 +123,10 @@ export default function SignUp() {
               You have account. Please <Link to="/admin/login">Log in</Link>
             </Typography>
           </Box>
-          <Grid container justifyContent="center" style={{ marginTop: "10px" }}>
+          <Grid container justifyContent="center">
             <Button
               variant="outlined"
               color="primary"
-              style={{ textTransform: "none" }}
               size="large"
               onClick={handleSubmit}
             >
