@@ -3,15 +3,18 @@ import React from "react";
 import CardContainer from "../../components/cardcontent/CardContainer";
 import ProductFilter from "../../components/productfilter/ProductFilter";
 import { FilterInterFace, MockFilterData } from "../../data/FilterDataPage";
-import { products } from "../../data/products";
 import LayoutContainer from "../../layout/HomeLayout/LayoutContainer";
 import { useState } from 'react'
 import { ChangeEvent } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { getAllProduct } from "../../redux/reducers/product.reducer";
+
 const ProductPage: React.FC = (props) => {
   const [filterData, setFilterData] = useState<FilterInterFace>({});
   const [tempData, setTimeData] = useState<FilterInterFace>({});
   const [helper, setHelper] = useState<string[]>([]);
-
+  const dispatch = useAppDispatch()
+  const products = useAppSelector((state)=> state.product.products);
   const onChange = ({ target } : ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
     setFilterData(
@@ -29,8 +32,8 @@ const ProductPage: React.FC = (props) => {
 
   useEffect (() => {
     GetDataFilter()
-    console.log('rerender')
-  },[])
+    dispatch(getAllProduct());
+  },[dispatch])
 
   const GetDataFilter = async () => {
     const data = await MockFilterData();
