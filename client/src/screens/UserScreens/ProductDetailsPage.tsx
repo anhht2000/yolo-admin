@@ -17,12 +17,11 @@ const ProductDetailsPage = () => {
   useEffect(() => {
     setdata(products.find((e) => e.title === id) as IProducts);
   }, [id]);
-
   return (
     <>
       <div className={`${overlay ? "overlay" : ""}`}></div>
       <LayoutContainer>
-        <ProductDetail source={products[1]} toggleOverLay={toggleOverlay} />
+        <ProductDetail source={data} toggleOverLay={toggleOverlay} />
         <Section title="Khám Phá Thêm">
           <CardContainer content={dataSection} />
         </Section>
