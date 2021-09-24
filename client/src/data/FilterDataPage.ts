@@ -1,3 +1,5 @@
+import { IProducts, products } from "./products"
+
 export interface FilterInterFace {
   [a: string]: {
     content: string;
@@ -37,6 +39,14 @@ export const MockFilterData = () => {
         }
       }
       resolve({filter: data, filter_helper: helper})
+    },1000)
+  })
+}
+
+export const MockFilterProduct = () => {
+  return new Promise<IProducts[]>((reslove, reject)=>{
+    setTimeout(()=>{
+      reslove(products)
     },1000)
   })
 }
