@@ -2,6 +2,7 @@ export const string = {
   Acount: "Email*",
   Password: "Password*",
   HolderEmail: "@gmail.com",
+  HolderPass:"123456",
   ConfirmPassword: "ConfirmPassword*",
   Name: "Name*",
   Sex: "Sex",

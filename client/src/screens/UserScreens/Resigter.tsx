@@ -5,18 +5,11 @@ import {
   TextField,
   Button,
   InputAdornment,
-  FormControl,
-  InputLabel,
-  Input,
   IconButton,
   MenuItem,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {
-  validateEmail,
-  validatePassword,
-  validatePhone,
-} from "../../lib/FunctHelper";
+import {validateEmail,validatePassword, validatePhone} from "../../lib/FunctHelper";
 import { imgLogo } from "../../assets";
 const Resigter = () => {
   const [sex, setSex] = useState({
@@ -51,11 +44,11 @@ const Resigter = () => {
   };
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+    setValues({ ...values, showPassword: !values.showPassword});
   };
 
   const handleClickShowPasswordConfirm = () => {
-    setValues({ ...values, showPasswordConfirm: !values.showPasswordConfirm });
+    setValues({ ...values, showPasswordConfirm: !values.showPasswordConfirm});
   };
   const handleMouseDownPassword = (event: any) => {
     event.preventDefault();
@@ -107,7 +100,7 @@ const Resigter = () => {
     }
   };
   const CheckConfirmPassword = (confirm_password: string) => {
-    if (confirm_password != values.password && values.confirm.length > 0) {
+    if (confirm_password !== values.password && values.confirm.length > 0) {
       return setValues({
         ...values,
         error_confirm: true,
@@ -138,15 +131,19 @@ const Resigter = () => {
   };
   useEffect(() => {
     CheckEmail(values.amount);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.amount]);
   useEffect(() => {
     CheckPassword(values.password);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.password]);
   useEffect(() => {
     CheckPhone(values.phone);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.phone]);
   useEffect(() => {
     CheckConfirmPassword(values.confirm);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.confirm]);
 
   return (
@@ -213,8 +210,10 @@ const Resigter = () => {
           </div>
           <div className="acount_resigter_password">
             <TextField
+              type={values.showPassword?"text" : "password"}
               label={string.Password}
               fullWidth={true}
+              placeholder={string.HolderPass}
               error={values.errorP}
               helperText={values.errorpassword}
               value={values.password}
@@ -235,11 +234,13 @@ const Resigter = () => {
           </div>
           <div className="acount_resigter_password">
             <TextField
+             type={values.showPasswordConfirm?"text":"password"}
               label={string.ConfirmPassword}
               fullWidth={true}
               error={values.error_confirm}
               helperText={values.error_confirm_password}
               value={values.confirm}
+              placeholder={string.HolderPass}
               onChange={handleConfirmPassword}
               InputProps={{
                 endAdornment: (

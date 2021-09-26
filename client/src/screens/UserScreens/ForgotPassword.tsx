@@ -29,6 +29,7 @@ const ForgotPassword = () => {
   };
   useEffect(() => {
     CheckEmail(values.amount);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.amount]);
   return (
     <div className="container_forgotpass">
