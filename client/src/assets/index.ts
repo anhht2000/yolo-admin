@@ -7,6 +7,8 @@ import * as slide_3 from "./png/slider/slide_3.png";
 import * as logo from "./png/logo/Logo.png";
 import * as logo_2 from "./png/logo/Logo-2.png";
 import * as favicon from "./png/logo/favicon.png";
+import * as Admin_logo from './png/logo/AdminLTELogo.png';
+import * as user_2 from './png/logo/user2-160x160.jpg';
 
 // ProductImport
 import * as product_01_image_01 from "./png/products/product-01 (1).jpg";
@@ -47,6 +49,8 @@ export const imgLogo = {
   logo: logo.default,
   logo_2: logo_2.default,
   favicon: favicon.default,
+  admin_logo: Admin_logo.default,
+  user_2: user_2.default
 };
 
 export const imgProduct = {

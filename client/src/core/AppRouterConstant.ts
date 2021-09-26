@@ -1,3 +1,4 @@
+import Dashboard from "../screens/AdminScreens/Dashboard";
 import ForgetPass from "../screens/AdminScreens/ForgetPass";
 import Login from "../screens/AdminScreens/Login";
 import SignUp from "../screens/AdminScreens/SignUp";
@@ -87,4 +88,11 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     exact: true,
     type: ETYPE.ADMIN,
   },
+  {
+    name: "admin",
+    path: '/admin',
+    exact: true,
+    component: Dashboard,
+    type: ETYPE.ADMIN
+  }
 ];

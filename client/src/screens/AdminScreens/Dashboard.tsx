@@ -1,9 +1,10 @@
 import React from 'react'
+import AdminSidebar from '../../layout/AdminLayout/AdminSidebar'
 
 const Dashboard = () => {
   return (
-    <div>
-    </div>
+    <AdminSidebar>
+    </AdminSidebar>
   )
 }
 
