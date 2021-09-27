@@ -27,7 +27,9 @@ const AdminSidebarSubRouter: React.FC<IAdminSidebarSubRouter> = ({e}) => {
       exact
       >
         {routerSub.icon && <i className={routerSub.icon}></i>}
-        {routerSub.routerName}
+        <div className="admin-router__multiple-router-char">
+          {routerSub.routerName}
+        </div>
       </NavLink>
     ))}
     </div>

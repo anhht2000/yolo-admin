@@ -128,11 +128,22 @@ $width: 25rem;
 }
 
 .admin-router__multiple-router {
-  display: none;
+  visibility: hidden;
+  position: relative;
+  left: -100%;
+  opacity: 0;
+  height: 0;
+  transition: all 0.3s ease-in-out;
   & .admin-router__one {
     padding-left: 4.5rem;
   }
   &.active {
-    display: block;
+    left: 0;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+  &-char {
+    width: 80%;
   }
 }
