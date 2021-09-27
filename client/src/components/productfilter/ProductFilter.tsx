@@ -17,7 +17,7 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
   const toggleActive = () => setActive(!active)
   return (
     <>
-    {loading ? 'loadingFilter': ''}
+    {loading ? 'loading' : ''}
     <i className='bx bx-filter product-filter-mb' onClick={toggleActive}></i>
     <div className={`product-filter ${active ? '' : 'hidden' }`}>
       {

@@ -6,6 +6,7 @@ export interface FilterInterFace {
     use?: boolean;
   }[]
 }
+
 export const filter : FilterInterFace = {
   category: [
     { content: "Áo thun"},
@@ -31,7 +32,7 @@ export const filter : FilterInterFace = {
 export const MockFilterData = () => {
   return new Promise<FilterInterFace>((resolve,reject)=> {
     setTimeout(()=> {
-      resolve(filter)
+      resolve(filter);
     },1000)
   })
 }
@@ -39,7 +40,7 @@ export const MockFilterData = () => {
 export const MockFilterProduct = () => {
   return new Promise<IProducts[]>((reslove, reject)=>{
     setTimeout(()=>{
-      reslove(products)
+      reslove(products);
     },1000)
   })
 }

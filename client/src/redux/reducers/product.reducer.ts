@@ -40,12 +40,15 @@ const ProductSlice = createSlice({
     },
     getAllFiltter(state) {
       state.loadingFilter = true;
+      state.filter = {};
+      state.filter_clone = {};
+      state.helper = [];
     },
     getAllFilterSuccess(state,action) {
       state.loadingFilter = false;
-      state.filter = action.payload.filter;
+      state.filter = Object.assign({},action.payload.filter);
       state.helper = action.payload.helper;
-      state.filter_clone = action.payload.filter;
+      state.filter_clone = Object.assign({},action.payload.filter);
     },
     filterChange(state,action) {
       state.filter = {

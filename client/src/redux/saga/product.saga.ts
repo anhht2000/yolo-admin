@@ -12,13 +12,11 @@ export function* getFilterProductSaga() {
   try {
     const data: FilterInterFace = yield call(MockFilterData);
     var helper: string[] = []
-    for(const key in data) {
+    const temp = Object.assign({},data);
+    for(const key in temp) {
       helper.push(key);
-      for(const element of data[key]) {
-        element.use = false;
-      }
     }
-    yield put(getAllFilterSuccess({filter: data, helper }));
+    yield put(getAllFilterSuccess({filter: temp, helper }));
   } catch (error) {
     console.log(error)
   }
