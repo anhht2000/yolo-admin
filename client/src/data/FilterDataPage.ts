@@ -6,7 +6,7 @@ export interface FilterInterFace {
     use?: boolean;
   }[]
 }
-export const data : FilterInterFace = {
+export const filter : FilterInterFace = {
   category: [
     { content: "Áo thun"},
     { content: 'Áo somi'},
@@ -29,16 +29,9 @@ export const data : FilterInterFace = {
 }
 
 export const MockFilterData = () => {
-  return new Promise<{filter:FilterInterFace,filter_helper:string[]}>((resolve,reject)=> {
+  return new Promise<FilterInterFace>((resolve,reject)=> {
     setTimeout(()=> {
-      var helper: string[] = []
-      for(const key in data) {
-        helper.push(key);
-        for(const element of data[key]) {
-          element.use = false;
-        }
-      }
-      resolve({filter: data, filter_helper: helper})
+      resolve(filter)
     },1000)
   })
 }

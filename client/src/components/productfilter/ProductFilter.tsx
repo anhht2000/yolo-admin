@@ -8,14 +8,16 @@ interface IProductFilter {
   filter?: FilterInterFace;
   onChange?: ( {target}: ChangeEvent<HTMLInputElement>) => void;
   onDelete?: () => void;
+  loading?:  boolean
 }
 
 const ProductFilter: React.FC<IProductFilter> = (props) => {
-  const {filter, helper, onChange, onDelete} = props;
+  const {filter, helper, onChange, onDelete, loading} = props;
   const [active,setActive] = useState(false);
   const toggleActive = () => setActive(!active)
   return (
     <>
+    {loading ? 'loadingFilter': ''}
     <i className='bx bx-filter product-filter-mb' onClick={toggleActive}></i>
     <div className={`product-filter ${active ? '' : 'hidden' }`}>
       {

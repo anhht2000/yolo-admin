@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import sideBarRouter from './SideBarRoute';
 import AdminSidebarSubRouter from './AdminSidebarSubRouter';
 
 const AdminSideBarRouter: React.FC = () => {
-  const [active, setActive] = useState({});
   return (
     <div className="admin-sidebar__content-router">
       {sideBarRouter.map((e,index) => {
