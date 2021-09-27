@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
   CContainer,
   CHeader,
@@ -21,7 +21,6 @@ import { setSidebarShow } from 'src/redux/slice'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.app.sidebarShow)
 
   return (
     <CHeader position="sticky" className="mb-4">

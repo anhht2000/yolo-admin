@@ -14,7 +14,7 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
-import { setSidebarShow, setSidebarUnfoldabel } from 'src/redux/slice'
+import { setSidebarUnfoldabel } from 'src/redux/slice'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
