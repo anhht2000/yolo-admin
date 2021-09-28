@@ -18,16 +18,13 @@ export default function FormAdd({ type, initialValue }) {
         ...values,
         [name]: {
           ...values[name],
-          ...Object.entries({
-            // ...values[name],
-            [value]: checked === true,
-          })
-            .filter((e) => e[1] === true)
-            .map((e) => e[0]),
+          [value]: checked === true,
         },
       })
-      // console.log('check', values)
     }
+  }
+  const handleSubmit = () => {
+    console.log({ ...values, image: [...image] })
   }
   // form edit
   if (type === 'edit') {
@@ -151,7 +148,9 @@ export default function FormAdd({ type, initialValue }) {
           </CCol>
         </CRow>
         <CRow className="text-center justify-content-center">
-          <CButton className="w-auto">Lưu</CButton>
+          <CButton className="w-auto" onClick={handleSubmit}>
+            Lưu
+          </CButton>
         </CRow>
       </CForm>
     )
@@ -267,7 +266,9 @@ export default function FormAdd({ type, initialValue }) {
           </CCol>
         </CRow>
         <CRow className="text-center justify-content-center">
-          <CButton className="w-auto">Lưu</CButton>
+          <CButton className="w-auto" onClick={handleSubmit}>
+            Lưu
+          </CButton>
         </CRow>
       </CForm>
     )
