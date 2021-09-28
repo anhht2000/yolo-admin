@@ -1,6 +1,7 @@
 import {
   CButton,
   CContainer,
+  CFormCheck,
   CModal,
   CModalBody,
   CModalFooter,
@@ -24,6 +25,11 @@ export default function ProductTable(props) {
     console.log('xoas', visible.slug)
     setVisible({ ...visible, status: false })
   }
+  const handleChangeCheck = (value) => {
+    //post api
+    console.log(!value)
+    //get list again
+  }
   const history = useHistory()
   return (
     <CContainer>
@@ -43,7 +49,12 @@ export default function ProductTable(props) {
             products.map((e, index) => {
               return (
                 <CTableRow key={index}>
-                  <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
+                  <CTableHeaderCell scope="row">
+                    <CFormCheck
+                      defaultChecked={e.active}
+                      onChange={() => handleChangeCheck(e.active)}
+                    />
+                  </CTableHeaderCell>
                   <CTableDataCell>
                     <img style={{ height: '80px' }} className="hei" src={e.image01} alt="" />
                   </CTableDataCell>
