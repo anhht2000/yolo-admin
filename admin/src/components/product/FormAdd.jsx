@@ -28,13 +28,23 @@ export default function FormAdd({ type, initialValue }) {
     }
   }
   const handleSubmit = () => {
-    console.log({ ...values, image: [...image] })
+    const argS =
+      values.size &&
+      Object.entries(values.size)
+        .filter((e) => e[1] === true)
+        .map((e) => e[0])
+    const argC =
+      values.color &&
+      Object.entries(values.color)
+        .filter((e) => e[1] === true)
+        .map((e) => e[0])
+
+    console.log({ ...values, size: argS, colors: argC, image01: image[0], image02: image[1] })
   }
   // form edit
   if (type === 'edit') {
     return (
       <CForm>
-        {console.log('test', values)}
         <CRow className="mb-3">
           <CFormLabel htmlFor="title" className="col-sm-2 col-form-label flex-grow-1">
             Tên
@@ -80,7 +90,7 @@ export default function FormAdd({ type, initialValue }) {
                     label={e.content}
                     className="me-4"
                     // defaultChecked={
-                    //   values.size && values.size.indexOf(e.content.toLowerCase()) !== -1
+                    //   values?.size && values.size.indexOf(e.content.toLowerCase()) !== -1
                     // }
                     onChange={(e) => handleChange(e)}
                   />
@@ -98,12 +108,12 @@ export default function FormAdd({ type, initialValue }) {
                 return (
                   <CFormCheck
                     key={index}
-                    name="size"
+                    name="color"
                     value={e.content}
                     label={e.content}
                     className="me-4 pb-2"
                     // defaultChecked={
-                    //   values.color && values.color.indexOf(e.content.toLowerCase()) !== -1
+                    //   values?.color && values.color.indexOf(e.content.toLowerCase()) !== -1
                     // }
                     onChange={(e) => handleChange(e)}
                   />
@@ -140,7 +150,6 @@ export default function FormAdd({ type, initialValue }) {
   else
     return (
       <CForm>
-        {console.log(values)}
         <CRow className="mb-3">
           <CFormLabel htmlFor="title" className="col-sm-2 col-form-label flex-grow-1">
             Tên
@@ -164,69 +173,45 @@ export default function FormAdd({ type, initialValue }) {
             Kích thước
           </CFormLabel>
           <CCol sm={9} className="d-flex">
-            <CFormCheck
-              name="size"
-              value="s"
-              label="S"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
-            <CFormCheck
-              name="size"
-              value="m"
-              label="M"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
-            <CFormCheck
-              name="size"
-              value="xl"
-              label="XL"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
-            <CFormCheck
-              name="size"
-              value="xxl"
-              label="XXL"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
+            {filter &&
+              filter.size.map((e, index) => {
+                return (
+                  <CFormCheck
+                    key={index}
+                    name="size"
+                    value={e.content}
+                    label={e.content}
+                    className="me-4"
+                    // defaultChecked={
+                    //   values.size && values.size.indexOf(e.content.toLowerCase()) !== -1
+                    // }
+                    onChange={(e) => handleChange(e)}
+                  />
+                )
+              })}
           </CCol>
         </CRow>
         <CRow className="mb-3 align-items-center">
           <CFormLabel htmlFor="image" className="col-sm-2 col-form-label flex-grow-1">
             Màu sắc
           </CFormLabel>
-          <CCol sm={9} className="d-flex">
-            <CFormCheck
-              name="color"
-              value="red"
-              label="Đỏ"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
-            <CFormCheck
-              name="color"
-              value="blue"
-              label="Xanh"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
-            <CFormCheck
-              name="color"
-              value="pink"
-              label="Hồng"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
-            <CFormCheck
-              name="color"
-              value="yellow"
-              label="Vàng"
-              className="me-4"
-              onChange={(e) => handleChange(e)}
-            />
+          <CCol sm={9} className="d-flex flex-wrap align-item-center">
+            {filter &&
+              filter.color.map((e, index) => {
+                return (
+                  <CFormCheck
+                    key={index}
+                    name="color"
+                    value={e.content}
+                    label={e.content}
+                    className="me-4 pb-2"
+                    // defaultChecked={
+                    //   values.color && values.color.indexOf(e.content.toLowerCase()) !== -1
+                    // }
+                    onChange={(e) => handleChange(e)}
+                  />
+                )
+              })}
           </CCol>
         </CRow>
         <CRow className="mb-3">
