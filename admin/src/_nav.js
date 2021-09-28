@@ -17,7 +17,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 const _nav = [
   {
     component: CNavItem,
-    name: 'admin',
+    name: 'Quản lý sản phẩm',
     to: '/product',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     badge: {
