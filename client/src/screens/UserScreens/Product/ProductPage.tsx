@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import React from "react";
-import CardContainer from "../../components/cardcontent/CardContainer";
-import ProductFilter from "../../components/productfilter/ProductFilter";
-import { FilterInterFace, MockFilterData } from "../../data/FilterDataPage";
-import { products } from "../../data/products";
-import LayoutContainer from "../../layout/HomeLayout/LayoutContainer";
+import CardContainer from "../../../components/cardcontent/CardContainer";
+import ProductFilter from "../../../components/productfilter/ProductFilter";
+import { FilterInterFace, MockFilterData } from "../../../data/FilterDataPage";
+import { products } from "../../../data/products";
+import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
 import { useState } from 'react'
 import { ChangeEvent } from "react";
 const ProductPage: React.FC = (props) => {

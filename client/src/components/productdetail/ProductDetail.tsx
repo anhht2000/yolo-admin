@@ -40,6 +40,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const saveToLocal = () => {
     const data = JSON.parse(localStorage.getItem('cartProduct') as string) as {
       title: string,
+      image01:string,
       variant:string[],
       variant_value:string[],
       price: string,
@@ -51,8 +52,8 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
 
       let temp = data.map((e) => {
         if (
-          JSON.stringify({title: e.title, variant: e.variant, variant_value: e.variant_value}) ===
-          JSON.stringify({title: source.title, variant: ['color','size'], variant_value: [color,size]})
+          JSON.stringify({title: e.title, variant: e.variant, variant_value: e.variant_value,image01:e.image01}) ===
+          JSON.stringify({title: source.title, variant: ['color','size'], variant_value: [color,size],image01:source.image01})
         ){
           flag = true;
           return { ...e, number: e.number + number };
@@ -66,6 +67,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         localStorage.setItem('cartProduct',JSON.stringify([
           ...data, {
             title: source.title,
+            image01:source.image01,
             variant: ['color', 'size'],
             variant_value: [color, size],
             price: source.price,
@@ -77,6 +79,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
       localStorage.setItem('cartProduct',JSON.stringify([
         {
           title: source.title,
+          image01:source.image01,
           variant: ['color', 'size'],
           variant_value: [color, size],
           price: source.price,

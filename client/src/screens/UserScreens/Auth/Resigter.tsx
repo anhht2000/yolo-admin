@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../../sass/resigter.scss";
-import { string } from "../../assets/string";
+import "../../../sass/resigter.scss";
+import { string } from "../../../assets/string";
 import {
   TextField,
   Button,
@@ -9,8 +9,8 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {validateEmail,validatePassword, validatePhone} from "../../lib/FunctHelper";
-import { imgLogo } from "../../assets";
+import {validateEmail,validatePassword, validatePhone} from "../../../lib/FunctHelper";
+import { imgLogo } from "../../../assets";
 const Resigter = () => {
   const [sex, setSex] = useState({
     showSex: "10",

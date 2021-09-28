@@ -37,6 +37,8 @@ import * as product_12_image_02 from "./png/products/product-12 (2).jpg";
 //import banner
 import * as bannerImg from "./png/banner/banner.png";
 import * as background from "./png/background/background.jpg";
+//import icon
+import * as ic_delete from './png/icon/ic_delete.png';
 export const imgSlider = {
   slide_1: slide_1.default,
   slide_2: slide_2.default,
@@ -82,3 +84,6 @@ export const imgBanner = {
 export const imgBackground = {
   background: background.default,
 };
+export const Icon = {
+  Ic_delete:ic_delete.default
+}

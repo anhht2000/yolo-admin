@@ -11,11 +11,12 @@ export const HeaderLinks: IHeaderLink[] = [
 ];
 
 interface IHeaderIcons {
+  path: string,
   className: string,
 }
 
 export const HeaderIcons: IHeaderIcons[] = [
-  { className:'bx bx-search' },
-  { className:'bx bx-shopping-bag' },
-  { className:'bx bx-user' }
+  { path:'/',className:'bx bx-search' },
+  { path:'/list_product_add',className:'bx bx-shopping-bag' },
+  { path:'/',className:'bx bx-user' }
 ];
