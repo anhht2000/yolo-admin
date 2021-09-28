@@ -6,3 +6,17 @@
 .sidebar-nav::-webkit-scrollbar-thumb {
   background-color: #999c9f;
 }
+
+
+.flex_option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center ;
+  &.gap {
+    gap: 1rem;
+  }
+}
+
+.icon-hover {
+  cursor: pointer;
+}
