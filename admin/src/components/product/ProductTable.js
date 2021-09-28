@@ -42,34 +42,32 @@ export default function ProductTable(props) {
           {products &&
             products.map((e, index) => {
               return (
-                <>
-                  <CTableRow key={index}>
-                    <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                    <CTableDataCell>
-                      <img style={{ height: '80px' }} className="hei" src={e.image01} alt="" />
-                    </CTableDataCell>
-                    <CTableDataCell>{e.title}</CTableDataCell>
-                    <CTableDataCell>{e.size.join(', ')}</CTableDataCell>
-                    <CTableDataCell>{e.colors.join(', ')}</CTableDataCell>
-                    <CTableDataCell>
-                      <CButton
-                        color="success"
-                        variant="outline"
-                        className="me-1"
-                        onClick={() => history.push('/product/' + e.slug)}
-                      >
-                        Sửa
-                      </CButton>
-                      <CButton
-                        color="danger"
-                        variant="outline"
-                        onClick={() => setVisible({ ...visible, status: true, slug: e.slug })}
-                      >
-                        Xóa
-                      </CButton>
-                    </CTableDataCell>
-                  </CTableRow>
-                </>
+                <CTableRow key={index}>
+                  <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
+                  <CTableDataCell>
+                    <img style={{ height: '80px' }} className="hei" src={e.image01} alt="" />
+                  </CTableDataCell>
+                  <CTableDataCell>{e.title}</CTableDataCell>
+                  <CTableDataCell>{e.size.join(', ')}</CTableDataCell>
+                  <CTableDataCell>{e.colors.join(', ')}</CTableDataCell>
+                  <CTableDataCell>
+                    <CButton
+                      color="success"
+                      variant="outline"
+                      className="me-1"
+                      onClick={() => history.push('/product/' + e.slug)}
+                    >
+                      Sửa
+                    </CButton>
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      onClick={() => setVisible({ ...visible, status: true, slug: e.slug })}
+                    >
+                      Xóa
+                    </CButton>
+                  </CTableDataCell>
+                </CTableRow>
               )
             })}
         </CTableBody>
