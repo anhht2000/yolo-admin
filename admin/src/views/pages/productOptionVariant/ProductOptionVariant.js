@@ -6,12 +6,6 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
   CRow,
   CTable,
   CTableBody,
@@ -22,6 +16,9 @@ import {
 } from '@coreui/react'
 import { cilDelete, cilPencil, cilPlus } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import OptionsVariantModalDelete from './OptionsVariantModalDelete'
+import OptionsVariantModalUpdate from './OptionsVariantModalUpdate'
+import OptionsVariantModalAdd from './OptionsVariantModalAdd'
 const ProductOptionVariant = () => {
   const [visible, setVisible] = useState(false)
   const [visibleAdd, setVisibleAdd] = useState(false)
@@ -104,68 +101,12 @@ const ProductOptionVariant = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CModal visible={visible} onDismiss={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Xác nhận xóa</CModalTitle>
-        </CModalHeader>
-        <CModalBody>Xác nhận xóa thuộc tính</CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisible(false)}>
-            Close
-          </CButton>
-          <CButton color="primary">xóa</CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal visible={visible} onDismiss={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Xác nhận xóa</CModalTitle>
-        </CModalHeader>
-        <CModalBody>Xác nhận xóa thuộc tính của Option: {'color'}</CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisible(false)}>
-            Close
-          </CButton>
-          <CButton color="primary">Save changes</CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal visible={visibleAdd} onDismiss={() => setVisibleAdd(false)}>
-        <CModalHeader>
-          <CModalTitle>Thêm thuộc tính</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <h5>Tên Options</h5>
-          <CFormSelect aria-label="Default select example">
-            {/* api fake data */}
-            <option>Open this select menu</option>
-            <option value="1">Kích Thước</option>
-            <option value="2">Màu sắc</option>
-            <option value="3">Chất liệu</option>
-          </CFormSelect>
-          <h5>Tên Thuộc tính</h5>
-          <CFormInput type="text" placeholder="Ect... XL" />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
-            Đóng
-          </CButton>
-          <CButton color="primary">Lưu thuộc tính</CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal visible={visibleUpdate} onDismiss={() => setVisibleUpdate(false)}>
-        <CModalHeader>
-          <CModalTitle>Sửa thuộc tính của option: {'color'}</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <h3>Tên thuộc tính</h3>
-          <CFormInput type="text" placeholder="Ect...XL" />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisibleUpdate(false)}>
-            Đóng
-          </CButton>
-          <CButton color="primary">Lưu thay đổi</CButton>
-        </CModalFooter>
-      </CModal>
+      <OptionsVariantModalDelete setVisible={setVisible} visible={visible} />
+      <OptionsVariantModalAdd setVisibleAdd={setVisibleAdd} visibleAdd={visibleAdd} />
+      <OptionsVariantModalUpdate
+        setVisibleUpdate={setVisibleUpdate}
+        visibleUpdate={visibleUpdate}
+      />
     </>
   )
 }

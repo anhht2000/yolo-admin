@@ -6,11 +6,6 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
   CRow,
   CTable,
   CTableBody,
@@ -21,6 +16,9 @@ import {
 } from '@coreui/react'
 import { cilDelete, cilPencil, cilPlus } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import OptionsModalAdd from './OptionsModalAdd'
+import OptionsModalDelete from './OptionsModalDelete'
+import OptionsModalUpdate from './OptionsModalUpdate'
 const ProductOption = () => {
   const [visible, setVisible] = useState(false)
   const [visibleAdd, setVisibleAdd] = useState(false)
@@ -103,60 +101,9 @@ const ProductOption = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CModal visible={visible} onDismiss={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Xác nhận xóa</CModalTitle>
-        </CModalHeader>
-        <CModalBody>Xác nhận xóa Options của sản phẩm</CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisible(false)}>
-            Close
-          </CButton>
-          <CButton color="primary">Save changes</CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal visible={visible} onDismiss={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Xác nhận xóa</CModalTitle>
-        </CModalHeader>
-        <CModalBody>Xác nhận xóa Options của sản phẩm</CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisible(false)}>
-            Close
-          </CButton>
-          <CButton color="primary">Save changes</CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal visible={visibleAdd} onDismiss={() => setVisibleAdd(false)}>
-        <CModalHeader>
-          <CModalTitle>Thêm sản phẩm</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <h3>Tên Options</h3>
-          <CFormInput type="text" placeholder="Ect... Kích Thước" />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
-            Đóng
-          </CButton>
-          <CButton color="primary">Lưu sản phẩm</CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal visible={visibleUpdate} onDismiss={() => setVisibleUpdate(false)}>
-        <CModalHeader>
-          <CModalTitle>Sửa sản phẩm</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <h3>Tên Options</h3>
-          <CFormInput type="text" placeholder="Ect... Kích Thước" />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisibleUpdate(false)}>
-            Đóng
-          </CButton>
-          <CButton color="primary">Lưu thay đổi</CButton>
-        </CModalFooter>
-      </CModal>
+      <OptionsModalDelete setVisible={setVisible} visible={visible} />
+      <OptionsModalAdd setVisibleAdd={setVisibleAdd} visibleAdd={visibleAdd} />
+      <OptionsModalUpdate setVisibleUpdate={setVisibleUpdate} visibleUpdate={visibleUpdate} />
     </>
   )
 }
