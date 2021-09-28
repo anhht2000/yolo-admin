@@ -1,6 +1,7 @@
 import React from 'react'
 import Product from './views/pages/product/Product'
-import Product_variant from './views/pages/product_variant/Product_variant'
+import ProductOption from './views/pages/productOption/ProductOption'
+import ProductOptionVariant from './views/pages/productOptionVariant/ProductOptionVariant'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -101,7 +102,8 @@ const routes = [
   { path: '/widgets', name: 'Widgets', component: Widgets },
   // path
   { path: '/product', name: 'Product', component: Product, exact: true },
-  { path: '/product/variant', name: 'Variant', component: Product_variant },
+  { path: '/product/option', name: 'Option', component: ProductOption, exact: true },
+  { path: '/product/option/variant', name: 'Variant', component: ProductOptionVariant },
 ]
 
 export default routes
