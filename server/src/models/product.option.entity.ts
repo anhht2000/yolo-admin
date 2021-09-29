@@ -10,7 +10,7 @@ import { Option } from "./option.entity";
 import { Option_Value } from "./option_value.entity";
 import { Product } from "./product.entity";
 @Entity()
-export class Product_Option extends Common{
+export class Product_Option extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -5,7 +5,7 @@ import { Common } from "./helper/common.helper";
 import { Option } from "./option.entity";
 
 @Entity()
-export class Option_Value extends Common{
+export class Option_Value extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 

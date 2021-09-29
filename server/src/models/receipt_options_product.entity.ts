@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Common } from "./helper/common.helper";
 
 @Entity()
-export class Receipt_Option_Product extends Common{
+export class Receipt_Option_Product extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 

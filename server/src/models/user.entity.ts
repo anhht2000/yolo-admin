@@ -4,7 +4,7 @@ import { Common } from "./helper/common.helper";
 import { Receipt } from "./receipt.entity";
 
 @Entity()
-export class User extends Common{
+export class User extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 

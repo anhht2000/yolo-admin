@@ -4,7 +4,7 @@ import { Product_Img } from "./product.img.entity";
 import { Common } from "./helper/common.helper";
 
 @Entity()
-export class Product extends Common{
+export class Product extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 

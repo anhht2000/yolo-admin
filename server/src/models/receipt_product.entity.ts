@@ -6,7 +6,7 @@ import { OneToMany } from "typeorm";
 import { Common } from "./helper/common.helper";
 
 @Entity()
-export class Receipt_Product extends Common{
+export class Receipt_Product extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 
