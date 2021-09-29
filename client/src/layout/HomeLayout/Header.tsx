@@ -25,7 +25,9 @@ const Header = () => {
       <ul className="header__icon">
         {HeaderIcons.map((e, index) => (
           <li key={index}>
+            <NavLink exact to={e.path}>
             <i className={e.className}></i>
+            </NavLink>
           </li>
         ))}
       </ul>

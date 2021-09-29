@@ -1,0 +1,50 @@
+.contaiber_listadd {
+    display: flex;
+    width: 100%;
+    margin-bottom: 2em;
+    &_left {
+        padding-left: 2em;
+        width: 60%;
+        display: flex;
+        &-img {
+            width: 28%;
+            padding: auto
+        }
+        &-title {
+            padding-top: 5em;
+            padding-left: 2em;
+            width: 60%;
+        }
+    }
+    &_right {
+        width: 40%;
+        display: flex;
+        gap: 4rem;
+        height: 10%;
+        &-title {
+            padding-top: 5em;
+        }
+        &-option {
+            display: flex;
+            padding-top: 5em;
+            &-bt {
+                text-align: center;
+                width: 10rem;
+                outline: none;
+                border: none;
+                border-top: 1px solid gray;
+                border-bottom: 1px solid gray;
+            }
+            i {
+                border: 1px solid gray;
+                line-height: 2rem;
+                cursor: pointer;
+            }
+        }
+        &-ic {
+            margin-top: 5em;
+            height: 1.2em;
+            width: 1.2em
+        }
+    }
+}

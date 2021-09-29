@@ -1,12 +1,12 @@
 /* eslint-disable */
 import React from "react";
-import { imgBanner } from "../../assets";
-import CardContainer from "../../components/cardcontent/CardContainer";
-import Section from "../../components/section/Section";
-import SliderContainer from "../../components/slider/SliderContainer";
-import SupportCardContainer from "../../components/supportcard/SupportCardContainer";
-import { products } from "../../data/products";
-import LayoutContainer from "../../layout/HomeLayout/LayoutContainer";
+import { imgBanner } from "../../../assets";
+import CardContainer from "../../../components/cardcontent/CardContainer";
+import Section from "../../../components/section/Section";
+import SliderContainer from "../../../components/slider/SliderContainer";
+import SupportCardContainer from "../../../components/supportcard/SupportCardContainer";
+import { products } from "../../../data/products";
+import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
 
 const LandingPage: React.FC = () => {
   const dataSection1 = Object.assign([], products.slice(12, 16));

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "../../sass/forgotpass.scss";
-import { string } from "../../assets/string";
+import "../../../sass/forgotpass.scss";
+import { string } from "../../../assets/string";
 import { TextField, Button } from "@material-ui/core";
-import { validateEmail } from "../../lib/FunctHelper";
-import { imgLogo } from "../../assets";
+import { validateEmail } from "../../../lib/FunctHelper";
+import { imgLogo } from "../../../assets";
 const ForgotPassword = () => {
   const [values, setValues] = useState({
     amount: "",
