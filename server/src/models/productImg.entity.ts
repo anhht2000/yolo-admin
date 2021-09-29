@@ -4,13 +4,13 @@ import { Common } from "./helper/common.helper";
 import { Product } from "./product.entity";
 
 @Entity()
-export class Product_Img extends Common {
+export class ProductImg extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   imgPath: string;
 
-  @ManyToOne(() => Product, (product) => product.product_img)
+  @ManyToOne(() => Product, (product) => product.productImg)
   product: Product;
 }
