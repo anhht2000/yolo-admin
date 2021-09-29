@@ -1,4 +1,4 @@
-import { Receipt_Product } from "./receipt_product.entity";
+import { ReceiptProduct } from "./receiptProduct.entity";
 import { User } from "./user.entity";
 import { ManyToOne } from "typeorm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
@@ -23,8 +23,8 @@ export class Receipt extends Common {
   user: User;
 
   @OneToMany(
-    () => Receipt_Product,
-    (receipt_product: any) => receipt_product.receipt
+    () => ReceiptProduct,
+    (receiptProduct: any) => receiptProduct.receipt
   )
-  receipt_products: Receipt_Product;
+  receiptProducts: ReceiptProduct;
 }

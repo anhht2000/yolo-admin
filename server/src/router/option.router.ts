@@ -1,12 +1,20 @@
 import { Router } from "express";
-import OptionController from "../controllers/option.controller";
-
+import optionController from "../controllers/option.controller";
+import { body } from 'express-validator';
 const router = Router();
 
-router.get('/', OptionController.getAllOption)
-router.post('/')
-router.get(':id', OptionController.getOneOption)
-router.put('/:id', OptionController.updateOption)
-router.delete('/:id', OptionController.deleteOption)
+router.get('/', optionController.getAllOption)
+
+router.post('/',[
+  body('name').isString().withMessage('Input nhập vào phải là ký tự'),
+], optionController.createOption)
+
+router.get('/:id',optionController.getOneOption)
+
+router.put('/:id', [
+  body('name').isString().withMessage('Input nhập vào phải là ký tự'),
+], optionController.updateOption)
+
+router.delete('/:id', optionController.deleteOption)
 
 export default router;

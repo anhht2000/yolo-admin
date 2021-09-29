@@ -1,6 +1,6 @@
-import { Product_Option } from "./product.option.entity";
+import { ProductOption } from "./productOption.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Product_Img } from "./product.img.entity";
+import { ProductImg } from "./productImg.entity";
 import { Common } from "./helper/common.helper";
 
 @Entity()
@@ -17,9 +17,9 @@ export class Product extends Common {
   @Column()
   price: string;
 
-  @OneToMany(() => Product_Img, (product_img) => product_img.product)
-  product_img: Product_Img[];
+  @OneToMany(() => ProductImg, (productImg) => productImg.product)
+  productImg: ProductImg[];
 
-  @OneToMany(() => Product_Option, (product_option) => product_option.product)
-  product_option: Product_Option[];
+  @OneToMany(() => ProductOption, (productOption) => productOption.product)
+  productOption: ProductOption[];
 }
