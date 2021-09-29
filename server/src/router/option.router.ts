@@ -1,6 +1,5 @@
 import { Router } from "express";
 import optionController from "../controllers/option.controller";
-import { body } from 'express-validator';
 import { ValidateData } from "../middleware/commonMiddleware";
 import { createUpdateRuleOption } from "../rules/optionRouter.rule";
 const router = Router();
