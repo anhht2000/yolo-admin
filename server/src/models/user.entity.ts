@@ -1,10 +1,10 @@
-import { OneToOne } from "typeorm";
 import { OneToMany } from "typeorm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Common } from "./helper/common.helper";
 import { Receipt } from "./receipt.entity";
 
 @Entity()
-export class User {
+export class User extends Common{
   @PrimaryGeneratedColumn()
   id: number;
 

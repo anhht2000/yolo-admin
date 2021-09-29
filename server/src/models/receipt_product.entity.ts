@@ -1,12 +1,12 @@
 import { Receipt_Option_Product } from "./receipt_options_product.entity";
-import { User } from "./user.entity";
 import { ManyToOne } from "typeorm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Receipt } from "./receipt.entity";
 import { OneToMany } from "typeorm";
+import { Common } from "./helper/common.helper";
 
 @Entity()
-export class Receipt_Product {
+export class Receipt_Product extends Common{
   @PrimaryGeneratedColumn()
   id: number;
 

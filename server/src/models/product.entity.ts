@@ -1,9 +1,10 @@
 import { Product_Option } from "./product.option.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product_Img } from "./product.img.entity";
+import { Common } from "./helper/common.helper";
 
 @Entity()
-export class Product {
+export class Product extends Common{
   @PrimaryGeneratedColumn()
   id: number;
 
