@@ -1,19 +1,16 @@
 import { Router } from "express";
 import optionController from "../controllers/option.controller";
-import { body } from 'express-validator';
+import { ValidateData } from "../middleware/commonMiddleware";
+import { createUpdateRuleOption } from "../rules/optionRouter.rule";
 const router = Router();
 
 router.get('/', optionController.getAllOption)
 
-router.post('/',[
-  body('name').isString().withMessage('Input nhập vào phải là ký tự'),
-], optionController.createOption)
+router.post('/', createUpdateRuleOption, ValidateData, optionController.createOption)
 
-router.get('/:id',optionController.getOneOption)
+router.get('/:id', optionController.getOneOption)
 
-router.put('/:id', [
-  body('name').isString().withMessage('Input nhập vào phải là ký tự'),
-], optionController.updateOption)
+router.put('/:id', createUpdateRuleOption, ValidateData, optionController.updateOption)
 
 router.delete('/:id', optionController.deleteOption)
 

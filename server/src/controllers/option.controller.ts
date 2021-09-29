@@ -2,7 +2,6 @@ import { CommonConfig } from "./index";
 import { NextFunction, Request, Response } from "express";
 import { getConnection, getRepository } from "typeorm";
 import { Option } from "../models/option.entity";
-import { validationResult } from "express-validator";
 import { OptionValue } from "../models/optionValue.entity";
 class OptionController {
   public async getAllOption(req: Request, res: Response, next: NextFunction) {
@@ -35,11 +34,6 @@ class OptionController {
   }
   public async createOption(req: Request, res: Response, next: NextFunction) {
     try {
-      const error = validationResult(req);
-      if (!error.isEmpty()) {
-        return res.status(400).json({ errors: error.array() });
-      }
-
       const { name } = req.body as { name: string };
       const optionRep = await getRepository(Option)
         .createQueryBuilder("option")
@@ -86,11 +80,6 @@ class OptionController {
   public async updateOption(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params as { id: string };
     try {
-      const error = validationResult(req);
-      if (!error.isEmpty()) {
-        return res.status(400).json({ errors: error.array() });
-      }
-
       const { name } = req.body as { name: string };
       await getRepository(Option)
         .createQueryBuilder("option")
