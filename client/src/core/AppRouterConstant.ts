@@ -8,7 +8,8 @@ import LoginEndUser from "../screens/UserScreens/Auth/Login";
 import ProductDetailsPage from "../screens/UserScreens/Product/ProductDetailsPage";
 import ProductPage from "../screens/UserScreens/Product/ProductPage";
 import ResigterEndUser from "../screens/UserScreens/Auth/Resigter";
-import ListProdcutAddCart from '../screens/UserScreens/Product/ListProdcutAddCart';
+import ListProdcutAddCart from "../screens/UserScreens/Product/ListProdcutAddCart";
+import ListPayProduct from "../screens/UserScreens/Product/ListPayProduct";
 enum ETYPE {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -48,6 +49,13 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     name: "List Product add cart",
     path: "/list_product_add",
     component: ListProdcutAddCart,
+    exact: false,
+    type: ETYPE.USER,
+  },
+  {
+    name: "List Pay Product",
+    path: "/list_pay_product",
+    component: ListPayProduct,
     exact: false,
     type: ETYPE.USER,
   },
@@ -98,9 +106,9 @@ export const AppRouterConfig: IAppRouterConfig[] = [
   },
   {
     name: "admin",
-    path: '/admin',
+    path: "/admin",
     exact: true,
     component: Dashboard,
-    type: ETYPE.ADMIN
-  }
+    type: ETYPE.ADMIN,
+  },
 ];
