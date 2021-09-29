@@ -5,51 +5,55 @@ import ProductFilter from "../../../components/productfilter/ProductFilter";
 import { FilterInterFace, MockFilterData } from "../../../data/FilterDataPage";
 import { products } from "../../../data/products";
 import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
-import { useState } from 'react'
+import { useState } from "react";
 import { ChangeEvent } from "react";
-const ProductPage: React.FC = (props) => {
-  const [filterData, setFilterData] = useState<FilterInterFace>({});
-  const [tempData, setTimeData] = useState<FilterInterFace>({});
-  const [helper, setHelper] = useState<string[]>([]);
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import {
+  filterChange,
+  filterClear,
+  getAllFiltter,
+  getAllProduct,
+} from "../../../redux/reducers/product.reducer";
 
-  const onChange = ({ target } : ChangeEvent<HTMLInputElement>) => {
+const ProductPage: React.FC = (props) => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.product.products);
+  const filter = useAppSelector((state) => state.product.filter);
+  const helper = useAppSelector((state) => state.product.helper);
+  const filterLoading = useAppSelector((state) => state.product.loadingFilter);
+  const productloading = useAppSelector(
+    (state) => state.product.loadingProduct
+  );
+  const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
-    setFilterData(
-      {
-        ...filterData, [value] : filterData[value].map(
-          e => e.content === name ? { content: e.content, use: !e.use } : e
-        )
-      }
-    );
-  }
+    dispatch(filterChange({ value, name }));
+  };
 
   const onDelete = () => {
-    setFilterData(tempData);
-  }
+    dispatch(filterClear());
+  };
 
-  useEffect (() => {
-    GetDataFilter()
-    console.log('rerender')
-  },[])
-
-  const GetDataFilter = async () => {
-    const data = await MockFilterData();
-    setFilterData(data.filter);
-    setTimeData(data.filter);
-    setHelper(data.filter_helper);
-  }
+  useEffect(() => {
+    dispatch(getAllFiltter());
+    dispatch(getAllProduct());
+  }, [dispatch]);
 
   return (
     <LayoutContainer>
       <div className="wapper">
         <ProductFilter
-          filter={filterData}
+          filter={filter}
           helper={helper}
           onChange={onChange}
           onDelete={onDelete}
+          loading={filterLoading}
         />
         <div className="product-content">
-          <CardContainer content={products} layout_3={true} />
+          {productloading ? (
+            "loadingProduct"
+          ) : (
+            <CardContainer content={products} layout_3={true} />
+          )}
         </div>
       </div>
     </LayoutContainer>

@@ -19,7 +19,7 @@ const ListProdcutAddCart = () => {
   const [data, setData] = useState(data_list);
   console.log(data);
 
-  const CountProduct = data_list.length;
+  const CountProduct = data.length !== 0 ? data.length : 0;
   const handleCountPrice = () => {
     const Price: any[] = [];
     if (data.length !== 0) {
@@ -32,19 +32,24 @@ const ListProdcutAddCart = () => {
     }, 0);
     setCountPrice(count);
   };
-  const setPriceUpdate = (price: number) => {
+  const setPlusPrice = (price: number) => {
     setCountPrice(countPrice + price);
+  };
+  const setSubtractPrice = (price: number) => {
+    setCountPrice(countPrice - price);
   };
   const handleOrder = () => {};
   const handleContinue = () => {};
-  const deleteProduct = (title: string, variant_value: string[]) => {
-    const Data = data_list.filter((item) => {
-      if (item.variant_value !== variant_value && item.title !== title) {
-        return item;
-      }
+  const deleteProduct = (
+    title: string,
+    variant_value: string[],
+    Index: number
+  ) => {
+    const Data = data_list.filter((item, index) => {
+      return index !== Index;
     });
     console.log(Data);
-
+    console.log(Index);
     setData(Data);
     localStorage.setItem("cartProduct", JSON.stringify(Data));
   };
@@ -75,9 +80,10 @@ const ListProdcutAddCart = () => {
                   price={e.price}
                   count={e.number}
                   deleteProduct={() => {
-                    deleteProduct(e.title, e.variant_value);
+                    deleteProduct(e.title, e.variant_value, index);
                   }}
-                  setPriceUpdate={setPriceUpdate}
+                  setPriceUpdate={setPlusPrice}
+                  setSubtractPrice={setSubtractPrice}
                 />
               </div>
             ))

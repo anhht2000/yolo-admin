@@ -1,0 +1,149 @@
+$height : 6rem;
+$width: 25rem;
+.admin-sidebar {
+  width: $width;
+  height: 100vh;
+  position: fixed;
+  background-color: #343A40;
+  &__logo {
+    height: $height;
+    padding: 1.3rem 2rem;
+    border-bottom: 2px solid #4B545C;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: 300;
+    color: #D4D6D7;
+    & img {
+      width: 33px;
+      height: 33px;
+    }
+  }
+  &__content {
+    height: calc(100vh - $height);
+    overflow-y: auto;
+    padding-left: 0.8rem;
+    padding-right: 0.3rem;
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-thumb{
+      background-color: gray;
+      border-radius: 5px;
+    }
+  }
+}
+
+.admin-sidebar__content {
+  &-user {
+    margin-top: 1.6rem;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1.6rem;
+    display: flex;
+    gap: 1rem;
+    padding-left: 1.2rem;
+    align-items: center;
+    color: #A7ACB4;
+    border-bottom: 2px solid #4B545C;
+    &:hover {
+      cursor: pointer;
+      color: #fff;
+    }
+    img {
+      width: 33px;
+      height: 33px;
+      border-radius: 50%;
+    }
+  }
+
+  &-router {
+
+  }
+}
+
+.admin-router {
+  &__one {
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    color: #C2C7D0!important;
+    &:hover {
+      background-color: #494E53;
+      color: #fff!important;
+      & > i {
+        color: #fff;
+      }
+    }
+    & > i {
+      font-size: 2.5rem;
+      color: #C2C7D0;
+      width: 3.5rem;
+    }
+  }
+}
+
+.admin-router__multiple {
+  &-header {
+    padding: 0.8rem 1.2rem;
+    padding-right: 1.8rem;
+    display: flex;
+    align-items: center;
+    color: #C2C7D0!important;
+    position: relative;
+    cursor: pointer;
+    &-title {
+      width: 78%;
+    }
+    &:hover {
+      background-color: #494E53;
+      color: #fff!important;
+      & > i {
+        color: #fff;
+      }
+    }
+    & > i {
+      font-size: 2.5rem;
+      color: #C2C7D0;
+      width: 3.5rem;
+    }
+    &.active {
+      .admin-router__multiple-icon {
+        position: absolute;
+        top: 43%;
+        transform: translateY(-50%) rotateZ(-90deg);
+      }
+    }
+  }
+  &-icon {
+    position: absolute;
+    top: 50%;
+    right: 0rem;
+    transform: translateY(-50%);
+    transition: all 0.3s ease-in-out;
+  }
+
+
+}
+
+.admin-router__multiple-router {
+  visibility: hidden;
+  position: relative;
+  left: -100%;
+  opacity: 0;
+  height: 0;
+  transition: all 0.3s ease-in-out;
+  & .admin-router__one {
+    padding-left: 4.5rem;
+  }
+  &.active {
+    left: 0;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+  &-char {
+    width: 80%;
+  }
+}

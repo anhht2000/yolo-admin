@@ -11,6 +11,7 @@ interface PropListAdd {
   deleteProduct?: any;
   countmoney?: any;
   setPriceUpdate: (price: number) => void;
+  setSubtractPrice: (price: number) => void;
 }
 const Listaddproduct: React.FC<PropListAdd> = (props) => {
   const {
@@ -20,8 +21,8 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
     price,
     count,
     deleteProduct,
-    countmoney,
     setPriceUpdate,
+    setSubtractPrice,
   } = props;
   const Variant_value: string[] = variant_value;
   const data = JSON.parse(localStorage.getItem("cartProduct") as string) as {
@@ -74,19 +75,16 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
 
   const plusClick = () => {
     setNumber(number + 1);
+    setPriceUpdate(parseInt(price as string));
   };
   const minusClick = () => {
     if (number - 1 < 1) return;
     setNumber(number - 1);
+    setSubtractPrice(parseInt(price as string));
   };
   useEffect(() => {
     saveToLocal();
-    // countmoney(money);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // console.log(money);
-  }, [money]);
-  useEffect(() => {
-    setPriceUpdate(parseInt(price as string) * number);
   }, [number]);
   return (
     <div className="contaiber_listadd">
