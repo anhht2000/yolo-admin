@@ -11,7 +11,6 @@ const Boostrap = async () => {
   app.listen(PORT, () =>
     console.log(`App Listen On: http://localhost:${PORT}`)
   );
-  console.log("1");
 };
 
 Boostrap().catch((err) => console.log(err));
