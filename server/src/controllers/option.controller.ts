@@ -27,7 +27,7 @@ class OptionController {
         }
       });
     } catch (error) {
-      res.send({message: error});
+      res.send({ message: error });
     }
   }
   public async createOption(req: Request, res: Response, next: NextFunction) {
@@ -36,7 +36,7 @@ class OptionController {
       const optionRep = await getRepository(Option)
         .createQueryBuilder('option')
         .insert()
-        .values({name: name})
+        .values({ name: name })
         .execute();
 
       res.send({ data: optionRep });
@@ -50,7 +50,7 @@ class OptionController {
       const { id } = req.params as { id: string };
       const optionRepo = await getRepository(Option)
         .createQueryBuilder('option')
-        .where('option.id = :id',{id: id})
+        .where('option.id = :id', { id: id })
         .getOne();
 
       res.send({ data: optionRepo });
@@ -85,12 +85,12 @@ class OptionController {
         .createQueryBuilder('option')
         .update()
         .set({ name: name })
-        .where('option.id = :id', {id: id})
+        .where('option.id = :id', { id: id })
         .execute();
 
       const optionRep = await getRepository(Option)
         .createQueryBuilder('option')
-        .where('option.id = :id', {id: id})
+        .where('option.id = :id', { id: id })
         .getOne();
 
       res.send({ data: optionRep });
