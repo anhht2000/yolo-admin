@@ -1,9 +1,10 @@
+import { CommonConfig } from "./index";
+import { ProductOption } from "./../models/productOption.entity";
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { getConnection, getRepository } from "typeorm";
 import { Product } from "../models/product.entity";
-import { Product_Img } from "./../models/product.img.entity";
-import { Product_Option } from "./../models/product.option.entity";
+import { ProductImg } from "../models/productImg.entity";
 
 class ProductController {
   //get
@@ -14,8 +15,8 @@ class ProductController {
   ) {
     try {
       const { page, limit } = request.query;
-      const _page = Number(page) || 1;
-      const _limit = Number(limit) || 5;
+      const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
+      const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
       const count = await getRepository(Product)
         .createQueryBuilder("product")
         .getCount();
@@ -123,8 +124,8 @@ class ProductController {
       const queryRunner = getConnection().createQueryRunner();
       queryRunner.startTransaction();
       try {
-        await queryRunner.manager.delete(Product_Option, { product: id });
-        await queryRunner.manager.delete(Product_Img, { product: id });
+        await queryRunner.manager.delete(ProductOption, { product: id });
+        await queryRunner.manager.delete(ProductImg, { product: id });
         await queryRunner.manager.delete(Product, { id: id });
         response.json({ mess: "delete success" });
         queryRunner.commitTransaction();
