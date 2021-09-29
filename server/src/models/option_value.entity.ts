@@ -1,9 +1,11 @@
 import { Product_Option } from "./product.option.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product_Img } from "./product.img.entity";
+import { Common } from "./helper/common.helper";
+import { Option } from "./option.entity";
 
 @Entity()
-export class Option_Value {
+export class Option_Value extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -15,4 +17,7 @@ export class Option_Value {
     (product_option) => product_option.option_value
   )
   product_options: Product_Option[];
+
+  @ManyToOne(() => Option, (option)=> option.option_value)
+  option: Option;
 }

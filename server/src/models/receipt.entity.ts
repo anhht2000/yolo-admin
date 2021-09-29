@@ -3,9 +3,10 @@ import { User } from "./user.entity";
 import { ManyToOne } from "typeorm";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { OneToMany } from "typeorm";
+import { Common } from "./helper/common.helper";
 
 @Entity()
-export class Receipt {
+export class Receipt extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 

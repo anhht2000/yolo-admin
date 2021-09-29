@@ -5,13 +5,12 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Common } from "./helper/common.helper";
 import { Option } from "./option.entity";
 import { Option_Value } from "./option_value.entity";
 import { Product } from "./product.entity";
-import { Product_Img } from "./product.img.entity";
-
 @Entity()
-export class Product_Option {
+export class Product_Option extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 
