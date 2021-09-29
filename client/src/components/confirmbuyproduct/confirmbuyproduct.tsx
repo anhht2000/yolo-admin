@@ -27,7 +27,6 @@ const confirmbuyproduct = (props: PropConfirm) => {
           onClick={ordered}
           className="container_confirmbuy_bt-confirm"
         >
-          {" "}
           ĐẶT HÀNG
         </button>
       </div>

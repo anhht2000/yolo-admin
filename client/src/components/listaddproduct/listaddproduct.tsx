@@ -35,7 +35,6 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
   }[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [number, setNumber] = useState<number>(count as number);
-  const [money, setMoney] = useState(0);
   const setInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (isNaN(parseInt(e.target.value)) || parseInt(e.target.value) < 1) {
       setNumber(1);
@@ -43,14 +42,6 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
       setNumber(parseInt(e.target.value));
     }
   };
-  // const deleteProduct = () => {
-  //   const datadelete = data.filter((item) => {
-  //     return item.title !== title;
-  //   });
-  //   localStorage.setItem("cartProduct", JSON.stringify(datadelete));
-  //   // window.location.reload();
-  // };
-
   const saveToLocal = () => {
     if (data) {
       let flag = false;

@@ -17,7 +17,6 @@ const ListProdcutAddCart = () => {
   }[];
   const [countPrice, setCountPrice] = useState(0);
   const [data, setData] = useState(data_list);
-  console.log(data);
 
   const CountProduct = data.length !== 0 ? data.length : 0;
   const handleCountPrice = () => {
@@ -48,8 +47,6 @@ const ListProdcutAddCart = () => {
     const Data = data_list.filter((item, index) => {
       return index !== Index;
     });
-    console.log(Data);
-    console.log(Index);
     setData(Data);
     localStorage.setItem("cartProduct", JSON.stringify(Data));
   };
