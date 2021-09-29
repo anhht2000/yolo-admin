@@ -1,13 +1,20 @@
 import { CButton, CCol, CForm, CFormInput, CFormSelect, CRow } from '@coreui/react'
 import React from 'react'
+import { useHistory } from 'react-router'
 import ProductTable from 'src/components/product/ProductTable'
 import { products } from 'src/data/products'
 
 const Product = () => {
+  const history = useHistory()
+  const handleClickAdd = () => {
+    history.push('/product/add')
+  }
   return (
     <div>
       <h2>Quản lý sản phẩm</h2>
-      <CButton color="dark my-3">Thêm sản phẩm</CButton>
+      <CButton color="dark my-3" onClick={handleClickAdd}>
+        Thêm sản phẩm
+      </CButton>
       {/* <CContainer> */}
       <CRow className="mt-2">
         <CCol xs={6}>
