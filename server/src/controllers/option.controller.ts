@@ -6,17 +6,17 @@ import { OptionValue } from "../models/optionValue.entity";
 class OptionController {
   public async getAllOption(req: Request, res: Response, next: NextFunction) {
     try {
-      const limit = parseInt(req.query.limit as string) || 5;
-      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || CommonConfig.DEFAUT_PERPAGE;
+      const page = parseInt(req.query.page as string) || CommonConfig.DEFAUT_PAGE;
       const optionRep = await getRepository(Option)
-                              .createQueryBuilder('option')
-                              .skip((page-1) * limit)
-                              .take(limit)
-                              .getMany();
+        .createQueryBuilder('option')
+        .skip((page-1) * limit)
+        .take(limit)
+        .getMany();
 
       const optionRepPage = await getRepository(Option)
-                                  .createQueryBuilder('option')
-                                  .getCount();
+        .createQueryBuilder('option')
+        .getCount();
 
       res.send({
         data: optionRep,
@@ -39,10 +39,10 @@ class OptionController {
 
       const { name } = req.body as { name: string };
       const optionRep = await getRepository(Option)
-                                .createQueryBuilder('option')
-                                .insert()
-                                .values({name: name})
-                                .execute();
+        .createQueryBuilder('option')
+        .insert()
+        .values({name: name})
+        .execute();
 
       res.send({ data: optionRep });
     } catch (error) {
@@ -54,9 +54,9 @@ class OptionController {
     try {
       const { id } = req.params as { id: string };
       const optionRepo = await getRepository(Option)
-                              .createQueryBuilder('option')
-                              .where('option.id = :id',{id: id})
-                              .getOne();
+        .createQueryBuilder('option')
+        .where('option.id = :id',{id: id})
+        .getOne();
 
       res.send({ data: optionRepo });
     } catch (error) {
@@ -95,13 +95,14 @@ class OptionController {
         .createQueryBuilder('option')
         .update()
         .set({ name: name })
-        .where('option.id = :id',{id: id})
+        .where('option.id = :id',{ id: id })
         .execute();
 
       const optionRep = await getRepository(Option)
-                        .createQueryBuilder('option')
-                        .where('option.id = :id',{id: id})
-                        .getOne();
+        .createQueryBuilder('option')
+        .where('option.id = :id',{id: id})
+        .getOne();
+
       res.send({ data: optionRep });
     } catch (error) {
       res.send({ message: error });
