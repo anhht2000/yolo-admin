@@ -22,7 +22,6 @@ export default function ProductTable(props) {
   const { products } = props
   const [visible, setVisible] = useState({ status: false, slug: '' })
   const handleDelete = () => {
-    console.log('xoas', visible.slug)
     setVisible({ ...visible, status: false })
   }
   const handleChangeCheck = (value) => {

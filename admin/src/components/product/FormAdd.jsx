@@ -26,6 +26,7 @@ export default function FormAdd({ type, initialValue }) {
         },
       })
     }
+    console.log({ name, value, type, checked })
   }
   const handleSubmit = () => {
     const argS =
@@ -39,7 +40,7 @@ export default function FormAdd({ type, initialValue }) {
         .filter((e) => e[1] === true)
         .map((e) => e[0])
 
-    console.log({ ...values, size: argS, colors: argC, image01: image[0], image02: image[1] })
+    const value = { ...values, size: argS, colors: argC, image01: image[0], image02: image[1] }
   }
   // form edit
   if (type === 'edit') {
@@ -50,7 +51,6 @@ export default function FormAdd({ type, initialValue }) {
             Tên
           </CFormLabel>
           <CCol sm={9}>
-            {/* defaultValue="email@example.com" */}
             <CFormInput
               type="text"
               id="title"
@@ -92,7 +92,7 @@ export default function FormAdd({ type, initialValue }) {
                     // defaultChecked={
                     //   values?.size && values.size.indexOf(e.content.toLowerCase()) !== -1
                     // }
-                    onChange={(e) => handleChange(e)}
+                    onClick={(e) => handleChange(e)}
                   />
                 )
               })}

@@ -104,12 +104,12 @@ const routes = [
   { path: '/widgets', name: 'Widgets', component: Widgets },
   // path
   //MANAGE pRODUCT
+  { path: '/product/option', name: 'Option', component: ProductOption, exact: true },
+  { path: '/product/option/variant', name: 'Variant', component: ProductOptionVariant },
+
   { path: '/product', name: 'Product', component: Product, exact: true },
   { path: '/product/add', name: 'Form Add Product', component: AddFormProduct, exact: true },
   { path: '/product/:slug', name: 'Form Edit Product', component: EditFormProduct, exact: true },
-
-  { path: '/product/option', name: 'Option', component: ProductOption, exact: true },
-  { path: '/product/option/variant', name: 'Variant', component: ProductOptionVariant },
 ]
 
 export default routes
