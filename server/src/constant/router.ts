@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productRouter, userRouter } from "../router";
+import { productRouter, userRouter, optionRouter } from "../router";
 
 interface IRouterConstant {
   path: string;
@@ -7,5 +7,6 @@ interface IRouterConstant {
 }
 export const RouterConstant: IRouterConstant[] = [
   { path: "/user", router: userRouter },
+  { path: "/option", router: optionRouter },
   { path: "/product", router: productRouter },
 ];

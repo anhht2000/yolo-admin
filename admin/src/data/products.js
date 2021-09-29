@@ -10,6 +10,7 @@ export const products = [
     colors: ['white', 'red', 'orange'],
     slug: 'ao-thun-dinosaur-01',
     size: ['s', 'm', 'l', 'xl'],
+    active: true,
   },
   {
     title: 'Áo thun Dinosaur 02',
@@ -20,6 +21,7 @@ export const products = [
     colors: ['white', 'red', 'blue'],
     slug: 'ao-thun-dinosaur-02',
     size: ['s', 'm'],
+    active: true,
   },
   {
     title: 'Áo thun Dinosaur 03',
@@ -30,6 +32,7 @@ export const products = [
     colors: ['white', 'red', 'orange', 'yellow'],
     slug: 'ao-thun-dinosaur-03',
     size: ['m'],
+    active: true,
   },
   {
     title: 'Áo thun Polo 04',
@@ -40,6 +43,7 @@ export const products = [
     colors: ['white', 'orange', 'blue'],
     slug: 'ao-thun-polo-04',
     size: ['xl'],
+    active: false,
   },
   {
     title: 'Áo thun Polo 05',
@@ -50,6 +54,7 @@ export const products = [
     colors: ['white', 'pink'],
     slug: 'ao-thun-polo-05',
     size: ['xxl'],
+    active: false,
   },
   {
     title: 'Áo thun Polo 06',
@@ -60,6 +65,7 @@ export const products = [
     colors: ['black'],
     slug: 'ao-thun-polo-06',
     size: ['s', 'm', 'xl'],
+    active: false,
   },
   {
     title: 'Áo somi caro 07',
@@ -70,6 +76,7 @@ export const products = [
     colors: ['white', 'red', 'orange', 'blue'],
     slug: 'ao-somi-caro-07',
     size: ['l', 'xl'],
+    active: false,
   },
   {
     title: 'Áo somi dài tay 08',
@@ -80,6 +87,7 @@ export const products = [
     colors: ['white', 'red', 'black'],
     slug: 'ao-somi-dai-tay-08',
     size: ['s', 'm', 'xl'],
+    active: false,
   },
   {
     title: 'Áo somi tay dài 09',
@@ -90,6 +98,7 @@ export const products = [
     colors: ['white', 'blue'],
     slug: 'ao-somi-tay-dai-09',
     size: ['m'],
+    active: false,
   },
   {
     title: 'Quần jean phong cách 10',
@@ -100,6 +109,7 @@ export const products = [
     colors: ['blue', 'black'],
     slug: 'quan-jean-phong-cach-10',
     size: ['l'],
+    active: false,
   },
   {
     title: 'Quần jean 11',
@@ -110,6 +120,7 @@ export const products = [
     colors: ['blue', 'black'],
     slug: 'quan-jean-11',
     size: ['s', 'm', 'xl'],
+    active: false,
   },
   {
     title: 'Quần jean 12',
@@ -120,6 +131,7 @@ export const products = [
     colors: ['blue'],
     slug: 'quan-jean-12',
     size: ['s', 'm', 'xl'],
+    active: false,
   },
   {
     title: 'Áo thun Dinosaur 13',
@@ -130,6 +142,7 @@ export const products = [
     colors: ['white', 'red'],
     slug: 'ao-thun-dinosaur-13',
     size: ['s', 'm', 'xl'],
+    active: false,
   },
   {
     title: 'Áo thun Dinosaur 14',
@@ -140,6 +153,7 @@ export const products = [
     colors: ['white', 'blue'],
     slug: 'ao-thun-dinosaur-14',
     size: ['s', 'm'],
+    active: false,
   },
   {
     title: 'Áo thun Dinosaur 15',
@@ -150,6 +164,7 @@ export const products = [
     colors: ['red', 'blue'],
     slug: 'ao-thun-dinosaur-15',
     size: ['xl'],
+    active: false,
   },
   {
     title: 'Áo somi dài tay 16',
@@ -160,6 +175,7 @@ export const products = [
     colors: ['blue', 'black'],
     slug: 'ao-somi-dai-tay-16',
     size: ['m', 'xl'],
+    active: false,
   },
   {
     title: 'Áo somi tay dài 17',
@@ -170,6 +186,7 @@ export const products = [
     colors: ['white', 'blue'],
     slug: 'ao-somi-tay-dai-17',
     size: ['s', 'l', 'xl'],
+    active: false,
   },
   {
     title: 'Quần jean phong cách 18',
@@ -180,5 +197,6 @@ export const products = [
     colors: ['blue', 'black'],
     slug: 'quan-jean-phong-cach-18',
     size: ['s', 'm', 'l', 'xl'],
+    active: false,
   },
 ]

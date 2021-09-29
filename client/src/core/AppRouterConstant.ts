@@ -2,12 +2,13 @@ import Dashboard from "../screens/AdminScreens/Dashboard";
 import ForgetPass from "../screens/AdminScreens/ForgetPass";
 import Login from "../screens/AdminScreens/Login";
 import SignUp from "../screens/AdminScreens/SignUp";
-import ForgotPasswordEndUser from "../screens/UserScreens/ForgotPassword";
-import LandingPage from "../screens/UserScreens/LandingPage";
-import LoginEndUser from "../screens/UserScreens/Login";
-import ProductDetailsPage from "../screens/UserScreens/ProductDetailsPage";
-import ProductPage from "../screens/UserScreens/ProductPage";
-import ResigterEndUser from "../screens/UserScreens/Resigter";
+import ForgotPasswordEndUser from "../screens/UserScreens/Auth/ForgotPassword";
+import LandingPage from "../screens/UserScreens/Home/LandingPage";
+import LoginEndUser from "../screens/UserScreens/Auth/Login";
+import ProductDetailsPage from "../screens/UserScreens/Product/ProductDetailsPage";
+import ProductPage from "../screens/UserScreens/Product/ProductPage";
+import ResigterEndUser from "../screens/UserScreens/Auth/Resigter";
+import ListProdcutAddCart from '../screens/UserScreens/Product/ListProdcutAddCart';
 enum ETYPE {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -40,6 +41,13 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     name: "Product Detail Page",
     path: "/product/:id",
     component: ProductDetailsPage,
+    exact: false,
+    type: ETYPE.USER,
+  },
+  {
+    name: "List Product add cart",
+    path: "/list_product_add",
+    component: ListProdcutAddCart,
     exact: false,
     type: ETYPE.USER,
   },

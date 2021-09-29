@@ -1,4 +1,6 @@
 import React from 'react'
+import AddFormProduct from './views/pages/product/AddFormProduct'
+import EditFormProduct from './views/pages/product/EditFormProduct'
 import Product from './views/pages/product/Product'
 import ProductOption from './views/pages/productOption/ProductOption'
 import ProductOptionVariant from './views/pages/productOptionVariant/ProductOptionVariant'
@@ -101,9 +103,13 @@ const routes = [
   { path: '/notifications/toasts', name: 'Toasts', component: Toasts },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   // path
-  { path: '/product', name: 'Product', component: Product, exact: true },
+  //MANAGE pRODUCT
   { path: '/product/option', name: 'Option', component: ProductOption, exact: true },
   { path: '/product/option/variant', name: 'Variant', component: ProductOptionVariant },
+
+  { path: '/product', name: 'Product', component: Product, exact: true },
+  { path: '/product/add', name: 'Form Add Product', component: AddFormProduct, exact: true },
+  { path: '/product/:slug', name: 'Form Edit Product', component: EditFormProduct, exact: true },
 ]
 
 export default routes

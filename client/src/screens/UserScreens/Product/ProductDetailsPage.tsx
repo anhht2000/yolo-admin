@@ -2,11 +2,11 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
-import { IProducts, products } from "../../data/products";
-import ProductDetail from "../../components/productdetail/ProductDetail";
-import Section from "../../components/section/Section";
-import CardContainer from "../../components/cardcontent/CardContainer";
-import LayoutContainer from "../../layout/HomeLayout/LayoutContainer";
+import { IProducts, products } from "../../../data/products";
+import ProductDetail from "../../../components/productdetail/ProductDetail";
+import Section from "../../../components/section/Section";
+import CardContainer from "../../../components/cardcontent/CardContainer";
+import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
 
 const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../sass/login.scss";
+import "../../../sass/login.scss";
 import { NavLink } from "react-router-dom";
 import {
   TextField,
@@ -8,9 +8,9 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { AccountCircle, Visibility, VisibilityOff,Fingerprint} from "@material-ui/icons";
-import { imgLogo } from "../../assets";
-import { string } from "../../assets/string";
-import { validateEmail, validatePassword } from "../../lib/FunctHelper";
+import { imgLogo } from "../../../assets";
+import { string } from "../../../assets/string";
+import { validateEmail, validatePassword } from "../../../lib/FunctHelper";
 const Login = () => {
   const [values, setValues] = useState({
     amount: "",

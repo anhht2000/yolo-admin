@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import './scss/style.scss'
+import ForgetPassword from './views/pages/forgetPass/ForgetPassword'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -24,6 +25,12 @@ class App extends Component {
         <React.Suspense fallback={loading}>
           <Switch>
             <Route exact path="/login" name="Login Page" render={(props) => <Login {...props} />} />
+            <Route
+              exact
+              path="/forget-password"
+              name="Forget Password Page"
+              render={(props) => <ForgetPassword {...props} />}
+            />
             <Route
               exact
               path="/register"

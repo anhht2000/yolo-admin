@@ -1,0 +1,42 @@
+    .container_listprodcutadd {
+        display: flex;
+        padding: 1.5em;
+        width: 100%;
+        @media screen and (max-width: 1100px) {
+            display: block;
+            // overflow: scroll
+        }
+        &_leftconfirm {
+            width: 30%;
+            position: relative;
+            height: 16em;
+            margin-top: 3em;
+            background-color: white;
+            box-shadow: 0px 0px 2rem 1px #d6d6d6;
+            @media screen and (max-width: 1100px) {
+                position: fixed;
+                display: none;
+                z-index: 99;
+                width: 95%;
+                bottom: 16em
+            }
+        }
+        &_right {
+            width: 70%;
+            padding: 1em;
+            position: relative;
+            &-Error {
+                padding: 4em;
+                font-size: 1.2em;
+                font-weight: bold;
+                height: 100%;
+                &-bt {
+                    font-size: 1.0em;
+                    width: 40%;
+                    margin-left: 6em;
+                    margin-top: 1.0em;
+                    height: 1.5em
+                }
+            }
+        }
+    }

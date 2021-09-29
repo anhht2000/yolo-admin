@@ -31,10 +31,10 @@ const Register = () => {
                     </CInputGroupText>
                     <CFormInput placeholder="Username" autoComplete="username" />
                   </CInputGroup>
-                  <CInputGroup className="mb-3">
+                  {/* <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
                     <CFormInput placeholder="Email" autoComplete="email" />
-                  </CInputGroup>
+                  </CInputGroup> */}
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
