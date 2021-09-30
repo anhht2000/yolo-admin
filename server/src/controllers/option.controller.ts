@@ -8,13 +8,19 @@ class OptionController {
     try {
       const limit = parseInt(req.query.limit as string) || CommonConfig.DEFAUT_PERPAGE;
       const page = parseInt(req.query.page as string) || CommonConfig.DEFAUT_PAGE;
+      const search = req.query.search || '';
+
       const optionRep = await getRepository(Option)
         .createQueryBuilder('option')
         .skip((page - 1) * limit)
         .take(limit)
+        .where('option.name LIKE :name', { name: `%${search}%` })
         .getMany();
 
-      const optionRepPage = await getRepository(Option).createQueryBuilder('option').getCount();
+      const optionRepPage = await getRepository(Option)
+        .createQueryBuilder('option')
+        .where('option.name LIKE :name', { name: `%${search}%` })
+        .getCount();
 
       res.send({
         data: optionRep,
@@ -89,9 +95,9 @@ class OptionController {
         .where('option.id = :id', { id: id })
         .getOne();
 
-      res.send({ data: optionRep });
+      return res.send({ data: optionRep });
     } catch (error) {
-      res.send({ message: error });
+      return res.send({ message: error });
     }
   }
 }
