@@ -9,7 +9,6 @@ const Boostrap = async () => {
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => console.log(`App Listen On: http://localhost:${PORT}`))
-  connect.close();
 }
 
 Boostrap().catch(err => console.log(err))

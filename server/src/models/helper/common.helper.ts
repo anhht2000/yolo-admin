@@ -3,11 +3,11 @@ import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from "typeorm";
 export abstract class Common {
 
   @CreateDateColumn()
-  createdate: Date
+  createDate: Date
 
   @UpdateDateColumn()
-  updatedate: Date
+  updateDate: Date
 
   @DeleteDateColumn()
-  deletedate: Date
+  deleteDate: Date
 }
