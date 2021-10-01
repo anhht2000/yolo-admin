@@ -37,9 +37,10 @@ class OptionController {
   public async createOption(req: Request, res: Response, next: NextFunction) {
     try {
       const { name } = req.body as { name: string };
-      const optionRep = await getRepository(Option)
-        .createQueryBuilder("option")
+      const optionRep = await getConnection()
+        .createQueryBuilder()
         .insert()
+        .into(Option)
         .values({ name: name })
         .execute();
 
@@ -79,15 +80,16 @@ class OptionController {
       queryRunner.release();
     }
   }
+
   public async updateOption(req: Request, res: Response, next: NextFunction) {
-    const { id } = req.params as { id: string };
     try {
+      const { id } = req.params as { id: string };
       const { name } = req.body as { name: string };
-      await getRepository(Option)
-        .createQueryBuilder("option")
-        .update()
+      await getConnection()
+        .createQueryBuilder()
+        .update(Option)
         .set({ name: name })
-        .where("option.id = :id", { id: id })
+        .where("id = :id", { id: id })
         .execute();
 
       const optionRep = await getRepository(Option)
