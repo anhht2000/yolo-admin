@@ -9,8 +9,6 @@ class OptionValueController {
       const { optionId } = req.params as { optionId : string }
       const { name } = req.body as { name: string };
 
-      console.log(req.params);
-
       const optionRepo = await getRepository(Option)
         .createQueryBuilder('option')
         .where('option.id = :id', { id : optionId })
