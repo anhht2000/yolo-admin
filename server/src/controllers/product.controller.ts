@@ -23,6 +23,8 @@ class ProductController {
         .getMany();
 
       return response.status(200).json({
+        success: true,
+        message: 'Get list successfully',
         data: productList,
         page: {
           totalPage: _total,
@@ -31,7 +33,7 @@ class ProductController {
         },
       });
     } catch (error) {
-      return response.status(500).json({ err: error });
+      return response.status(500).json({ success: false, message: 'Get list fail' });
     }
   }
   //add
@@ -50,10 +52,12 @@ class ProductController {
         .execute();
 
       return response.status(200).json({
+        success: true,
+        message: 'Add successfully',
         data: { name, description, price, ...product.generatedMaps[0] },
       });
     } catch (error) {
-      return response.status(500).json({ err: error });
+      return response.status(500).json({ success: true, message: error });
     }
   }
   //update
@@ -77,11 +81,12 @@ class ProductController {
         .getOne();
 
       return response.status(200).json({
+        success: true,
+        message: 'Get list successfully',
         data: data,
-        message: 'success',
       });
     } catch (error) {
-      return response.status(500).json({ err: error });
+      return response.status(500).json({ success: false, message: error });
     }
   }
   //delete
@@ -95,12 +100,13 @@ class ProductController {
       await queryRunner.manager.delete(Product, { id: id });
       queryRunner.commitTransaction();
 
-      return response.json({ mess: 'delete success' });
+      response.json({ success: true, message: 'Delete successfully' });
     } catch (error) {
       queryRunner.rollbackTransaction();
-      return response.json({ mess: 'delete fail' });
+      response.json({ success: false, message: 'Delete fail' });
     } finally {
       queryRunner.release();
+      return;
     }
   }
   //search and filter
@@ -124,6 +130,8 @@ class ProductController {
           .getMany();
 
         return response.status(200).json({
+          success: true,
+          message: 'search successfully',
           data: productList,
           page: {
             totalPage: _total,
@@ -132,7 +140,7 @@ class ProductController {
           },
         });
       } catch (error) {
-        return response.status(500).json({ err: error });
+        return response.status(500).json({ success: false, message: error });
       }
     } else {
       try {
@@ -184,6 +192,8 @@ class ProductController {
         const _total = Math.ceil(count / _limit);
 
         return response.status(200).json({
+          success: true,
+          message: 'Filter successfully',
           data: productList,
           page: {
             totalPage: _total,
@@ -192,7 +202,7 @@ class ProductController {
           },
         });
       } catch (error) {
-        return response.status(500).send(error);
+        return response.status(500).send({ success: false, message: 'Filter fail' });
       }
     }
   }
