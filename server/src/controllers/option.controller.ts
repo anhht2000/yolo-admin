@@ -1,8 +1,8 @@
-import { CommonConfig } from "./index";
-import { NextFunction, Request, Response } from "express";
-import { getConnection, getRepository } from "typeorm";
-import { Option } from "../models/option.entity";
-import { OptionValue } from "../models/optionValue.entity";
+import { NextFunction, Request, Response } from 'express';
+import { getConnection, getRepository } from 'typeorm';
+import { Option } from '../models/option.entity';
+import { OptionValue } from '../models/optionValue.entity';
+import { CommonConfig } from './index';
 class OptionController {
   public async getAllOption(req: Request, res: Response, next: NextFunction) {
     try {
@@ -11,15 +11,15 @@ class OptionController {
       const search = req.query.search || '';
 
       const optionRep = await getRepository(Option)
-        .createQueryBuilder("option")
-        .leftJoinAndSelect('option.optionValue','optionValue')
+        .createQueryBuilder('option')
+        .leftJoinAndSelect('option.optionValue', 'optionValue')
         .where('option.name LIKE :name', { name: `%${search}%` })
         .skip((page - 1) * limit)
         .take(limit)
         .getMany();
 
       const optionRepPage = await getRepository(Option)
-        .createQueryBuilder("option")
+        .createQueryBuilder('option')
         .where('option.name LIKE :name', { name: `%${search}%` })
         .getCount();
 
@@ -55,8 +55,8 @@ class OptionController {
     try {
       const { id } = req.params as { id: string };
       const optionRepo = await getRepository(Option)
-        .createQueryBuilder("option")
-        .where("option.id = :id", { id: id })
+        .createQueryBuilder('option')
+        .where('option.id = :id', { id: id })
         .getOne();
 
       res.send({ data: optionRepo });
@@ -90,12 +90,12 @@ class OptionController {
         .createQueryBuilder()
         .update(Option)
         .set({ name: name })
-        .where("id = :id", { id: id })
+        .where('id = :id', { id: id })
         .execute();
 
       const optionRep = await getRepository(Option)
-        .createQueryBuilder("option")
-        .where("option.id = :id", { id: id })
+        .createQueryBuilder('option')
+        .where('option.id = :id', { id: id })
         .getOne();
 
       return res.send({ data: optionRep });
