@@ -2,7 +2,6 @@ import { Router } from "express";
 import optionValueController from "../controllers/optionValue.controller";
 import { ValidateData } from "../middleware/commonMiddleware";
 import { createRuleOptionValue, UpdateRuleOptionValue } from "../rules/optionValueRouter.rule";
-// import { ValidateData } from "../middleware/commonMiddleware";
 
 const router = Router();
 

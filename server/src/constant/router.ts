@@ -8,6 +8,5 @@ interface IRouterConstant {
 export const RouterConstant: IRouterConstant[] = [
   { path: "/user", router: userRouter },
   { path: "/option", router: optionRouter },
-  { path: "/variant", router: optionValueRouter },
   { path: "/product", router: productRouter },
 ];

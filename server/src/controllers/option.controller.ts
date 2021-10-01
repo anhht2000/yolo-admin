@@ -12,9 +12,10 @@ class OptionController {
 
       const optionRep = await getRepository(Option)
         .createQueryBuilder("option")
+        .leftJoinAndSelect('option.optionValue','optionValue')
+        .where('option.name LIKE :name', { name: `%${search}%` })
         .skip((page - 1) * limit)
         .take(limit)
-        .where('option.name LIKE :name', { name: `%${search}%` })
         .getMany();
 
       const optionRepPage = await getRepository(Option)

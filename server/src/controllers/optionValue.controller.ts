@@ -6,7 +6,10 @@ import { ProductOption } from "../models/productOption.entity";
 class OptionValueController {
   public async insertOptionValue(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, optionId } = req.body as { name: string, optionId: string};
+      const { optionId } = req.params as { optionId : string }
+      const { name } = req.body as { name: string };
+
+      console.log(req.params);
 
       const optionRepo = await getRepository(Option)
         .createQueryBuilder('option')
