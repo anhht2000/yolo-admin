@@ -9,5 +9,6 @@ router.get('/', userController.getAllUser);
 router.post('/', createUpdateRuleUser, ValidateData, userController.createUser);
 router.put('/:userId', createUpdateRuleUser, ValidateData, userController.updateUser);
 router.delete('/:userId', userController.deleteUser);
+router.get('/get', userController.searchUser);
 
 export default router;
