@@ -1,44 +1,71 @@
 import { NextFunction, Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { CommonConfig } from ".";
+import { getConnection, getRepository } from "typeorm";
+import { Option } from "../models/option.entity";
 import { OptionValue } from "../models/optionValue.entity";
-
+import { ProductOption } from "../models/productOption.entity";
 class OptionValueController {
-  public async getAllOptionValueByOption(req: Request, res: Response, next: NextFunction) {
+  public async insertOptionValue(req: Request, res: Response, next: NextFunction) {
     try {
-      const limit = parseInt(req.query.limit as string) || CommonConfig.DEFAUT_PERPAGE;
-      const page = parseInt(req.query.page as string) || CommonConfig.DEFAUT_PAGE;
-      const search = req.query.search || '';
+      const { optionId } = req.params as { optionId : string }
+      const { name } = req.body as { name: string };
 
-      const optionValueRepo = await getRepository(OptionValue)
-        .createQueryBuilder('optionValue')
-        .where('optionValue.name LIKE :name', { name: `%${search}%`})
-        .getMany()
+      const optionRepo = await getRepository(Option)
+        .createQueryBuilder('option')
+        .where('option.id = :id', { id : optionId })
+        .getOne()
 
-      const optionValueRepPage = await getRepository(Option)
-        .createQueryBuilder("optionValue")
-        .where('optionValue.name LIKE :name', { name: `%${search}%` })
-        .getCount();
+      const optionValueRepo = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(OptionValue)
+        .values({ name: name, option: optionRepo })
+        .execute();
 
-      res.send({
-        data: optionValueRepo,
-        page: {
-          totalPage: Math.ceil(optionValueRepPage / limit),
-          perPage: limit,
-          currentPage: page,
-        },
-      });
+      res.send({ data: optionValueRepo })
     } catch (error) {
-      res.send({ message: error });
+      res.send({ error: error })
     }
   }
 
   public async updateOptionValue(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params as { id: string }
+      const { name } = req.body as { name: string }
+      await getConnection()
+        .createQueryBuilder()
+        .update(OptionValue)
+        .set({ name: name })
+        .where("id = :id", { id: id })
+        .execute();
 
+      const optionValueRep = await getRepository(OptionValue)
+        .createQueryBuilder("optionValue")
+        .where("optionValue.id = :id", { id: id })
+        .getOne();
+
+      res.send({ data: optionValueRep })
+    } catch (error) {
+      res.send({ message: error})
+    }
   }
 
   public async deleteOptionValue(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params as { id: string };
 
+    const queryRunner = getConnection().createQueryRunner();
+    queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.delete(ProductOption, { optionValue: id });
+      await queryRunner.manager.delete(OptionValue, { id: id });
+      res.send({ data: [] });
+      queryRunner.commitTransaction();
+    } catch (error) {
+      res.send({ message: error });
+      queryRunner.rollbackTransaction();
+    } finally {
+      queryRunner.release();
+    }
   }
 }
 
