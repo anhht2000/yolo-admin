@@ -1,18 +1,14 @@
 import { Router } from 'express';
-import optionController from '../controllers/option.controller';
+import optionValueController from '../controllers/optionValue.controller';
 import { ValidateData } from '../middleware/commonMiddleware';
-import { createUpdateRuleOption } from '../rules/optionRouter.rule';
+import { createRuleOptionValue, UpdateRuleOptionValue } from '../rules/optionValueRouter.rule';
 
 const router = Router();
 
-router.get('/', optionController.getAllOption);
+router.post('/', createRuleOptionValue, ValidateData, optionValueController.insertOptionValue);
 
-router.post('/', createUpdateRuleOption, ValidateData, optionController.createOption);
+router.put('/:id', UpdateRuleOptionValue, ValidateData, optionValueController.updateOptionValue);
 
-router.get('/:id', optionController.getOneOption);
-
-router.put('/:id', createUpdateRuleOption, ValidateData, optionController.updateOption);
-
-router.delete('/:id', optionController.deleteOption);
+router.delete('/:id', optionValueController.deleteOptionValue);
 
 export default router;
