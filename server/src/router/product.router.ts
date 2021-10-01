@@ -1,8 +1,7 @@
-import { createUpdateRuleProduct } from './../rules/productRouter.rule';
 import { Router } from 'express';
-import { body, check } from 'express-validator';
 import productController from '../controllers/product.controller';
 import { ValidateData } from '../middleware/commonMiddleware';
+import { createUpdateRuleProduct } from './../rules/productRouter.rule';
 
 const router = Router();
 
