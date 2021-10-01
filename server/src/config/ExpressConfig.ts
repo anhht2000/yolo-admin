@@ -8,7 +8,6 @@ export class ExpressConfig {
     app.use(urlencoded({ extended: true }));
     RouterConstant.forEach(element => {
       app.use(element.path,element.router)
-      console.log(element.path);
     });
   }
 }
