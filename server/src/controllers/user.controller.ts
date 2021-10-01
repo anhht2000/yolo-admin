@@ -125,7 +125,6 @@ class UserController {
       return res.status(500).json({ success: false, message: error });
     }
   }
-  public async setRoleUser(req: Request, res: Response, next: NextFunction) {}
 }
 const userController = new UserController();
 export default userController;
