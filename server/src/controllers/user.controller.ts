@@ -4,6 +4,7 @@ import { User } from './../models/user.entity';
 import { getConnection, getRepository } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
+
 class UserController {
   public async getAllUser(req: Request, res: Response, next: NextFunction) {
     const { page, limit } = req.query;
