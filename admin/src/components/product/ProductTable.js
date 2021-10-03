@@ -26,7 +26,6 @@ export default function ProductTable(props) {
   }
   const handleChangeCheck = (value) => {
     //post api
-    console.log(!value)
     //get list again
   }
   const history = useHistory()
