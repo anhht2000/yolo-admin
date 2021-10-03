@@ -10,15 +10,13 @@ export default function FormAdd({ type, initialValue }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
-      console.log('acceptedFiles', acceptedFiles)
-      console.log('rejectedFiles', rejectedFiles)
-      setAcceptFile(
-        acceptedFiles.map((item) =>
-          Object.assign(item, {
-            preview: URL.createObjectURL(item),
-          }),
-        ),
-      )
+      var Files = Object.assign(acceptFile)
+      var Accept = acceptedFiles.map((item) => {
+        return Object.assign(item, {
+          preview: URL.createObjectURL(item),
+        })
+      })
+      setAcceptFile([...Files, ...Accept])
     },
   })
   useEffect(() => {
@@ -148,7 +146,7 @@ export default function FormAdd({ type, initialValue }) {
           <div {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
             <div className="upload">
-              <i className="bx bx-cloud-upload"></i> upload
+              <i className="bx bx-cloud-upload"></i> Upload
             </div>
           </div>
           <div className="preview">
