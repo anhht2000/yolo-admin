@@ -34,7 +34,6 @@ export default function ForgetPass() {
     } else if (!re.test(values.username)) {
       setError({ ...error, username: "You must typing email!!" });
     } else {
-      console.log(values);
     }
   };
   return (

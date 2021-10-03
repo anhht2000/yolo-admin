@@ -38,27 +38,30 @@ class ProductController {
   }
   //add
   public async addProduct(request: Request, response: Response, next: NextFunction) {
-    try {
-      const { name, description, price } = request.body;
-      const product = await getRepository(Product)
-        .createQueryBuilder('product')
-        .insert()
-        .into(Product)
-        .values({
-          name,
-          description,
-          price,
-        })
-        .execute();
+    console.log(request.files);
+    console.log(request.body);
+    response.send('success');
+    // try {
+    //   const { name, description, price } = request.body;
+    //   const product = await getRepository(Product)
+    //     .createQueryBuilder('product')
+    //     .insert()
+    //     .into(Product)
+    //     .values({
+    //       name,
+    //       description,
+    //       price,
+    //     })
+    //     .execute();
 
-      return response.status(200).json({
-        success: true,
-        message: 'Add successfully',
-        data: { name, description, price, ...product.generatedMaps[0] },
-      });
-    } catch (error) {
-      return response.status(500).json({ success: true, message: error });
-    }
+    //   return response.status(200).json({
+    //     success: true,
+    //     message: 'Add successfully',
+    //     data: { name, description, price, ...product.generatedMaps[0] },
+    //   });
+    // } catch (error) {
+    //   return response.status(500).json({ success: true, message: error });
+    // }
   }
   //update
   public async updateProduct(request: Request, response: Response, next: NextFunction) {
