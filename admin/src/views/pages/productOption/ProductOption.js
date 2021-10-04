@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CFormInput,
   CRow,
   CTable,
   CTableBody,
@@ -19,7 +18,7 @@ import CIcon from '@coreui/icons-react'
 import OptionsModalAdd from './OptionsModalAdd'
 import OptionsModalDelete from './OptionsModalDelete'
 import OptionsModalUpdate from './OptionsModalUpdate'
-import { GetProductOption } from 'src/config/ProductAPI'
+import { getProductOption } from 'src/config/ProductAPI'
 import { resetDateTime } from 'src/config/dateTime'
 import Pagination from 'src/components/pagination/Pagination'
 const ProductOption = () => {
@@ -28,13 +27,20 @@ const ProductOption = () => {
   const [visibleUpdate, setVisibleUpdate] = useState(false)
   const [options, setOptions] = useState({})
   useEffect(() => {
-    GetProductOption()
+    getProductOption()
       .then((result) => {
         setOptions(result.data)
-        console.log(result.data)
       })
       .catch((err) => {})
   }, [])
+
+  const changeData = (page) => {
+    getProductOption(page)
+      .then((result) => {
+        setOptions(result.data)
+      })
+      .catch((err) => {})
+  }
   return (
     <>
       <CRow>
@@ -109,6 +115,7 @@ const ProductOption = () => {
               <Pagination
                 currentPage={options.page?.currentPage}
                 totalPage={options.page?.totalPage}
+                changeData={changeData}
               />
             </CCardHeader>
           </CCard>
