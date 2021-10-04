@@ -1,20 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from '@coreui/react'
-import { cilDelete, cilPencil, cilPlus } from '@coreui/icons'
-import CIcon from '@coreui/icons-react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
 import OptionsModalAdd from './OptionsModalAdd'
 import OptionsModalDelete from './OptionsModalDelete'
 import OptionsModalUpdate from './OptionsModalUpdate'
@@ -24,9 +9,11 @@ import {
   getProductOption,
   updateProductOption,
 } from 'src/config/productOptionAPI'
-import { resetDateTime } from 'src/config/dateTime'
 import Pagination from 'src/components/pagination/Pagination'
 import { toast } from 'react-toastify'
+import ProductOptionTable from './ProductOptionTable'
+import ProductOptionHeader from './ProductOptionHeader'
+import ProductOptionVariant from './ProductOptionVariant'
 
 const ProductOption = () => {
   const [visible, setVisible] = useState(false)
@@ -34,6 +21,7 @@ const ProductOption = () => {
   const [visibleUpdate, setVisibleUpdate] = useState(false)
   const [options, setOptions] = useState({})
   const [fakeOption, setfakeOption] = useState({})
+  const [viewOption, setViewOption] = useState()
   const getOptionApi = async (page = 1) => {
     try {
       const response = await getProductOption(page)
@@ -70,7 +58,7 @@ const ProductOption = () => {
       getOptionApi()
       toast.info(`~~ xóa dữ liệu thành công ~~`)
     } catch (err) {
-      toast.error(`~~ process xóa gặp vấn đề ~~`)
+      toast.error(`~~ proccess xóa gặp vấn đề ~~`)
     }
   }
 
@@ -86,6 +74,7 @@ const ProductOption = () => {
       toast.error(`~~ thêm Option Đã bị lỗi ~~`)
     }
   }
+
   useEffect(() => {
     getOptionApi()
   }, [])
@@ -96,71 +85,17 @@ const ProductOption = () => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CCardHeader className="flex_option">
-              <div>
-                <strong>Quản lý Options Sản phẩm</strong> <small>(Size, color, ...)</small>
-              </div>
-              <div>
-                <CButton
-                  color={'primary'}
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => {
-                    setVisibleAdd(true)
-                  }}
-                >
-                  <CIcon
-                    icon={cilPlus}
-                    className="me-2"
-                    style={{ height: '15px', width: '15px' }}
-                  />
-                  Thêm
-                </CButton>
-              </div>
+              <ProductOptionHeader setVisibleAdd={setVisibleAdd} />
             </CCardHeader>
             <CCardBody>
-              <CTable hover>
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell scope="col">STT</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">OptionName</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">DayCreate</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">DayUpdate</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {options.data &&
-                    options.data.map((item, index) => (
-                      <CTableRow key={index}>
-                        <CTableHeaderCell scope="row">{item.id}</CTableHeaderCell>
-                        <CTableDataCell>{item.name}</CTableDataCell>
-                        <CTableDataCell>{resetDateTime(item.createDate)}</CTableDataCell>
-                        <CTableDataCell>{resetDateTime(item.updateDate)}</CTableDataCell>
-                        <CTableDataCell>
-                          <div>
-                            <CIcon
-                              icon={cilPencil}
-                              className="me-2 icon-hover"
-                              style={{ height: '15px', width: '15px' }}
-                              onClick={() => {
-                                setVisibleUpdate(true)
-                                setfakeOption(item)
-                              }}
-                            />
-                            <CIcon
-                              icon={cilDelete}
-                              onClick={() => {
-                                setVisible(!visible)
-                                setfakeOption(item)
-                              }}
-                              className="me-2 icon-hover"
-                              style={{ height: '15px', width: '15px' }}
-                            />
-                          </div>
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                </CTableBody>
-              </CTable>
+              <ProductOptionTable
+                options={options}
+                setVisibleUpdate={setVisibleUpdate}
+                setfakeOption={setfakeOption}
+                setVisible={setVisible}
+                visible={visible}
+                setViewOption={setViewOption}
+              />
             </CCardBody>
             <CCardHeader className="flex_option">
               <Pagination
@@ -169,6 +104,11 @@ const ProductOption = () => {
                 changeData={getOptionApi}
               />
             </CCardHeader>
+            {viewOption && (
+              <CCardHeader>
+                <ProductOptionVariant option={viewOption} />
+              </CCardHeader>
+            )}
           </CCard>
         </CCol>
       </CRow>

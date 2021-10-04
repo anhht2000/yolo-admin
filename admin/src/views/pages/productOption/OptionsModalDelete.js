@@ -26,7 +26,7 @@ const OptionsModalDelete = (props) => {
       <CModalHeader>
         <CModalTitle>Xác nhận xóa</CModalTitle>
       </CModalHeader>
-      <CModalBody>Xác nhận xóa Options của sản phẩm</CModalBody>
+      <CModalBody>Xác nhận xóa Option: &quot;{fakeOption.name}&quot; </CModalBody>
       <CModalFooter>
         <CButton color="secondary" onClick={() => setVisible(false)}>
           Đóng
