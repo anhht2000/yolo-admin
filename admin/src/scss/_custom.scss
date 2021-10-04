@@ -50,4 +50,14 @@
   border: 1px dashed gray;
 }
 
+.page-link {
+  cursor: pointer;
+  color: black;
+  &:hover {
+    color: blue;
+  }
+}
 
+.pagination {
+  align-items: center;
+}

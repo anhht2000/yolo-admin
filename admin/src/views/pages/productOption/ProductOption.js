@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CButton,
   CCard,
@@ -19,10 +19,22 @@ import CIcon from '@coreui/icons-react'
 import OptionsModalAdd from './OptionsModalAdd'
 import OptionsModalDelete from './OptionsModalDelete'
 import OptionsModalUpdate from './OptionsModalUpdate'
+import { GetProductOption } from 'src/config/ProductAPI'
+import { resetDateTime } from 'src/config/dateTime'
+import Pagination from 'src/components/pagination/Pagination'
 const ProductOption = () => {
   const [visible, setVisible] = useState(false)
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [visibleUpdate, setVisibleUpdate] = useState(false)
+  const [options, setOptions] = useState({})
+  useEffect(() => {
+    GetProductOption()
+      .then((result) => {
+        setOptions(result.data)
+        console.log(result.data)
+      })
+      .catch((err) => {})
+  }, [])
   return (
     <>
       <CRow>
@@ -49,12 +61,6 @@ const ProductOption = () => {
                 </CButton>
               </div>
             </CCardHeader>
-            <CCardHeader className="flex_option gap">
-              <CFormInput type="text" placeholder="options" />
-              <CButton color={'primary'} style={{ padding: '6px 11px', width: '10%' }}>
-                Tìm kiếm
-              </CButton>
-            </CCardHeader>
             <CCardBody>
               <CTable hover>
                 <CTableHead>
@@ -63,41 +69,48 @@ const ProductOption = () => {
                     <CTableHeaderCell scope="col">OptionName</CTableHeaderCell>
                     <CTableHeaderCell scope="col">DayCreate</CTableHeaderCell>
                     <CTableHeaderCell scope="col">DayUpdate</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">DayDelete</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  <CTableRow>
-                    <CTableHeaderCell scope="row">1</CTableHeaderCell>
-                    <CTableDataCell>Mark</CTableDataCell>
-                    <CTableDataCell>Otto</CTableDataCell>
-                    <CTableDataCell>@mdo</CTableDataCell>
-                    <CTableDataCell>@mdo</CTableDataCell>
-                    <CTableDataCell>
-                      <div>
-                        <CIcon
-                          icon={cilPencil}
-                          className="me-2 icon-hover"
-                          style={{ height: '15px', width: '15px' }}
-                          onClick={() => {
-                            setVisibleUpdate(true)
-                          }}
-                        />
-                        <CIcon
-                          icon={cilDelete}
-                          onClick={() => {
-                            setVisible(!visible)
-                          }}
-                          className="me-2 icon-hover"
-                          style={{ height: '15px', width: '15px' }}
-                        />
-                      </div>
-                    </CTableDataCell>
-                  </CTableRow>
+                  {options.data &&
+                    options.data.map((item, index) => (
+                      <CTableRow key={index}>
+                        <CTableHeaderCell scope="row">{item.id}</CTableHeaderCell>
+                        <CTableDataCell>{item.name}</CTableDataCell>
+                        <CTableDataCell>{resetDateTime(item.createDate)}</CTableDataCell>
+                        <CTableDataCell>{resetDateTime(item.updateDate)}</CTableDataCell>
+                        <CTableDataCell>
+                          <div>
+                            <CIcon
+                              icon={cilPencil}
+                              className="me-2 icon-hover"
+                              style={{ height: '15px', width: '15px' }}
+                              onClick={() => {
+                                setVisibleUpdate(true)
+                              }}
+                            />
+                            <CIcon
+                              icon={cilDelete}
+                              onClick={() => {
+                                setVisible(!visible)
+                              }}
+                              className="me-2 icon-hover"
+                              style={{ height: '15px', width: '15px' }}
+                            />
+                          </div>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
                 </CTableBody>
               </CTable>
             </CCardBody>
+            <CCardHeader className="flex_option">
+              <Pagination
+                currentPage={options.page?.currentPage}
+                totalPage={options.page?.totalPage}
+              />
+            </CCardHeader>
           </CCard>
         </CCol>
       </CRow>
