@@ -1,12 +1,13 @@
 import {
   CButton,
   CContainer,
-  CFormCheck,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CPagination,
+  CPaginationItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -15,11 +16,16 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
+import DEFAULT from 'src/constant/comon'
+import { getTotalPage } from 'src/redux/slice/productSlice'
 // import PropTypes from 'prop-types'
 
 export default function ProductTable(props) {
   const { products } = props
+  const totalPage = useSelector(getTotalPage)
+
   const [visible, setVisible] = useState({ status: false, slug: '' })
   const handleDelete = () => {
     setVisible({ ...visible, status: false })
@@ -48,30 +54,45 @@ export default function ProductTable(props) {
               return (
                 <CTableRow key={index}>
                   <CTableHeaderCell scope="row">
-                    <CFormCheck
+                    {/* <CFormCheck
                       defaultChecked={e.active}
                       onChange={() => handleChangeCheck(e.active)}
-                    />
+                    /> */}
                   </CTableHeaderCell>
                   <CTableDataCell>
-                    <img style={{ height: '80px' }} className="hei" src={e.image01} alt="" />
+                    <img
+                      style={{ height: '80px', width: '100px', objectFit: 'cover' }}
+                      className="hei"
+                      src={DEFAULT.path + e?.productImg[0]?.imgPath}
+                      alt=""
+                    />
                   </CTableDataCell>
-                  <CTableDataCell>{e.title}</CTableDataCell>
-                  <CTableDataCell>{e.size.join(', ')}</CTableDataCell>
-                  <CTableDataCell>{e.colors.join(', ')}</CTableDataCell>
+                  <CTableDataCell>{e.name}</CTableDataCell>
+                  <CTableDataCell>
+                    {e?.productOption
+                      .filter((e) => e?.option?.name === 'size')
+                      .map((e) => e?.optionValue?.name)
+                      .join(' ')}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    {e?.productOption
+                      .filter((e) => e?.option?.name === 'color')
+                      .map((e) => e?.optionValue?.name)
+                      .join(' ')}
+                  </CTableDataCell>
                   <CTableDataCell>
                     <CButton
                       color="success"
                       variant="outline"
                       className="me-1"
-                      onClick={() => history.push('/product/' + e.slug)}
+                      onClick={() => history.push('/product/' + e.id)}
                     >
                       Sửa
                     </CButton>
                     <CButton
                       color="danger"
                       variant="outline"
-                      onClick={() => setVisible({ ...visible, status: true, slug: e.slug })}
+                      onClick={() => setVisible({ ...visible, status: true, slug: e.id })}
                     >
                       Xóa
                     </CButton>
@@ -79,6 +100,19 @@ export default function ProductTable(props) {
                 </CTableRow>
               )
             })}
+          <CTableRow className="d-block text-center">
+            {/* <CPagination>
+              <CPaginationItem aria-label="Previous" disabled>
+                <span aria-hidden="true">&laquo;</span>
+              </CPaginationItem>
+              {totalPage.map((e, index) => (
+                <CPaginationItem key={index}>1</CPaginationItem>
+              ))}
+              <CPaginationItem aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </CPaginationItem>
+            </CPagination> */}
+          </CTableRow>
         </CTableBody>
       </CTable>
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>
@@ -98,7 +132,3 @@ export default function ProductTable(props) {
     </CContainer>
   )
 }
-
-// ProductTable.propsType = {
-//   products: PropTypes.string,
-// }

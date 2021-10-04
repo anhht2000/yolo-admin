@@ -1,8 +1,8 @@
+import { ProductImg } from './../models/productImg.entity';
 import { OptionValue } from './../models/optionValue.entity';
 import { NextFunction, Request, Response } from 'express';
 import { getConnection, getRepository } from 'typeorm';
 import { Product } from '../models/product.entity';
-import { ProductImg } from '../models/productImg.entity';
 import { ProductOption } from './../models/productOption.entity';
 import { CommonConfig } from './index';
 import { Option } from '../models/option.entity';
@@ -14,10 +14,14 @@ class ProductController {
       const { page, limit } = request.query;
       const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
       const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
-      const count = await getRepository(Product).createQueryBuilder('product').getCount();
+      const count = await getRepository(Product).createQueryBuilder('Product').getCount();
       const _total = Math.ceil(count / _limit);
       const productList = await getRepository(Product)
-        .createQueryBuilder('product')
+        .createQueryBuilder('Product')
+        .leftJoinAndSelect('Product.productOption', 'ProductOption')
+        .leftJoinAndSelect('ProductOption.option', 'option')
+        .leftJoinAndSelect('ProductOption.optionValue', 'optionValue')
+        .leftJoinAndSelect('Product.productImg', 'productImg')
         .skip((_page - 1) * _limit)
         .take(_limit)
         .getMany();
@@ -36,39 +40,114 @@ class ProductController {
       return response.status(500).json({ success: false, message: 'Get list fail' });
     }
   }
+
+  public async getOneProduct(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { productId } = request.params;
+      const product = await getRepository(Product)
+        .createQueryBuilder('Product')
+        .leftJoinAndSelect('Product.productOption', 'ProductOption')
+        .leftJoinAndSelect('ProductOption.option', 'option')
+        .leftJoinAndSelect('ProductOption.optionValue', 'optionValue')
+        .leftJoinAndSelect('Product.productImg', 'productImg')
+        .where('Product.id = :productId', { productId: productId })
+        .getOne();
+
+      return response.status(200).json({
+        success: true,
+        message: 'Get product successfully',
+        data: product,
+      });
+    } catch (error) {
+      return response.status(500).json({ success: false, message: 'Get product fail' });
+    }
+  }
   //add
   public async addProduct(request: Request, response: Response, next: NextFunction) {
-    console.log(request.files);
-    console.log(request.body);
-    response.send('success');
-    // try {
-    //   const { name, description, price } = request.body;
-    //   const product = await getRepository(Product)
-    //     .createQueryBuilder('product')
-    //     .insert()
-    //     .into(Product)
-    //     .values({
-    //       name,
-    //       description,
-    //       price,
-    //     })
-    //     .execute();
+    try {
+      const { name, description, price, size, color } = request.body;
+      let product = await getRepository(Product)
+        .createQueryBuilder('product')
+        .insert()
+        .into(Product)
+        .values({
+          name,
+          description,
+          price,
+        })
+        .execute();
+      const productId = product.generatedMaps[0].id;
+      const data = await getRepository(Product)
+        .createQueryBuilder('product')
+        .where('id = :id', { id: productId })
+        .getOne();
 
-    //   return response.status(200).json({
-    //     success: true,
-    //     message: 'Add successfully',
-    //     data: { name, description, price, ...product.generatedMaps[0] },
-    //   });
-    // } catch (error) {
-    //   return response.status(500).json({ success: true, message: error });
-    // }
+      if (request.files) {
+        request.files = request.files as Array<any>;
+        request.files.forEach(async (item, index) => {
+          const productImg = await getRepository(ProductImg)
+            .createQueryBuilder('productImg')
+            .insert()
+            .into(ProductImg)
+            .values({
+              imgPath: item.filename,
+              name: item.originalname,
+              product: data,
+            })
+            .execute();
+        });
+      }
+      const dtsize = await getRepository(Option).createQueryBuilder().where("name = 'size'").getOne();
+      size.split(',').forEach(async (e: string) => {
+        const sizeT = await getRepository(OptionValue)
+          .createQueryBuilder('OptionValue')
+          .where('name = :nameSize', { nameSize: `${e}` })
+          .getOne();
+        await getRepository(ProductOption)
+          .createQueryBuilder('ProductOption')
+          .insert()
+          .into(ProductOption)
+          .values({
+            product: data,
+            option: dtsize,
+            optionValue: sizeT,
+          })
+          .execute();
+      });
+
+      const dtcolor = await getRepository(Option).createQueryBuilder().where("name = 'color'").getOne();
+      color.split(',').forEach(async (e: string) => {
+        const colorT = await getRepository(OptionValue)
+          .createQueryBuilder('OptionValue')
+          .where('name = :nameColor', { nameColor: `${e}` })
+          .getOne();
+        await getRepository(ProductOption)
+          .createQueryBuilder('ProductOption')
+          .insert()
+          .into(ProductOption)
+          .values({
+            product: data,
+            option: dtcolor,
+            optionValue: colorT,
+          })
+          .execute();
+      });
+
+      return response.status(200).json({
+        success: true,
+        message: 'Add successfully',
+        data: data,
+      });
+    } catch (error) {
+      return response.status(500).json({ success: false, message: error });
+    }
   }
   //update
   public async updateProduct(request: Request, response: Response, next: NextFunction) {
     try {
       const { id } = request.params;
-      const { name, description, price } = request.body;
-      await getRepository(Product)
+      const { name, description, price, size, color } = request.body;
+      let product = await getRepository(Product)
         .createQueryBuilder('product')
         .update(Product)
         .set({
@@ -76,16 +155,66 @@ class ProductController {
           description,
           price,
         })
-        .where('id = :id', { id: id })
+        .where('id = :idProduct', { idProduct: id })
         .execute();
       const data = await getRepository(Product)
         .createQueryBuilder('product')
-        .where('id = :id', { id: id })
+        .where('id = :idProduct', { idProduct: id })
         .getOne();
+
+      if (request.files) {
+        request.files = request.files as Array<any>;
+        request.files.forEach(async (item, index) => {
+          const productImg = await getRepository(ProductImg)
+            .createQueryBuilder('productImg')
+            .update(ProductImg)
+            .set({
+              imgPath: item.filename,
+              name: item.originalname,
+            })
+            .where('productImg.productId = :idPr', { idPr: id })
+            .execute();
+        });
+      }
+      // const dtsize = await getRepository(Option).createQueryBuilder().where("name = 'size'").getOne();
+      // size.split(',').forEach(async (e: string) => {
+      //   const sizeT = await getRepository(OptionValue)
+      //     .createQueryBuilder('OptionValue')
+      //     .where('name = :nameSize', { nameSize: `${e}` })
+      //     .getOne();
+      //   await getRepository(ProductOption)
+      //     .createQueryBuilder('ProductOption')
+      //     .insert()
+      //     .into(ProductOption)
+      //     .values({
+      //       product: data,
+      //       option: dtsize,
+      //       optionValue: sizeT,
+      //     })
+      //     .execute();
+      // });
+
+      // const dtcolor = await getRepository(Option).createQueryBuilder().where("name = 'color'").getOne();
+      // color.split(',').forEach(async (e: string) => {
+      //   const colorT = await getRepository(OptionValue)
+      //     .createQueryBuilder('OptionValue')
+      //     .where('name = :nameColor', { nameColor: `${e}` })
+      //     .getOne();
+      //   await getRepository(ProductOption)
+      //     .createQueryBuilder('ProductOption')
+      //     .insert()
+      //     .into(ProductOption)
+      //     .values({
+      //       product: data,
+      //       option: dtcolor,
+      //       optionValue: colorT,
+      //     })
+      //     .execute();
+      // });
 
       return response.status(200).json({
         success: true,
-        message: 'Get list successfully',
+        message: 'Update successfully',
         data: data,
       });
     } catch (error) {
@@ -149,18 +278,11 @@ class ProductController {
       try {
         const dataOption = String(filter).split(',');
         const count = await getRepository(Product)
-          .createQueryBuilder('product')
-          .select('product.id', 'id')
-          .addSelect('product.name', 'name')
-          .addSelect('product.price', 'price')
-          .addSelect('productOption.optionId', 'optionId')
-          .addSelect('productImg.imgPath', 'imgPath')
-          .addSelect('optionValue.name', 'Value')
-          .addSelect('option.name', 'option')
-          .leftJoin(ProductImg, 'productImg', 'product.id = productImg.productId')
-          .leftJoin(ProductOption, 'productOption', 'product.id = productOption.productId')
-          .leftJoin(Option, 'option', 'productOption.optionId = option.id')
-          .leftJoin(OptionValue, 'optionValue', 'optionValue.optionId = option.id')
+          .createQueryBuilder('Product')
+          .leftJoinAndSelect('Product.productOption', 'ProductOption')
+          .leftJoinAndSelect('ProductOption.option', 'option')
+          .leftJoinAndSelect('ProductOption.optionValue', 'optionValue')
+          .leftJoinAndSelect('Product.productImg', 'productImg')
           .skip((_page - 1) * _limit)
           .take(_limit)
           .where('optionValue.name like :value1', { value1: dataOption[0] })
@@ -170,19 +292,12 @@ class ProductController {
           .orWhere('optionValue.name like :value5', { value5: dataOption[4] })
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
           .getCount();
-        const productList = await getRepository(Product)
-          .createQueryBuilder('product')
-          .select('product.id', 'id')
-          .addSelect('product.name', 'name')
-          .addSelect('product.price', 'price')
-          .addSelect('productOption.optionId', 'optionId')
-          .addSelect('productImg.imgPath', 'imgPath')
-          .addSelect('optionValue.name', 'Value')
-          .addSelect('option.name', 'option')
-          .leftJoin(ProductImg, 'productImg', 'product.id = productImg.productId')
-          .leftJoin(ProductOption, 'productOption', 'product.id = productOption.productId')
-          .leftJoin(Option, 'option', 'productOption.optionId = option.id')
-          .leftJoin(OptionValue, 'optionValue', 'optionValue.optionId = option.id')
+        const productList = getRepository(Product)
+          .createQueryBuilder('Product')
+          .leftJoinAndSelect('Product.productOption', 'ProductOption')
+          .leftJoinAndSelect('ProductOption.option', 'option')
+          .leftJoinAndSelect('ProductOption.optionValue', 'optionValue')
+          .leftJoinAndSelect('Product.productImg', 'productImg')
           .skip((_page - 1) * _limit)
           .take(_limit)
           .where('optionValue.name like :value1', { value1: dataOption[0] })
@@ -191,7 +306,7 @@ class ProductController {
           .orWhere('optionValue.name like :value4', { value4: dataOption[3] })
           .orWhere('optionValue.name like :value5', { value5: dataOption[4] })
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
-          .getRawMany();
+          .getMany();
         const _total = Math.ceil(count / _limit);
 
         return response.status(200).json({

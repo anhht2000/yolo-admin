@@ -19,9 +19,25 @@ export default function FormAdd({ type, initialValue }) {
       setAcceptFile([...Files, ...Accept])
     },
   })
+  const handleRemoveImage = (image) => {
+    const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
+    setAcceptFile(newArrImage)
+  }
+
   useEffect(() => {
-    setValues(initialValue)
-  }, [initialValue])
+    if (type === 'edit') {
+      const color = {}
+      initialValue?.color?.map((e) => {
+        color[e] = true
+      })
+      const size = {}
+      initialValue?.size?.map((e) => {
+        size[e] = true
+      })
+      setValues({ ...initialValue, size, color })
+      setAcceptFile([{ preview: initialValue?.image, name: initialValue?.title }])
+    }
+  }, [type, initialValue])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -40,18 +56,40 @@ export default function FormAdd({ type, initialValue }) {
 
   const handleSubmit = async () => {
     try {
+      const argS =
+        values.size &&
+        Object.entries(values.size)
+          .filter((e) => e[1] === true)
+          .map((e) => e[0])
+      const argC =
+        values.color &&
+        Object.entries(values.color)
+          .filter((e) => e[1] === true)
+          .map((e) => e[0])
       const formdata = new FormData()
       acceptFile.forEach((item) => {
         formdata.append('allImg', item)
       })
-      // formdata.append('title', values.title)
-      // formdata.append('price', values.price)
-      await axios.post('http://localhost:4000/product/add', formdata, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (progressEvent) => {},
-      })
+      formdata.append('name', values.title)
+      formdata.append('price', values.price)
+      formdata.append('description', values.description)
+      formdata.append('size', argS)
+      formdata.append('color', argC)
+      if (type === 'edit') {
+        await axios.put('http://localhost:4000/product/edit/' + initialValue?.id, formdata, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          onUploadProgress: (progressEvent) => {},
+        })
+      } else {
+        await axios.post('http://localhost:4000/product/add', formdata, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          onUploadProgress: (progressEvent) => {},
+        })
+      }
       setAcceptFile([])
     } catch (error) {
       alert(error)
@@ -68,7 +106,7 @@ export default function FormAdd({ type, initialValue }) {
             type="text"
             id="title"
             name="title"
-            defaultValue={values?.title}
+            defaultValue={values?.name}
             onChange={(e) => handleChange(e)}
           />
         </CCol>
@@ -83,6 +121,21 @@ export default function FormAdd({ type, initialValue }) {
             id="price"
             name="price"
             defaultValue={values?.price}
+            onChange={(e) => handleChange(e)}
+          />
+        </CCol>
+      </CRow>
+      <CRow className="mb-3">
+        <CFormLabel htmlFor="description" className="col-sm-2 col-form-label flex-grow-1">
+          Miêu tả
+        </CFormLabel>
+        <CCol sm={9}>
+          <CFormInput
+            type="text"
+            id="description"
+            name="description"
+            multiple
+            defaultValue={values?.description}
             onChange={(e) => handleChange(e)}
           />
         </CCol>
@@ -102,9 +155,9 @@ export default function FormAdd({ type, initialValue }) {
                   value={e.content}
                   label={e.content}
                   className="me-4"
-                  // defaultChecked={
-                  //   values?.size && values.size.indexOf(e.content.toLowerCase()) !== -1
-                  // }
+                  checked={
+                    false || (values.hasOwnProperty('size') && values.size[e.content]) || false
+                  }
                   onClick={(e) => handleChange(e)}
                 />
               )
@@ -125,9 +178,9 @@ export default function FormAdd({ type, initialValue }) {
                   value={e.content}
                   label={e.content}
                   className="me-4 pb-2"
-                  // defaultChecked={
-                  //   values?.color && values.color.indexOf(e.content.toLowerCase()) !== -1
-                  // }
+                  checked={
+                    false || (values.hasOwnProperty('color') && values.color[e.content]) || false
+                  }
                   onChange={(e) => handleChange(e)}
                 />
               )
@@ -154,6 +207,7 @@ export default function FormAdd({ type, initialValue }) {
               <div key={index} className="preview__img__flex">
                 <img src={item.preview} alt={index} className="preview__img" />
                 <div className={'preview__title'}>{item.name}</div>
+                <i className="bx bx-x preview__icon" onClick={() => handleRemoveImage(item)} />
               </div>
             ))}
           </div>

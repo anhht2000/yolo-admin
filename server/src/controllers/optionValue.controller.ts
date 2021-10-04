@@ -1,18 +1,18 @@
-import { NextFunction, Request, Response } from "express";
-import { getConnection, getRepository } from "typeorm";
-import { Option } from "../models/option.entity";
-import { OptionValue } from "../models/optionValue.entity";
-import { ProductOption } from "../models/productOption.entity";
+import { NextFunction, Request, Response } from 'express';
+import { getConnection, getRepository } from 'typeorm';
+import { Option } from '../models/option.entity';
+import { OptionValue } from '../models/optionValue.entity';
+import { ProductOption } from '../models/productOption.entity';
 class OptionValueController {
   public async insertOptionValue(req: Request, res: Response, next: NextFunction) {
     try {
-      const { optionId } = req.params as { optionId : string }
+      const { optionId } = req.params as { optionId: string };
       const { name } = req.body as { name: string };
 
       const optionRepo = await getRepository(Option)
         .createQueryBuilder('option')
-        .where('option.id = :id', { id : optionId })
-        .getOne()
+        .where('option.id = :id', { id: optionId })
+        .getOne();
 
       const optionValueRepo = await getConnection()
         .createQueryBuilder()
@@ -21,31 +21,31 @@ class OptionValueController {
         .values({ name: name, option: optionRepo })
         .execute();
 
-      res.send({ data: optionValueRepo })
+      res.send({ data: optionValueRepo });
     } catch (error) {
-      res.send({ error: error })
+      res.send({ error: error });
     }
   }
 
   public async updateOptionValue(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params as { id: string }
-      const { name } = req.body as { name: string }
+      const { id } = req.params as { id: string };
+      const { name } = req.body as { name: string };
       await getConnection()
         .createQueryBuilder()
         .update(OptionValue)
         .set({ name: name })
-        .where("id = :id", { id: id })
+        .where('id = :id', { id: id })
         .execute();
 
       const optionValueRep = await getRepository(OptionValue)
-        .createQueryBuilder("optionValue")
-        .where("optionValue.id = :id", { id: id })
+        .createQueryBuilder('optionValue')
+        .where('optionValue.id = :id', { id: id })
         .getOne();
 
-      res.send({ data: optionValueRep })
+      res.send({ data: optionValueRep });
     } catch (error) {
-      res.send({ message: error})
+      res.send({ message: error });
     }
   }
 

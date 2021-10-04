@@ -1,21 +1,26 @@
 import { CButton, CCol, CForm, CFormInput, CFormSelect, CRow } from '@coreui/react'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import ProductTable from 'src/components/product/ProductTable'
-import { products } from 'src/data/products'
+import { actionGetAllProduct, getProduct } from 'src/redux/slice/productSlice'
 
 const Product = () => {
   const history = useHistory()
+  const dispatch = useDispatch()
+  const products = useSelector(getProduct)
   const handleClickAdd = () => {
     history.push('/product/add')
   }
+  useEffect(() => {
+    dispatch(actionGetAllProduct())
+  }, [dispatch])
   return (
     <div>
       <h2>Quản lý sản phẩm</h2>
       <CButton color="dark my-3" onClick={handleClickAdd}>
         Thêm sản phẩm
       </CButton>
-      {/* <CContainer> */}
       <CRow className="mt-2">
         <CCol xs={6}>
           <CForm className="row g-0">
