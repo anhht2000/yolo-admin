@@ -21,6 +21,7 @@ import OptionsModalUpdate from './OptionsModalUpdate'
 import { getProductOption } from 'src/config/ProductAPI'
 import { resetDateTime } from 'src/config/dateTime'
 import Pagination from 'src/components/pagination/Pagination'
+import { toast } from 'react-toastify'
 const ProductOption = () => {
   const [visible, setVisible] = useState(false)
   const [visibleAdd, setVisibleAdd] = useState(false)
@@ -31,7 +32,9 @@ const ProductOption = () => {
       .then((result) => {
         setOptions(result.data)
       })
-      .catch((err) => {})
+      .catch((err) => {
+        toast.error(`~ lỗi rồi thím ơi ~`)
+      })
   }, [])
 
   const changeData = (page) => {
@@ -39,7 +42,9 @@ const ProductOption = () => {
       .then((result) => {
         setOptions(result.data)
       })
-      .catch((err) => {})
+      .catch((err) => {
+        toast.error(`~ lỗi rồi thím ơi ~`)
+      })
   }
   return (
     <>

@@ -10,7 +10,7 @@ const Pagination = (props) => {
       <ul className="pagination">
         {1 < currentPage && (
           <>
-            <li className="page-item">
+            <li className={`page-item`}>
               <div
                 className="page-link"
                 onClick={() => {
