@@ -74,6 +74,7 @@ const ProductOptionVariant = (props) => {
       ...options,
       data: options['data'].map((data) => (data.id === option.id ? option : data)),
     })
+    // eslint-disable-next-line
   }, [option])
   return (
     <>
