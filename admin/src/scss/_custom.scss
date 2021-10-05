@@ -58,3 +58,9 @@
   border: 1px dashed gray;
   cursor: pointer;
 }
+.pagination {
+  display: inline-flex;
+  .page-item {
+    cursor: pointer;
+  }
+}

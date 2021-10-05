@@ -3,7 +3,12 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import ProductTable from 'src/components/product/ProductTable'
-import { actionGetAllProduct, getProduct } from 'src/redux/slice/productSlice'
+import {
+  actionGetAllProduct,
+  actionSearchProduct,
+  actionSortProduct,
+  getProduct,
+} from 'src/redux/slice/productSlice'
 
 const Product = () => {
   const history = useHistory()
@@ -11,6 +16,13 @@ const Product = () => {
   const products = useSelector(getProduct)
   const handleClickAdd = () => {
     history.push('/product/add')
+  }
+  const handleChangeSearch = ({ target }) => {
+    dispatch(actionSearchProduct(target.value))
+  }
+  const handleSort = ({ target }) => {
+    const { name, value } = target
+    dispatch(actionSortProduct({ by: name, order: value }))
   }
   useEffect(() => {
     dispatch(actionGetAllProduct())
@@ -25,30 +37,35 @@ const Product = () => {
         <CCol xs={6}>
           <CForm className="row g-0">
             <CCol xs="auto">
-              {/* <CFormLabel htmlFor="search" className="visually-hidden">
-                Enter to search
-              </CFormLabel> */}
-              <CFormInput type="text" placeholder="Enter to search" />
+              <CFormInput
+                type="text"
+                placeholder="Enter to search"
+                onChange={(e) => {
+                  handleChangeSearch(e)
+                }}
+              />
             </CCol>
             <CCol xs="auto">
-              <CButton className="mb-3">Tìm kiếm</CButton>
+              <CButton className="mb-3" disabled>
+                Tìm kiếm
+              </CButton>
             </CCol>
           </CForm>
         </CCol>
         <CCol xs={6} className="text-end">
           <CForm className="row justify-content-end">
             <CCol xs="auto">
-              <CFormSelect name="time">
-                <option>Time</option>
+              <CFormSelect name="createDate" onChange={(e) => handleSort(e)}>
+                <option value="">Time</option>
+                <option value="0">Cũ nhất</option>
                 <option value="1">Mới nhất</option>
-                <option value="2">Cũ nhất</option>
               </CFormSelect>
             </CCol>
             <CCol xs="auto">
-              <CFormSelect name="price">
-                <option>Price</option>
+              <CFormSelect name="price" onChange={(e) => handleSort(e)}>
+                <option value="">Price</option>
+                <option value="0">Thấp nhất</option>
                 <option value="1">Cao nhất</option>
-                <option value="2">Thấp nhất</option>
               </CFormSelect>
             </CCol>
           </CForm>

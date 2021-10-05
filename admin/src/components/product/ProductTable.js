@@ -14,17 +14,16 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
-import DEFAULT from 'src/constant/comon'
-import { actionGetAllProduct, getTotalPage } from 'src/redux/slice/productSlice'
+import { actionGetAllProduct } from 'src/redux/slice/productSlice'
 import productApi from '../../core/productApi'
+import Pagination from './Pagination'
 
 export default function ProductTable(props) {
   const { products } = props
   const history = useHistory()
   const dispatch = useDispatch()
-  const totalPage = useSelector(getTotalPage)
 
   const [visible, setVisible] = useState({ status: false, id: '' })
   const handleDelete = async (id) => {
@@ -64,7 +63,7 @@ export default function ProductTable(props) {
                     <img
                       style={{ height: '80px', width: '100px', objectFit: 'cover' }}
                       className="hei"
-                      src={DEFAULT.path + e?.productImg[0]?.imgPath}
+                      src={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
                       alt=""
                     />
                   </CTableDataCell>
@@ -101,21 +100,9 @@ export default function ProductTable(props) {
                 </CTableRow>
               )
             })}
-          <CTableRow className="d-block text-center">
-            {/* <CPagination>
-              <CPaginationItem aria-label="Previous" disabled>
-                <span aria-hidden="true">&laquo;</span>
-              </CPaginationItem>
-              {totalPage.map((e, index) => (
-                <CPaginationItem key={index}>1</CPaginationItem>
-              ))}
-              <CPaginationItem aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </CPaginationItem>
-            </CPagination> */}
-          </CTableRow>
         </CTableBody>
       </CTable>
+      <Pagination />
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>
         <CModalHeader onDismiss={() => setVisible({ ...visible, status: false })}>
           <CModalTitle>Xác nhận</CModalTitle>

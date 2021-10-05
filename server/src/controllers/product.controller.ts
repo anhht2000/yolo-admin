@@ -146,8 +146,6 @@ class ProductController {
     try {
       const { id } = request.params;
       const { name, description, price, size, color } = request.body;
-      console.log('name', { name, description, price, size, color });
-      console.log('file', request.files);
 
       await getRepository(Product)
         .createQueryBuilder('product')
@@ -274,10 +272,14 @@ class ProductController {
           .getCount();
         const _total = Math.ceil(count / _limit);
         const productList = await getRepository(Product)
-          .createQueryBuilder('product')
+          .createQueryBuilder('Product')
+          .leftJoinAndSelect('Product.productOption', 'ProductOption')
+          .leftJoinAndSelect('ProductOption.option', 'option')
+          .leftJoinAndSelect('ProductOption.optionValue', 'optionValue')
+          .leftJoinAndSelect('Product.productImg', 'productImg')
           .skip((_page - 1) * _limit)
           .take(_limit)
-          .where('product.name like :name', { name: `%${_search}%` })
+          .where('Product.name like :name', { name: `%${_search}%` })
           .getMany();
 
         return response.status(200).json({
@@ -341,6 +343,40 @@ class ProductController {
       } catch (error) {
         return response.status(500).send({ success: false, message: 'Filter fail' });
       }
+    }
+  }
+  public async sortProduct(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { sortBy, page, limit, order } = request.query;
+      const _sortBy = String(sortBy);
+      const _order = (order === '1' ? 'DESC' : 'ASC') || 'ASC';
+      const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
+      const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
+      const count = await getRepository(Product).createQueryBuilder('Product').getCount();
+      const _total = Math.ceil(count / _limit);
+      const product = await getRepository(Product)
+        .createQueryBuilder('Product')
+        .leftJoinAndSelect('Product.productOption', 'ProductOption')
+        .leftJoinAndSelect('ProductOption.option', 'option')
+        .leftJoinAndSelect('ProductOption.optionValue', 'optionValue')
+        .leftJoinAndSelect('Product.productImg', 'productImg')
+        .orderBy(`Product.${_sortBy}`, _order)
+        .skip((_page - 1) * _limit)
+        .take(_limit)
+        .getMany();
+
+      return response.status(200).json({
+        success: true,
+        message: 'Get sort successfully',
+        data: product,
+        page: {
+          totalPage: _total,
+          perPage: _limit,
+          currentPage: _page,
+        },
+      });
+    } catch (error) {
+      return response.status(500).json({ success: false, message: 'Get sort fail' });
     }
   }
 }

@@ -1,12 +1,11 @@
 import { CButton, CCol, CForm, CFormCheck, CFormInput, CFormLabel, CRow } from '@coreui/react'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useHistory } from 'react-router'
-import DEFAULT from 'src/constant/comon'
 import { filter } from 'src/data/FilterDataPage'
+import productApi from '../../core/productApi'
 
-export default function FormAdd({ type, initialValue }) {
+export default function FormProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
@@ -39,8 +38,9 @@ export default function FormAdd({ type, initialValue }) {
       })
       setValues({ ...initialValue, size, color })
       if (initialValue?.productImg) {
+        console.log('env', process.env.REACT_APP_API_URL)
         const dtTest = initialValue?.productImg.map((e) => ({
-          preview: DEFAULT.path + e?.imgPath,
+          preview: process.env.REACT_APP_API_URL + e?.imgPath,
           name: e?.name,
         }))
         setAcceptFile(dtTest)
@@ -84,25 +84,12 @@ export default function FormAdd({ type, initialValue }) {
       formdata.append('description', values.description || '')
       formdata.append('size', argS)
       formdata.append('color', argC)
+
       if (type === 'edit') {
-        const res = await axios.put(
-          'http://localhost:4000/product/edit/' + initialValue?.id,
-          formdata,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            onUploadProgress: (progressEvent) => {},
-          },
-        )
+        await productApi.updateProduct(initialValue?.id, formdata)
         history.push('/product')
       } else {
-        const res = await axios.post('http://localhost:4000/product/add', formdata, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          onUploadProgress: (progressEvent) => {},
-        })
+        await productApi.createProduct(formdata)
         history.push('/product')
       }
     } catch (error) {
