@@ -12,5 +12,13 @@ const productApi = {
     const url = 'product/delete/' + id
     return AxiosClient.delete(url)
   },
+  searchProduct: (value) => {
+    const url = 'product/search'
+    return AxiosClient.get(url, { params: { search: `${value}` } })
+  },
+  sortProduct: (by, order) => {
+    const url = 'product/sort'
+    return AxiosClient.get(url, { params: { sortBy: `${by}`, order: `${order}` } })
+  },
 }
 export default productApi
