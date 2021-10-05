@@ -13,7 +13,6 @@ import { fun } from 'src/data/FilterDataPage'
 const OptionsModalDelete = (props) => {
   const { visible, setVisible, deleteOptionApi, fakeOption } = props
   const [loading, setLoading] = useState(false)
-  console.log(fakeOption)
   const deleteOption = async () => {
     setLoading(true)
     await fun()

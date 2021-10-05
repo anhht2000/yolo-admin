@@ -33,7 +33,7 @@ const ProductOptionVariant = (props) => {
           ...option,
           optionValue: [...option['optionValue'], response.data.data],
         })
-        toast.success(`thêm dữ liệu thành công`)
+        toast.success(`Thêm dữ liệu thành công`)
       } catch (error) {
         toast.error(`Thêm variant bị lỗi rồi`)
       }
@@ -48,9 +48,9 @@ const ProductOptionVariant = (props) => {
         ...option,
         optionValue: option['optionValue'].filter((item) => item.id !== id),
       })
-      toast.success(`xóa dữ liệu thành công`)
+      toast.success(`Xóa dữ liệu thành công`)
     } catch (err) {
-      toast.error(`xóa không thành công`)
+      toast.error(`Xóa không thành công`)
     }
   }
 
@@ -63,9 +63,9 @@ const ProductOptionVariant = (props) => {
           item.id === response.data.data.id ? response.data.data : item,
         ),
       })
-      toast.success(`~~ update dữ liệu thành công ~~`)
+      toast.success(`Update dữ liệu thành công`)
     } catch (err) {
-      toast.error(`~~ update thất bại rồi nha ~~`)
+      toast.error(`Update thất bại `)
     }
   }
 

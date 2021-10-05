@@ -27,7 +27,7 @@ const ProductOption = () => {
       const response = await getProductOption(page)
       setOptions(response.data)
     } catch (err) {
-      toast.error(`~~ load page ${page} lỗi rồi nhá ~~`)
+      toast.error(`Load page ${page} không thành công`)
     }
   }
 
@@ -40,9 +40,9 @@ const ProductOption = () => {
           return option.id === response.data.data.id ? response.data.data : option
         }),
       })
-      toast.info(`~~ update dữ liệu thành công rồi nha ~~`)
+      toast.info(`Update dữ liệu thành công!`)
     } catch (err) {
-      toast.error(`~~ update fail rồi nhá ~~`)
+      toast.error(`Update thất bại`)
     }
   }
 
@@ -56,9 +56,9 @@ const ProductOption = () => {
       //   }),
       // })
       getOptionApi()
-      toast.info(`~~ xóa dữ liệu thành công ~~`)
+      toast.info(`Xóa dữ liệu thành công`)
     } catch (err) {
-      toast.error(`~~ proccess xóa gặp vấn đề ~~`)
+      toast.error(`Proccess xóa gặp vấn đề`)
     }
   }
 
@@ -71,7 +71,7 @@ const ProductOption = () => {
       })
       getOptionApi()
     } catch (err) {
-      toast.error(`~~ thêm Option Đã bị lỗi ~~`)
+      toast.error(`System Error`)
     }
   }
 
