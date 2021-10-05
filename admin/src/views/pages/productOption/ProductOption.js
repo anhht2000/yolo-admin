@@ -95,6 +95,8 @@ const ProductOption = () => {
                 setVisible={setVisible}
                 visible={visible}
                 setViewOption={setViewOption}
+                page={options.page?.currentPage}
+                perPage={options.page?.perPage}
               />
             </CCardBody>
             <CCardHeader className="flex_option">
@@ -106,7 +108,12 @@ const ProductOption = () => {
             </CCardHeader>
             {viewOption && (
               <CCardHeader>
-                <ProductOptionVariant option={viewOption} />
+                <ProductOptionVariant
+                  option={viewOption}
+                  options={options}
+                  setOptions={setOptions}
+                  setOption={setViewOption}
+                />
               </CCardHeader>
             )}
           </CCard>

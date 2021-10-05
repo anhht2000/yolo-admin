@@ -12,7 +12,16 @@ import React from 'react'
 import { resetDateTime } from 'src/config/dateTime'
 
 const ProductOptionTable = (props) => {
-  const { options, setVisibleUpdate, setfakeOption, setVisible, visible, setViewOption } = props
+  const {
+    options,
+    setVisibleUpdate,
+    setfakeOption,
+    setVisible,
+    visible,
+    setViewOption,
+    page,
+    perPage,
+  } = props
   return (
     <CTable hover>
       <CTableHead>
@@ -28,7 +37,7 @@ const ProductOptionTable = (props) => {
         {options.data &&
           options.data.map((item, index) => (
             <CTableRow key={index}>
-              <CTableHeaderCell scope="row">{item.id}</CTableHeaderCell>
+              <CTableHeaderCell scope="row">{(page - 1) * perPage + index + 1}</CTableHeaderCell>
               <CTableDataCell>{item.name}</CTableDataCell>
               <CTableDataCell>{resetDateTime(item.createDate)}</CTableDataCell>
               <CTableDataCell>{resetDateTime(item.updateDate)}</CTableDataCell>
