@@ -8,20 +8,8 @@ const router = Router();
 
 router.get('/', productController.getProduct);
 router.get('/:productId', productController.getOneProduct);
-router.post(
-  '/add',
-  // createUpdateRuleProduct,
-  // ValidateData,
-  upload.array('allImg'),
-  productController.addProduct
-);
-router.put(
-  '/edit/:id',
-  //  createUpdateRuleProduct,
-  //   ValidateData,
-  upload.array('allImg'),
-  productController.updateProduct
-);
+router.post('/add', upload.array('allImg'), createUpdateRuleProduct, productController.addProduct);
+router.put('/edit/:id', upload.array('allImg'), createUpdateRuleProduct, productController.updateProduct);
 router.delete('/delete/:id', productController.deleteProduct);
 router.get('/search', productController.searchProduct);
 

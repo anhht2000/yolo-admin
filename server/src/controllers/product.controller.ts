@@ -136,7 +136,6 @@ class ProductController {
       return response.status(200).json({
         success: true,
         message: 'Add successfully',
-        data: data,
       });
     } catch (error) {
       return response.status(500).json({ success: false, message: error });
@@ -147,7 +146,10 @@ class ProductController {
     try {
       const { id } = request.params;
       const { name, description, price, size, color } = request.body;
-      let product = await getRepository(Product)
+      console.log('name', { name, description, price, size, color });
+      console.log('file', request.files);
+
+      await getRepository(Product)
         .createQueryBuilder('product')
         .update(Product)
         .set({
@@ -162,60 +164,77 @@ class ProductController {
         .where('id = :idProduct', { idProduct: id })
         .getOne();
 
+      await getRepository(ProductImg)
+        .createQueryBuilder('productImg')
+        .leftJoinAndSelect('productImg.product', 'product')
+        .delete()
+        .from(ProductImg)
+        .where('product.id = :idT', { idT: id })
+        .execute();
+
       if (request.files) {
         request.files = request.files as Array<any>;
         request.files.forEach(async (item, index) => {
           const productImg = await getRepository(ProductImg)
             .createQueryBuilder('productImg')
-            .update(ProductImg)
-            .set({
+            .insert()
+            .into(ProductImg)
+            .values({
               imgPath: item.filename,
               name: item.originalname,
+              product: data,
             })
-            .where('productImg.productId = :idPr', { idPr: id })
             .execute();
         });
       }
-      // const dtsize = await getRepository(Option).createQueryBuilder().where("name = 'size'").getOne();
-      // size.split(',').forEach(async (e: string) => {
-      //   const sizeT = await getRepository(OptionValue)
-      //     .createQueryBuilder('OptionValue')
-      //     .where('name = :nameSize', { nameSize: `${e}` })
-      //     .getOne();
-      //   await getRepository(ProductOption)
-      //     .createQueryBuilder('ProductOption')
-      //     .insert()
-      //     .into(ProductOption)
-      //     .values({
-      //       product: data,
-      //       option: dtsize,
-      //       optionValue: sizeT,
-      //     })
-      //     .execute();
-      // });
 
-      // const dtcolor = await getRepository(Option).createQueryBuilder().where("name = 'color'").getOne();
-      // color.split(',').forEach(async (e: string) => {
-      //   const colorT = await getRepository(OptionValue)
-      //     .createQueryBuilder('OptionValue')
-      //     .where('name = :nameColor', { nameColor: `${e}` })
-      //     .getOne();
-      //   await getRepository(ProductOption)
-      //     .createQueryBuilder('ProductOption')
-      //     .insert()
-      //     .into(ProductOption)
-      //     .values({
-      //       product: data,
-      //       option: dtcolor,
-      //       optionValue: colorT,
-      //     })
-      //     .execute();
-      // });
+      await getRepository(ProductOption)
+        .createQueryBuilder('ProductOption')
+        .leftJoinAndSelect('ProductOption.product', 'product')
+        .delete()
+        .from(ProductOption)
+        .where('product.id = :idP', { idP: id })
+        .execute();
+
+      const dtsize = await getRepository(Option).createQueryBuilder().where("name = 'size'").getOne();
+      size.split(',').forEach(async (e: string) => {
+        const sizeT = await getRepository(OptionValue)
+          .createQueryBuilder('OptionValue')
+          .where('name = :nameSizeU', { nameSizeU: `${e}` })
+          .getOne();
+        await getRepository(ProductOption)
+          .createQueryBuilder('ProductOption')
+          .insert()
+          .into(ProductOption)
+          .values({
+            product: data,
+            option: dtsize,
+            optionValue: sizeT,
+          })
+          .execute();
+      });
+
+      const dtcolor = await getRepository(Option).createQueryBuilder().where("name = 'color'").getOne();
+      color.split(',').forEach(async (e: string) => {
+        const colorT = await getRepository(OptionValue)
+          .createQueryBuilder('OptionValue')
+          .where('name = :nameColorU', { nameColorU: `${e}` })
+          .getOne();
+        await getRepository(ProductOption)
+          .createQueryBuilder('ProductOption')
+          .insert()
+          .into(ProductOption)
+          .values({
+            product: data,
+            option: dtcolor,
+            optionValue: colorT,
+          })
+          .execute();
+      });
 
       return response.status(200).json({
         success: true,
         message: 'Update successfully',
-        data: data,
       });
     } catch (error) {
       return response.status(500).json({ success: false, message: error });

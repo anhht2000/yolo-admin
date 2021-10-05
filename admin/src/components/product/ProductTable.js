@@ -6,8 +6,6 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CPagination,
-  CPaginationItem,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -16,25 +14,28 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import DEFAULT from 'src/constant/comon'
-import { getTotalPage } from 'src/redux/slice/productSlice'
-// import PropTypes from 'prop-types'
+import { actionGetAllProduct, getTotalPage } from 'src/redux/slice/productSlice'
+import productApi from '../../core/productApi'
 
 export default function ProductTable(props) {
   const { products } = props
+  const history = useHistory()
+  const dispatch = useDispatch()
   const totalPage = useSelector(getTotalPage)
 
-  const [visible, setVisible] = useState({ status: false, slug: '' })
-  const handleDelete = () => {
+  const [visible, setVisible] = useState({ status: false, id: '' })
+  const handleDelete = async (id) => {
+    await productApi.deleteProduct(id)
+    dispatch(actionGetAllProduct())
     setVisible({ ...visible, status: false })
   }
   const handleChangeCheck = (value) => {
     //post api
     //get list again
   }
-  const history = useHistory()
   return (
     <CContainer>
       <CTable width="100%">
@@ -92,7 +93,7 @@ export default function ProductTable(props) {
                     <CButton
                       color="danger"
                       variant="outline"
-                      onClick={() => setVisible({ ...visible, status: true, slug: e.id })}
+                      onClick={() => setVisible({ ...visible, status: true, id: e.id })}
                     >
                       Xóa
                     </CButton>
@@ -119,12 +120,12 @@ export default function ProductTable(props) {
         <CModalHeader onDismiss={() => setVisible({ ...visible, status: false })}>
           <CModalTitle>Xác nhận</CModalTitle>
         </CModalHeader>
-        <CModalBody>Bạn có chắc chắn muốn xóa sản phẩm {visible.slug} không?</CModalBody>
+        <CModalBody>Bạn có chắc chắn muốn xóa sản phẩm có id = {visible.id} không?</CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisible({ ...visible, status: false })}>
             Đóng
           </CButton>
-          <CButton color="primary" onClick={handleDelete}>
+          <CButton color="primary" onClick={() => handleDelete(visible.id)}>
             Xác nhận
           </CButton>
         </CModalFooter>

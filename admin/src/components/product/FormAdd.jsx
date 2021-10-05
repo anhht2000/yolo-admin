@@ -2,11 +2,14 @@ import { CButton, CCol, CForm, CFormCheck, CFormInput, CFormLabel, CRow } from '
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useHistory } from 'react-router'
+import DEFAULT from 'src/constant/comon'
 import { filter } from 'src/data/FilterDataPage'
 
 export default function FormAdd({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
+  const history = useHistory()
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -35,7 +38,13 @@ export default function FormAdd({ type, initialValue }) {
         size[e] = true
       })
       setValues({ ...initialValue, size, color })
-      setAcceptFile([{ preview: initialValue?.image, name: initialValue?.title }])
+      if (initialValue?.productImg) {
+        const dtTest = initialValue?.productImg.map((e) => ({
+          preview: DEFAULT.path + e?.imgPath,
+          name: e?.name,
+        }))
+        setAcceptFile(dtTest)
+      }
     }
   }, [type, initialValue])
 
@@ -70,42 +79,47 @@ export default function FormAdd({ type, initialValue }) {
       acceptFile.forEach((item) => {
         formdata.append('allImg', item)
       })
-      formdata.append('name', values.title)
-      formdata.append('price', values.price)
-      formdata.append('description', values.description)
+      formdata.append('name', values.name || '')
+      formdata.append('price', values.price || '')
+      formdata.append('description', values.description || '')
       formdata.append('size', argS)
       formdata.append('color', argC)
       if (type === 'edit') {
-        await axios.put('http://localhost:4000/product/edit/' + initialValue?.id, formdata, {
-          headers: {
-            'Content-Type': 'application/json',
+        const res = await axios.put(
+          'http://localhost:4000/product/edit/' + initialValue?.id,
+          formdata,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            onUploadProgress: (progressEvent) => {},
           },
-          onUploadProgress: (progressEvent) => {},
-        })
+        )
+        history.push('/product')
       } else {
-        await axios.post('http://localhost:4000/product/add', formdata, {
+        const res = await axios.post('http://localhost:4000/product/add', formdata, {
           headers: {
             'Content-Type': 'application/json',
           },
           onUploadProgress: (progressEvent) => {},
         })
+        history.push('/product')
       }
-      setAcceptFile([])
     } catch (error) {
-      alert(error)
+      console.log(error)
     }
   }
   return (
     <CForm>
       <CRow className="mb-3">
-        <CFormLabel htmlFor="title" className="col-sm-2 col-form-label flex-grow-1">
+        <CFormLabel htmlFor="name" className="col-sm-2 col-form-label flex-grow-1">
           Tên
         </CFormLabel>
         <CCol sm={9}>
           <CFormInput
             type="text"
-            id="title"
-            name="title"
+            id="name"
+            name="name"
             defaultValue={values?.name}
             onChange={(e) => handleChange(e)}
           />

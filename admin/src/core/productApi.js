@@ -8,5 +8,9 @@ const productApi = {
     const url = 'product/' + id
     return AxiosClient.get(url)
   },
+  deleteProduct: (id) => {
+    const url = 'product/delete/' + id
+    return AxiosClient.delete(url)
+  },
 }
 export default productApi
