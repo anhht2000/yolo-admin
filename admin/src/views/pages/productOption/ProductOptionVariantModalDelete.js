@@ -10,13 +10,13 @@ import {
 import React, { useState } from 'react'
 import { fun } from 'src/data/FilterDataPage'
 
-const OptionsModalDelete = (props) => {
-  const { visible, setVisible, deleteOptionApi, fakeOption } = props
+const ProductOptionVariantModalDelete = (props) => {
+  const { visible, setVisible, variant, option, deleteVariant } = props
   const [loading, setLoading] = useState(false)
-  const deleteOption = async () => {
+  const DeleteVariant = async () => {
     setLoading(true)
     await fun()
-    await deleteOptionApi(fakeOption.id)
+    deleteVariant(variant.id)
     setLoading(false)
     setVisible(false)
   }
@@ -25,12 +25,14 @@ const OptionsModalDelete = (props) => {
       <CModalHeader>
         <CModalTitle>Xác nhận xóa</CModalTitle>
       </CModalHeader>
-      <CModalBody>Xác nhận xóa Option: &quot;{fakeOption.name}&quot; </CModalBody>
+      <CModalBody>
+        Xác nhận xóa thuộc tính: {variant.name} của Option: {option.name}{' '}
+      </CModalBody>
       <CModalFooter>
         <CButton color="secondary" onClick={() => setVisible(false)}>
           Đóng
         </CButton>
-        <CButton color="primary" disabled={loading} onClick={deleteOption}>
+        <CButton color="primary" onClick={DeleteVariant}>
           {loading && <CSpinner size="sm" />} Xóa
         </CButton>
       </CModalFooter>
@@ -38,4 +40,4 @@ const OptionsModalDelete = (props) => {
   )
 }
 
-export default OptionsModalDelete
+export default ProductOptionVariantModalDelete
