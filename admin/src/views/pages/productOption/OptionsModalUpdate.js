@@ -9,7 +9,7 @@ import {
   CSpinner,
 } from '@coreui/react'
 import React, { useState } from 'react'
-// import { fun } from 'src/data/FilterDataPage'
+import { fun } from 'src/data/FilterDataPage'
 
 const OptionsModalUpdate = (props) => {
   const [loading, setLoading] = useState(false)
@@ -19,16 +19,11 @@ const OptionsModalUpdate = (props) => {
   }
 
   const updateOptions = async () => {
-    try {
-      setLoading(true)
-      // await fun() //side effect
-      await updateOptionApi(fakeOption)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setVisibleUpdate(false)
-      setLoading(false)
-    }
+    setLoading(true)
+    await fun() //side effect
+    await updateOptionApi(fakeOption)
+    setVisibleUpdate(false)
+    setLoading(false)
   }
 
   return (
