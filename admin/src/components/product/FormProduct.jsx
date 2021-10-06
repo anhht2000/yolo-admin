@@ -37,6 +37,7 @@ export default function FormProduct({ type, initialValue }) {
         size[e] = true
       })
       setValues({ ...initialValue, size, color })
+
       if (initialValue?.productImg) {
         console.log('env', process.env.REACT_APP_API_URL)
         const dtTest = initialValue?.productImg.map((e) => ({
