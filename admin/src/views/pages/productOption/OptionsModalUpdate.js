@@ -1,6 +1,7 @@
 import {
   CButton,
   CFormInput,
+  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
@@ -18,6 +19,9 @@ const OptionsModalUpdate = (props) => {
     setfakeOption({ ...fakeOption, name: e.target.value })
   }
 
+  const onChangeMeta = (e) => {
+    setfakeOption({ ...fakeOption, meta: e.target.value })
+  }
   const updateOptions = async () => {
     setLoading(true)
     await fun() //side effect
@@ -32,13 +36,23 @@ const OptionsModalUpdate = (props) => {
         <CModalTitle>Sửa Options</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <h3>Tên Options</h3>
+        <h4>Tên Options</h4>
         <CFormInput
           value={fakeOption.name}
           type="text"
           placeholder="Ect... Kích Thước"
           onChange={onChange}
         />
+        <h4>Loại Options</h4>
+        <CFormSelect
+          aria-label="Default select example"
+          value={fakeOption.meta}
+          onChange={onChangeMeta}
+        >
+          <option value="default">Chọn Loại thuộc tính</option>
+          <option value="text">Kiểu chữ</option>
+          <option value="color">Mã Màu</option>
+        </CFormSelect>
       </CModalBody>
       <CModalFooter>
         <CButton color="secondary" onClick={() => setVisibleUpdate(false)}>

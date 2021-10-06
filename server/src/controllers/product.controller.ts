@@ -170,6 +170,7 @@ class ProductController {
           .orWhere('optionValue.name like :value5', { value5: dataOption[4] })
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
           .getCount();
+
         const productList = await getRepository(Product)
           .createQueryBuilder('product')
           .select('product.id', 'id')
@@ -192,6 +193,7 @@ class ProductController {
           .orWhere('optionValue.name like :value5', { value5: dataOption[4] })
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
           .getRawMany();
+
         const _total = Math.ceil(count / _limit);
 
         return response.status(200).json({

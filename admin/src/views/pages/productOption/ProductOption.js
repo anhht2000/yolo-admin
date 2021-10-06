@@ -62,9 +62,9 @@ const ProductOption = () => {
     }
   }
 
-  const createOptionApi = async (name) => {
+  const createOptionApi = async ({ name, meta }) => {
     try {
-      const response = await createProductOption(name)
+      const response = await createProductOption({ name, meta })
       setOptions({
         ...options,
         data: [response, ...options['data']],

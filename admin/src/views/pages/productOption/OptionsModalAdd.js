@@ -1,6 +1,7 @@
 import {
   CButton,
   CFormInput,
+  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
@@ -16,16 +17,23 @@ const OptionsModalAdd = (props) => {
   const { visibleAdd, setVisibleAdd, createOptionApi } = props
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState('')
+  const [meta, setMeta] = useState('default')
   const addOption = async () => {
     setLoading(true)
     await fun()
     if (name === '') {
-      toast.error('trường dữ liệu không được để trống')
+      toast.error('Trường dữ liệu không được để trống')
       setLoading(false)
-      setVisibleAdd(false)
       return
     }
-    createOptionApi(name)
+    if (meta === 'default') {
+      toast.error('Phải chọn kiểu dữ liệu của Option')
+      setLoading(false)
+      return
+    }
+    createOptionApi({ name: name, meta: meta })
+    setName('')
+    setMeta('default')
     setLoading(false)
     setVisibleAdd(false)
   }
@@ -35,7 +43,7 @@ const OptionsModalAdd = (props) => {
         <CModalTitle>Thêm sản phẩm</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <h3>Tên Options</h3>
+        <h4>Tên Options</h4>
         <CFormInput
           value={name}
           onChange={(e) => {
@@ -44,6 +52,18 @@ const OptionsModalAdd = (props) => {
           type="text"
           placeholder="Ect... Kích Thước"
         />
+        <h4>Loại Options</h4>
+        <CFormSelect
+          aria-label="Default select example"
+          value={meta}
+          onChange={(e) => {
+            setMeta(e.target.value)
+          }}
+        >
+          <option value="default">Chọn Loại thuộc tính</option>
+          <option value="text">Text</option>
+          <option value="color">Mã Màu</option>
+        </CFormSelect>
       </CModalBody>
       <CModalFooter>
         <CButton color="secondary" onClick={() => setVisibleAdd(false)}>

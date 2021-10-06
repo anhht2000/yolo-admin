@@ -3,7 +3,6 @@ import AddFormProduct from './views/pages/product/AddFormProduct'
 import EditFormProduct from './views/pages/product/EditFormProduct'
 import Product from './views/pages/product/Product'
 import ProductOption from './views/pages/productOption/ProductOption'
-import ProductOptionVariant from './views/pages/productOptionVariant/ProductOptionVariant'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -105,7 +104,6 @@ const routes = [
   // path
   //MANAGE pRODUCT
   { path: '/product/option', name: 'Option', component: ProductOption, exact: true },
-  { path: '/product/option/variant', name: 'Variant', component: ProductOptionVariant },
 
   { path: '/product', name: 'Product', component: Product, exact: true },
   { path: '/product/add', name: 'Form Add Product', component: AddFormProduct, exact: true },

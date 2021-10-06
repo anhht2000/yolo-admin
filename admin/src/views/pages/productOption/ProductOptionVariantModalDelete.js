@@ -32,7 +32,7 @@ const ProductOptionVariantModalDelete = (props) => {
         <CButton color="secondary" onClick={() => setVisible(false)}>
           Đóng
         </CButton>
-        <CButton color="primary" onClick={DeleteVariant}>
+        <CButton color="primary" onClick={DeleteVariant} disabled={loading}>
           {loading && <CSpinner size="sm" />} Xóa
         </CButton>
       </CModalFooter>

@@ -6,8 +6,8 @@ export const getProductOption = async (page = 1, search = '', limit = '') => {
   return data
 }
 
-export const createProductOption = async (name) => {
-  const data = await axiosClient.post('/option', { name: name })
+export const createProductOption = async ({ name, meta }) => {
+  const data = await axiosClient.post('/option', { name: name, meta: meta })
 
   return data
 }
@@ -18,8 +18,8 @@ export const deleteProductOption = async (id) => {
   return data
 }
 
-export const updateProductOption = async (name, id) => {
-  const data = await axiosClient.put(`/option/${id}`, { name: name })
+export const updateProductOption = async ({ name, meta }, id) => {
+  const data = await axiosClient.put(`/option/${id}`, { name: name, meta: meta })
 
   return data
 }
