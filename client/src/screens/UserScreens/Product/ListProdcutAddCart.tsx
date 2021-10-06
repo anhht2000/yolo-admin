@@ -17,10 +17,9 @@ const ListProdcutAddCart = () => {
   }[];
   const [countPrice, setCountPrice] = useState(0);
   const [data, setData] = useState(data_list);
-
-  const CountProduct = data.length !== 0 ? data.length : 0;
+  const [countProduct, setCountProduct] = useState(0);
   const handleCountPrice = () => {
-    const Price: any[] = [];
+    const Price: number[] = [];
     if (data.length !== 0) {
       data.map((e: any) => {
         return Price.push(parseInt(e.price) * parseInt(e.number));
@@ -31,36 +30,58 @@ const ListProdcutAddCart = () => {
     }, 0);
     setCountPrice(count);
   };
+  const handleCountProduct = () => {
+    const CountProduct: number[] = [];
+    if (data.length !== 0) {
+      data.map((e: any) => {
+        return CountProduct.push(parseInt(e.number));
+      });
+    } else return CountProduct.push(0);
+    const count = CountProduct.reduce(function (total, number) {
+      return total + number;
+    }, 0);
+    setCountProduct(count);
+  };
+  const reloadCountProduct = (Number: number) => {
+    setCountProduct(countProduct + Number);
+  };
   const setPlusPrice = (price: number) => {
     setCountPrice(countPrice + price);
   };
   const setSubtractPrice = (price: number) => {
     setCountPrice(countPrice - price);
   };
+  const setCountProductUpdatePlus = (Number: number) => {
+    setCountProduct(countProduct + Number);
+  };
+  const setCountProductUpdateSubtract = (Number: number) => {
+    setCountProduct(countProduct - Number);
+  };
   const handleOrder = () => {};
   const handleContinue = () => {};
-  const deleteProduct = (
-    title: string,
-    variant_value: string[],
-    Index: number
-  ) => {
-    const Data = data_list.filter((item, index) => {
-      return index !== Index;
-    });
-    setData(Data);
-    localStorage.setItem("cartProduct", JSON.stringify(Data));
+  const deleteProduct = (title: string, Index: number) => {
+    if (data_list.length > 0) {
+      const Data = data_list.filter((item, index) => {
+        if (index === 0) {
+          setCountProduct(0);
+          setCountPrice(0);
+        }
+        return index !== Index;
+      });
+      setData(Data);
+      localStorage.setItem("cartProduct", JSON.stringify(Data));
+    }
   };
-
   useEffect(() => {
     handleCountPrice();
+    handleCountProduct();
   }, [data]);
-
   return (
     <LayoutContainer>
       <div className="container_listprodcutadd">
         <div className="container_listprodcutadd_leftconfirm">
           <ConfirmBuyProduct
-            count={CountProduct}
+            count={countProduct}
             countmoney={`${countPrice}`}
             ordered={handleOrder}
             continue_shopping={handleContinue}
@@ -77,10 +98,13 @@ const ListProdcutAddCart = () => {
                   price={e.price}
                   count={e.number}
                   deleteProduct={() => {
-                    deleteProduct(e.title, e.variant_value, index);
+                    deleteProduct(e.title, index);
                   }}
                   setPriceUpdate={setPlusPrice}
                   setSubtractPrice={setSubtractPrice}
+                  setCountProductUpdatePlus={setCountProductUpdatePlus}
+                  setCountProductUpdateSubtract={setCountProductUpdateSubtract}
+                  reloadCountProduct={reloadCountProduct}
                 />
               </div>
             ))

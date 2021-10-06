@@ -19,6 +19,14 @@ export const filter = {
   ],
 }
 
+export const fun = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('')
+    }, 1000)
+  })
+}
+
 export const MockFilterData = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {

@@ -16,6 +16,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(sagaMiddleware)
   },
+  devTools: true,
 })
 
 sagaMiddleware.run(rootSaga)

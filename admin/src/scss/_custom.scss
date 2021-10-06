@@ -64,3 +64,19 @@
     cursor: pointer;
   }
 }
+
+.page-link {
+  cursor: pointer;
+  color: black;
+  &:hover {
+    color: rgb(119, 158, 224);
+  }
+  &.current {
+    background-color: rgb(59, 70, 89);
+    color: white;
+  }
+}
+
+.pagination {
+  align-items: center;
+}

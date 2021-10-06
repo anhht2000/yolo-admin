@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository } from 'typeorm';
 import { Option } from '../models/option.entity';
 import { OptionValue } from '../models/optionValue.entity';
 import { ProductOption } from '../models/productOption.entity';
@@ -9,19 +9,12 @@ class OptionValueController {
       const { optionId } = req.params as { optionId: string };
       const { name } = req.body as { name: string };
 
-      const optionRepo = await getRepository(Option)
-        .createQueryBuilder('option')
-        .where('option.id = :id', { id: optionId })
-        .getOne();
+      const optionRepo = await getManager().findOne(Option, optionId);
 
-      const optionValueRepo = await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(OptionValue)
-        .values({ name: name, option: optionRepo })
-        .execute();
+      const optionValueRepo = await getManager().insert(OptionValue, { name: name, option: optionRepo });
 
-      res.send({ data: optionValueRepo });
+      const result = await getManager().findOne(OptionValue, optionValueRepo?.identifiers[0].id);
+      res.send({ data: result });
     } catch (error) {
       res.send({ error: error });
     }

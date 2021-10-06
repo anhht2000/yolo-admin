@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import './scss/style.scss'
 import ForgetPassword from './views/pages/forgetPass/ForgetPassword'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -41,6 +43,7 @@ class App extends Component {
             <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />
             <Route path="/" name="Home" render={(props) => <DefaultLayout {...props} />} />
           </Switch>
+          <ToastContainer />
         </React.Suspense>
       </HashRouter>
     )

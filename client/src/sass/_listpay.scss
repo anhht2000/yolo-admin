@@ -1,0 +1,15 @@
+.container_content_product {
+    width: 100%;
+    margin-top: 1em;
+    background-color: white;
+    box-shadow: 0px 0px 2rem 1px #d6d6d6;
+    &_colum {
+        display: flex;
+        width: 100%;
+        &-title {
+            width: 20%;
+            display: block;
+            text-align: center;
+        }
+    }
+}
