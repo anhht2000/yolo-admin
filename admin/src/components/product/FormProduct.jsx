@@ -1,14 +1,26 @@
-import { CButton, CCol, CForm, CFormCheck, CFormInput, CFormLabel, CRow } from '@coreui/react'
+import {
+  CButton,
+  CCol,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CRow,
+  CSpinner,
+} from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { filter } from 'src/data/FilterDataPage'
+import { getLoading } from 'src/redux/slice/productSlice'
 import productApi from '../../core/productApi'
 
 export default function FormProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
+  const isLoading = useSelector(getLoading)
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -217,6 +229,7 @@ export default function FormProduct({ type, initialValue }) {
       </CRow>
       <CRow className="text-center justify-content-center">
         <CButton className="w-auto" onClick={handleSubmit}>
+          {isLoading && <CSpinner component="span" size="sm" />}
           Lưu
         </CButton>
       </CRow>
