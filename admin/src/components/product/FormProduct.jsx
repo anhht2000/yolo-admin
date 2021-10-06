@@ -1,12 +1,14 @@
 import { CButton, CCol, CForm, CFormCheck, CFormInput, CFormLabel, CRow } from '@coreui/react'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useHistory } from 'react-router'
 import { filter } from 'src/data/FilterDataPage'
+import productApi from '../../core/productApi'
 
-export default function FormAdd({ type, initialValue }) {
+export default function FormProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
+  const history = useHistory()
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -19,9 +21,33 @@ export default function FormAdd({ type, initialValue }) {
       setAcceptFile([...Files, ...Accept])
     },
   })
+  const handleRemoveImage = (image) => {
+    const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
+    setAcceptFile(newArrImage)
+  }
+
   useEffect(() => {
-    setValues(initialValue)
-  }, [initialValue])
+    if (type === 'edit') {
+      const color = {}
+      initialValue?.color?.map((e) => {
+        color[e] = true
+      })
+      const size = {}
+      initialValue?.size?.map((e) => {
+        size[e] = true
+      })
+      setValues({ ...initialValue, size, color })
+
+      if (initialValue?.productImg) {
+        console.log('env', process.env.REACT_APP_API_URL)
+        const dtTest = initialValue?.productImg.map((e) => ({
+          preview: process.env.REACT_APP_API_URL + e?.imgPath,
+          name: e?.name,
+        }))
+        setAcceptFile(dtTest)
+      }
+    }
+  }, [type, initialValue])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -40,35 +66,49 @@ export default function FormAdd({ type, initialValue }) {
 
   const handleSubmit = async () => {
     try {
+      const argS =
+        values.size &&
+        Object.entries(values.size)
+          .filter((e) => e[1] === true)
+          .map((e) => e[0])
+      const argC =
+        values.color &&
+        Object.entries(values.color)
+          .filter((e) => e[1] === true)
+          .map((e) => e[0])
       const formdata = new FormData()
       acceptFile.forEach((item) => {
         formdata.append('allImg', item)
       })
-      // formdata.append('title', values.title)
-      // formdata.append('price', values.price)
-      await axios.post('http://localhost:4000/product/add', formdata, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (progressEvent) => {},
-      })
-      setAcceptFile([])
+      formdata.append('name', values.name || '')
+      formdata.append('price', values.price || '')
+      formdata.append('description', values.description || '')
+      formdata.append('size', argS)
+      formdata.append('color', argC)
+
+      if (type === 'edit') {
+        await productApi.updateProduct(initialValue?.id, formdata)
+        history.push('/product')
+      } else {
+        await productApi.createProduct(formdata)
+        history.push('/product')
+      }
     } catch (error) {
-      alert(error)
+      console.log(error)
     }
   }
   return (
     <CForm>
       <CRow className="mb-3">
-        <CFormLabel htmlFor="title" className="col-sm-2 col-form-label flex-grow-1">
+        <CFormLabel htmlFor="name" className="col-sm-2 col-form-label flex-grow-1">
           Tên
         </CFormLabel>
         <CCol sm={9}>
           <CFormInput
             type="text"
-            id="title"
-            name="title"
-            defaultValue={values?.title}
+            id="name"
+            name="name"
+            defaultValue={values?.name}
             onChange={(e) => handleChange(e)}
           />
         </CCol>
@@ -83,6 +123,21 @@ export default function FormAdd({ type, initialValue }) {
             id="price"
             name="price"
             defaultValue={values?.price}
+            onChange={(e) => handleChange(e)}
+          />
+        </CCol>
+      </CRow>
+      <CRow className="mb-3">
+        <CFormLabel htmlFor="description" className="col-sm-2 col-form-label flex-grow-1">
+          Miêu tả
+        </CFormLabel>
+        <CCol sm={9}>
+          <CFormInput
+            type="text"
+            id="description"
+            name="description"
+            multiple
+            defaultValue={values?.description}
             onChange={(e) => handleChange(e)}
           />
         </CCol>
@@ -102,9 +157,9 @@ export default function FormAdd({ type, initialValue }) {
                   value={e.content}
                   label={e.content}
                   className="me-4"
-                  // defaultChecked={
-                  //   values?.size && values.size.indexOf(e.content.toLowerCase()) !== -1
-                  // }
+                  checked={
+                    false || (values.hasOwnProperty('size') && values.size[e.content]) || false
+                  }
                   onClick={(e) => handleChange(e)}
                 />
               )
@@ -125,9 +180,9 @@ export default function FormAdd({ type, initialValue }) {
                   value={e.content}
                   label={e.content}
                   className="me-4 pb-2"
-                  // defaultChecked={
-                  //   values?.color && values.color.indexOf(e.content.toLowerCase()) !== -1
-                  // }
+                  checked={
+                    false || (values.hasOwnProperty('color') && values.color[e.content]) || false
+                  }
                   onChange={(e) => handleChange(e)}
                 />
               )
@@ -154,6 +209,7 @@ export default function FormAdd({ type, initialValue }) {
               <div key={index} className="preview__img__flex">
                 <img src={item.preview} alt={index} className="preview__img" />
                 <div className={'preview__title'}>{item.name}</div>
+                <i className="bx bx-x preview__icon" onClick={() => handleRemoveImage(item)} />
               </div>
             ))}
           </div>

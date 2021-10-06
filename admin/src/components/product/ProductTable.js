@@ -1,7 +1,6 @@
 import {
   CButton,
   CContainer,
-  CFormCheck,
   CModal,
   CModalBody,
   CModalFooter,
@@ -15,20 +14,27 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
-// import PropTypes from 'prop-types'
+import { actionGetAllProduct } from 'src/redux/slice/productSlice'
+import productApi from '../../core/productApi'
+import Pagination from './Pagination'
 
 export default function ProductTable(props) {
   const { products } = props
-  const [visible, setVisible] = useState({ status: false, slug: '' })
-  const handleDelete = () => {
+  const history = useHistory()
+  const dispatch = useDispatch()
+
+  const [visible, setVisible] = useState({ status: false, id: '' })
+  const handleDelete = async (id) => {
+    await productApi.deleteProduct(id)
+    dispatch(actionGetAllProduct())
     setVisible({ ...visible, status: false })
   }
   const handleChangeCheck = (value) => {
     //post api
     //get list again
   }
-  const history = useHistory()
   return (
     <CContainer>
       <CTable width="100%">
@@ -48,30 +54,45 @@ export default function ProductTable(props) {
               return (
                 <CTableRow key={index}>
                   <CTableHeaderCell scope="row">
-                    <CFormCheck
+                    {/* <CFormCheck
                       defaultChecked={e.active}
                       onChange={() => handleChangeCheck(e.active)}
-                    />
+                    /> */}
                   </CTableHeaderCell>
                   <CTableDataCell>
-                    <img style={{ height: '80px' }} className="hei" src={e.image01} alt="" />
+                    <img
+                      style={{ height: '80px', width: '100px', objectFit: 'cover' }}
+                      className="hei"
+                      src={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
+                      alt=""
+                    />
                   </CTableDataCell>
-                  <CTableDataCell>{e.title}</CTableDataCell>
-                  <CTableDataCell>{e.size.join(', ')}</CTableDataCell>
-                  <CTableDataCell>{e.colors.join(', ')}</CTableDataCell>
+                  <CTableDataCell>{e.name}</CTableDataCell>
+                  <CTableDataCell>
+                    {e?.productOption
+                      .filter((e) => e?.option?.name === 'size')
+                      .map((e) => e?.optionValue?.name)
+                      .join(' ')}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    {e?.productOption
+                      .filter((e) => e?.option?.name === 'color')
+                      .map((e) => e?.optionValue?.name)
+                      .join(' ')}
+                  </CTableDataCell>
                   <CTableDataCell>
                     <CButton
                       color="success"
                       variant="outline"
                       className="me-1"
-                      onClick={() => history.push('/product/' + e.slug)}
+                      onClick={() => history.push('/product/' + e.id)}
                     >
                       Sửa
                     </CButton>
                     <CButton
                       color="danger"
                       variant="outline"
-                      onClick={() => setVisible({ ...visible, status: true, slug: e.slug })}
+                      onClick={() => setVisible({ ...visible, status: true, id: e.id })}
                     >
                       Xóa
                     </CButton>
@@ -81,16 +102,17 @@ export default function ProductTable(props) {
             })}
         </CTableBody>
       </CTable>
+      <Pagination />
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>
         <CModalHeader onDismiss={() => setVisible({ ...visible, status: false })}>
           <CModalTitle>Xác nhận</CModalTitle>
         </CModalHeader>
-        <CModalBody>Bạn có chắc chắn muốn xóa sản phẩm {visible.slug} không?</CModalBody>
+        <CModalBody>Bạn có chắc chắn muốn xóa sản phẩm có id = {visible.id} không?</CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisible({ ...visible, status: false })}>
             Đóng
           </CButton>
-          <CButton color="primary" onClick={handleDelete}>
+          <CButton color="primary" onClick={() => handleDelete(visible.id)}>
             Xác nhận
           </CButton>
         </CModalFooter>
@@ -98,7 +120,3 @@ export default function ProductTable(props) {
     </CContainer>
   )
 }
-
-// ProductTable.propsType = {
-//   products: PropTypes.string,
-// }

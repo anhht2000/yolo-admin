@@ -3,18 +3,19 @@ import { products } from './products'
 export const filter = {
   category: [{ content: 'Áo thun' }, { content: 'Áo somi' }, { content: 'Quần jean' }],
   color: [
-    { content: 'trắng' },
-    { content: 'Hồng' },
-    { content: 'Cam' },
-    { content: 'Vàng' },
-    { content: 'Xanh dương' },
+    { content: 'white' },
+    { content: 'pink' },
+    { content: 'orange' },
+    { content: 'yellow' },
+    { content: 'blue' },
+    { content: 'red' },
   ],
   size: [
-    { content: 'S' },
-    { content: 'L' },
-    { content: 'M' },
-    { content: 'XL' },
-    { content: 'XXL' },
+    { content: 's' },
+    { content: 'l' },
+    { content: 'm' },
+    { content: 'xl' },
+    { content: 'xxl' },
   ],
 }
 

@@ -6,15 +6,12 @@ import { createUpdateRuleProduct } from './../rules/productRouter.rule';
 
 const router = Router();
 
-router.get('/get', productController.getProduct);
-router.post('/add',
-  upload.array('allImg'),
-  // createUpdateRuleProduct,
-  // ValidateData,
-  productController.addProduct
-);
-router.put('/edit/:id', createUpdateRuleProduct, ValidateData, productController.updateProduct);
+router.get('/', productController.getProduct);
+router.post('/add', upload.array('allImg'), createUpdateRuleProduct, productController.addProduct);
+router.put('/edit/:id', upload.array('allImg'), createUpdateRuleProduct, productController.updateProduct);
 router.delete('/delete/:id', productController.deleteProduct);
 router.get('/search', productController.searchProduct);
+router.get('/sort', productController.sortProduct);
+router.get('/:productId', productController.getOneProduct);
 
 export default router;
