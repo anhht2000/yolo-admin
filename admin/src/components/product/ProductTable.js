@@ -16,7 +16,6 @@ import {
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
-import DEFAULT from 'src/constant/comon'
 import { actionGetAllProduct } from 'src/redux/slice/productSlice'
 import productApi from '../../core/productApi'
 import Pagination from './Pagination'
@@ -64,7 +63,7 @@ export default function ProductTable(props) {
                     <img
                       style={{ height: '80px', width: '100px', objectFit: 'cover' }}
                       className="hei"
-                      src={DEFAULT.path + e?.productImg[0]?.imgPath}
+                      src={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
                       alt=""
                     />
                   </CTableDataCell>

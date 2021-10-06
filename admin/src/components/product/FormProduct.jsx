@@ -2,8 +2,8 @@ import { CButton, CCol, CForm, CFormCheck, CFormInput, CFormLabel, CRow } from '
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useHistory } from 'react-router'
-import productApi from 'src/core/productApi'
 import { filter } from 'src/data/FilterDataPage'
+import productApi from '../../core/productApi'
 
 export default function FormProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
@@ -37,9 +37,11 @@ export default function FormProduct({ type, initialValue }) {
         size[e] = true
       })
       setValues({ ...initialValue, size, color })
+
       if (initialValue?.productImg) {
+        console.log('env', process.env.REACT_APP_API_URL)
         const dtTest = initialValue?.productImg.map((e) => ({
-          preview: process.env.REACT_APP_AXIOS_HOST + e?.imgPath,
+          preview: process.env.REACT_APP_API_URL + e?.imgPath,
           name: e?.name,
         }))
         setAcceptFile(dtTest)

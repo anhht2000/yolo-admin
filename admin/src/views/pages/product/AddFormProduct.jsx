@@ -1,6 +1,6 @@
 import { CCol, CContainer, CRow } from '@coreui/react'
 import React from 'react'
-import FormAdd from 'src/components/product/FormAdd'
+import FormProduct from 'src/components/product/FormProduct'
 
 export default function AddFormProduct() {
   return (
@@ -8,7 +8,7 @@ export default function AddFormProduct() {
       <CRow>
         <CCol xs="12" lg={7} xl={6} className="mx-auto shadow bg-body rounded py-3">
           <h4 className="text-center mb-3">Thêm sản phẩm</h4>
-          <FormAdd initialValue={{ name: '', price: '', size: {}, color: {} }} />
+          <FormProduct initialValue={{ name: '', price: '', size: {}, color: {} }} />
         </CCol>
       </CRow>
     </CContainer>
