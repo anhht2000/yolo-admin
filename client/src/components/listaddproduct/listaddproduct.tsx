@@ -12,6 +12,9 @@ interface PropListAdd {
   countmoney?: any;
   setPriceUpdate: (price: number) => void;
   setSubtractPrice: (price: number) => void;
+  setCountProductUpdatePlus: (Number: number) => void;
+  setCountProductUpdateSubtract: (Number: number) => void;
+  reloadCountProduct: (Number: number) => void;
 }
 const Listaddproduct: React.FC<PropListAdd> = (props) => {
   const {
@@ -23,8 +26,12 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
     deleteProduct,
     setPriceUpdate,
     setSubtractPrice,
+    setCountProductUpdatePlus,
+    setCountProductUpdateSubtract,
+    reloadCountProduct,
   } = props;
   const Variant_value: string[] = variant_value;
+  const [currentNumber, SetCurrentNumber] = useState<number>(count as number);
   const data = JSON.parse(localStorage.getItem("cartProduct") as string) as {
     title: string;
     image01: string;
@@ -35,13 +42,7 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
   }[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [number, setNumber] = useState<number>(count as number);
-  const setInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (isNaN(parseInt(e.target.value)) || parseInt(e.target.value) < 1) {
-      setNumber(1);
-    } else {
-      setNumber(parseInt(e.target.value));
-    }
-  };
+
   const saveToLocal = () => {
     if (data) {
       let flag = false;
@@ -63,20 +64,52 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
       }
     }
   };
-
+  const setInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (isNaN(parseInt(e.target.value)) || parseInt(e.target.value) < 1) {
+      setNumber(1);
+      SetCurrentNumber(1);
+    } else {
+      setNumber(parseInt(e.target.value));
+      setPriceUpdate(
+        (parseInt(e.target.value) - currentNumber) * parseInt(price as string)
+      );
+      SetCurrentNumber(parseInt(e.target.value));
+    }
+    if (parseInt(e.target.value) !== 1) {
+      saveToLocal();
+    }
+    handleReload(parseInt(e.target.value), currentNumber);
+  };
   const plusClick = () => {
     setNumber(number + 1);
     setPriceUpdate(parseInt(price as string));
+    setCountProductUpdatePlus(1);
+    SetCurrentNumber(number + 1);
   };
   const minusClick = () => {
     if (number - 1 < 1) return;
     setNumber(number - 1);
     setSubtractPrice(parseInt(price as string));
+    setCountProductUpdateSubtract(1);
+    SetCurrentNumber(number + 1);
   };
+
+  const handleReload = (Number: number, CurrentNumber: number) => {
+    let count = 0;
+    if (Number > CurrentNumber) {
+      count = Number - CurrentNumber;
+      return reloadCountProduct(count);
+    } else {
+      count = CurrentNumber - Number;
+      reloadCountProduct(-count);
+    }
+  };
+
   useEffect(() => {
     saveToLocal();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [number]);
+
   return (
     <div className="contaiber_listadd">
       <div className="contaiber_listadd_left">

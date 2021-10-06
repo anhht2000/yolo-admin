@@ -7,8 +7,8 @@ import * as slide_3 from "./png/slider/slide_3.png";
 import * as logo from "./png/logo/Logo.png";
 import * as logo_2 from "./png/logo/Logo-2.png";
 import * as favicon from "./png/logo/favicon.png";
-import * as Admin_logo from './png/logo/AdminLTELogo.png';
-import * as user_2 from './png/logo/user2-160x160.jpg';
+import * as Admin_logo from "./png/logo/AdminLTELogo.png";
+import * as user_2 from "./png/logo/user2-160x160.jpg";
 
 // ProductImport
 import * as product_01_image_01 from "./png/products/product-01 (1).jpg";
@@ -40,7 +40,8 @@ import * as product_12_image_02 from "./png/products/product-12 (2).jpg";
 import * as bannerImg from "./png/banner/banner.png";
 import * as background from "./png/background/background.jpg";
 //import icon
-import * as ic_delete from './png/icon/ic_delete.png';
+import * as ic_delete from "./png/icon/ic_delete.png";
+import * as ic_location from "./png/icon/ic_location.png";
 export const imgSlider = {
   slide_1: slide_1.default,
   slide_2: slide_2.default,
@@ -52,7 +53,7 @@ export const imgLogo = {
   logo_2: logo_2.default,
   favicon: favicon.default,
   admin_logo: Admin_logo.default,
-  user_2: user_2.default
+  user_2: user_2.default,
 };
 
 export const imgProduct = {
@@ -89,5 +90,6 @@ export const imgBackground = {
   background: background.default,
 };
 export const Icon = {
-  Ic_delete:ic_delete.default
-}
+  Ic_delete: ic_delete.default,
+  Ic_location: ic_location.default,
+};
