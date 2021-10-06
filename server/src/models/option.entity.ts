@@ -7,6 +7,7 @@ export enum Emeta {
   TEXT = 'text',
   COLOR = 'color'
 }
+
 @Entity()
 export class Option extends Common {
   @PrimaryGeneratedColumn()
