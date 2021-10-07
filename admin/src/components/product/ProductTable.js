@@ -16,8 +16,8 @@ import {
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
+import productApi from 'src/config/productApi'
 import { actionGetAllProduct } from 'src/redux/slice/productSlice'
-import productApi from '../../core/productApi'
 import Pagination from './Pagination'
 
 export default function ProductTable(props) {
@@ -35,6 +35,7 @@ export default function ProductTable(props) {
     //post api
     //get list again
   }
+
   return (
     <CContainer>
       <CTable width="100%">

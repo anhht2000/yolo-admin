@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository } from 'typeorm';
 import { Emeta, Option } from '../models/option.entity';
 import { OptionValue } from '../models/optionValue.entity';
 import { CommonConfig } from './index';
@@ -79,6 +79,20 @@ class OptionController {
       queryRunner.rollbackTransaction();
     } finally {
       queryRunner.release();
+    }
+  }
+
+  public async getAllOptionWithVariant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await getManager().find(Option, { relations: ['optionValue'] })
+
+      res.send({
+        success: true,
+        data: data
+      })
+
+    } catch (error) {
+      res.send({ message: error })
     }
   }
 

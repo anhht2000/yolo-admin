@@ -23,3 +23,9 @@ export const updateProductOption = async ({ name, meta }, id) => {
 
   return data
 }
+
+export const getAllOption = async () => {
+  const data = await axiosClient.get('/option/all')
+
+  return data
+}

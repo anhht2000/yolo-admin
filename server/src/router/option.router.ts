@@ -7,6 +7,8 @@ const router = Router();
 
 router.get('/', optionController.getAllOption)
 
+router.get('/all', optionController.getAllOptionWithVariant)
+
 router.post('/', createUpdateRuleOption, ValidateData, optionController.createOption)
 
 router.get('/:id', optionController.getOneOption)
