@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { getConnection, getRepository } from 'typeorm';
-import { Option } from '../models/option.entity';
+import { getConnection, getManager, getRepository } from 'typeorm';
+import { Emeta, Option } from '../models/option.entity';
 import { OptionValue } from '../models/optionValue.entity';
 import { CommonConfig } from './index';
 class OptionController {
@@ -37,12 +37,12 @@ class OptionController {
   }
   public async createOption(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name } = req.body as { name: string };
+      const { name, meta } = req.body as { name: string, meta: string };
       const optionRep = await getConnection()
         .createQueryBuilder()
         .insert()
         .into(Option)
-        .values({ name: name })
+        .values({ name: name, meta: meta === 'color' ? Emeta.COLOR : Emeta.TEXT })
         .execute();
 
       res.send({ data: optionRep });
@@ -82,14 +82,28 @@ class OptionController {
     }
   }
 
+  public async getAllOptionWithVariant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await getManager().find(Option, { relations: ['optionValue'] })
+
+      res.send({
+        success: true,
+        data: data
+      })
+
+    } catch (error) {
+      res.send({ message: error })
+    }
+  }
+
   public async updateOption(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params as { id: string };
-      const { name } = req.body as { name: string };
+      const { name , meta } = req.body as { name: string, meta: string };
       await getConnection()
         .createQueryBuilder()
         .update(Option)
-        .set({ name: name })
+        .set({ name: name, meta: meta === 'color' ? Emeta.COLOR : Emeta.TEXT})
         .where('id = :id', { id: id })
         .execute();
 

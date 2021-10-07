@@ -47,7 +47,7 @@ const ProductOptionVariantModalUpdate = (props) => {
         <CButton color="secondary" onClick={() => setVisible(false)}>
           Đóng
         </CButton>
-        <CButton color="primary" onClick={updateProductOptionValue}>
+        <CButton color="primary" onClick={updateProductOptionValue} disabled={loading}>
           {loading && <CSpinner size="sm" />} Lưu thay đổi
         </CButton>
       </CModalFooter>

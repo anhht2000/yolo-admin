@@ -7,7 +7,11 @@ import { createUpdateRuleProduct } from './../rules/productRouter.rule';
 const router = Router();
 
 router.get('/', productController.getProduct);
-router.post('/add', upload.array('allImg'), createUpdateRuleProduct, productController.addProduct);
+router.post('/add',
+  upload.array('allImg'),
+  // createUpdateRuleProduct,
+  productController.addProduct
+);
 router.put('/edit/:id', upload.array('allImg'), createUpdateRuleProduct, productController.updateProduct);
 router.delete('/delete/:id', productController.deleteProduct);
 router.get('/search', productController.searchProduct);

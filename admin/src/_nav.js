@@ -31,11 +31,6 @@ const _nav = [
         name: 'Quản lý option sản phẩm',
         to: '/product/option',
       },
-      {
-        component: CNavItem,
-        name: 'Quản lý variant option',
-        to: '/product/option/variant',
-      },
     ],
   },
   {
