@@ -78,18 +78,18 @@ export default function FormProduct({ type, initialValue }) {
             ...variantSend[e.target.name].filter((item) => item !== e.target.value),
           ],
         })
-      } else {
-        setVariantSend({
-          ...variantSend,
-          [e.target.name]: [...variantSend[e.target.name], e.target.value],
-        })
+        return
       }
-    } else {
       setVariantSend({
         ...variantSend,
-        [e.target.name]: [e.target.value],
+        [e.target.name]: [...variantSend[e.target.name], e.target.value],
       })
+      return
     }
+    setVariantSend({
+      ...variantSend,
+      [e.target.name]: [e.target.value],
+    })
   }
 
   const LoadOptions = async () => {
