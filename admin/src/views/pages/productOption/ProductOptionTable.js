@@ -28,6 +28,7 @@ const ProductOptionTable = (props) => {
         <CTableRow>
           <CTableHeaderCell scope="col">STT</CTableHeaderCell>
           <CTableHeaderCell scope="col">OptionName</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Meta</CTableHeaderCell>
           <CTableHeaderCell scope="col">DayCreate</CTableHeaderCell>
           <CTableHeaderCell scope="col">DayUpdate</CTableHeaderCell>
           <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -39,6 +40,7 @@ const ProductOptionTable = (props) => {
             <CTableRow key={index}>
               <CTableHeaderCell scope="row">{(page - 1) * perPage + index + 1}</CTableHeaderCell>
               <CTableDataCell>{item.name}</CTableDataCell>
+              <CTableDataCell>{item.meta}</CTableDataCell>
               <CTableDataCell>{resetDateTime(item.createDate)}</CTableDataCell>
               <CTableDataCell>{resetDateTime(item.updateDate)}</CTableDataCell>
               <CTableDataCell>

@@ -1,5 +1,5 @@
 import { call, debounce, put, takeLatest } from '@redux-saga/core/effects'
-import productApi from 'src/core/productApi'
+import productApi from 'src/config/productApi'
 import {
   actionGeOneProduct,
   actionGeOneProductSuccess,

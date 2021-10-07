@@ -2,9 +2,9 @@ import {
   CButton,
   CCol,
   CForm,
-  CFormCheck,
   CFormInput,
   CFormLabel,
+  CFormSelect,
   CRow,
   CSpinner,
 } from '@coreui/react'
@@ -12,15 +12,21 @@ import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import { filter } from 'src/data/FilterDataPage'
 import { getLoading } from 'src/redux/slice/productSlice'
-import productApi from '../../core/productApi'
+import { toast } from 'react-toastify'
+import productApi from 'src/config/productApi'
+import { getAllOption } from 'src/config/productOptionAPI'
+import { fun } from 'src/data/FilterDataPage'
 
 export default function FormProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
   const isLoading = useSelector(getLoading)
+  const [selectData, setSelectData] = useState([])
+  const [selectForm, setSelectForm] = useState('default')
+  const [variantTemp, setVariantTemp] = useState([])
+  const [variantSend, setVariantSend] = useState({})
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -33,6 +39,7 @@ export default function FormProduct({ type, initialValue }) {
       setAcceptFile([...Files, ...Accept])
     },
   })
+
   const handleRemoveImage = (image) => {
     const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
     setAcceptFile(newArrImage)
@@ -40,18 +47,9 @@ export default function FormProduct({ type, initialValue }) {
 
   useEffect(() => {
     if (type === 'edit') {
-      const color = {}
-      initialValue?.color?.map((e) => {
-        color[e] = true
-      })
-      const size = {}
-      initialValue?.size?.map((e) => {
-        size[e] = true
-      })
-      setValues({ ...initialValue, size, color })
+      setValues({ ...initialValue })
 
       if (initialValue?.productImg) {
-        console.log('env', process.env.REACT_APP_API_URL)
         const dtTest = initialValue?.productImg.map((e) => ({
           preview: process.env.REACT_APP_API_URL + e?.imgPath,
           name: e?.name,
@@ -60,34 +58,59 @@ export default function FormProduct({ type, initialValue }) {
       }
     }
   }, [type, initialValue])
-
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    if (type === 'text') {
-      setValues({ ...values, [name]: value })
-    } else {
-      setValues({
-        ...values,
-        [name]: {
-          ...values[name],
-          [value]: checked === true,
-        },
+    const { name, value } = e.target
+    setValues({ ...values, [name]: value })
+  }
+  const handleChangeOptionVariant = (e) => {
+    const data = variantTemp.find((item) => item.id === parseInt(e.target.name))
+    const temp = data.optionValue.find((item) => item.id === parseInt(e.target.value))
+    const newTemp = { ...temp, use: !temp.use }
+    const newData = {
+      ...data,
+      optionValue: data.optionValue.map((item) => (item.id === newTemp.id ? newTemp : item)),
+    }
+    setVariantTemp(variantTemp.map((item) => (newData.id === item.id ? newData : item)))
+
+    if (variantSend[e.target.name]) {
+      const data = variantSend[e.target.name].find((item) => item === e.target.value)
+      if (data) {
+        setVariantSend({
+          ...variantSend,
+          [e.target.name]: [
+            ...variantSend[e.target.name].filter((item) => item !== e.target.value),
+          ],
+        })
+        return
+      }
+      setVariantSend({
+        ...variantSend,
+        [e.target.name]: [...variantSend[e.target.name], e.target.value],
       })
+      return
+    }
+    setVariantSend({
+      ...variantSend,
+      [e.target.name]: [e.target.value],
+    })
+  }
+
+  const LoadOptions = async () => {
+    try {
+      const { data } = await getAllOption()
+      await fun()
+      setSelectData(data.data)
+    } catch (error) {
+      toast.error(`System error`)
     }
   }
 
+  useEffect(() => {
+    LoadOptions()
+  }, [])
+
   const handleSubmit = async () => {
     try {
-      const argS =
-        values.size &&
-        Object.entries(values.size)
-          .filter((e) => e[1] === true)
-          .map((e) => e[0])
-      const argC =
-        values.color &&
-        Object.entries(values.color)
-          .filter((e) => e[1] === true)
-          .map((e) => e[0])
       const formdata = new FormData()
       acceptFile.forEach((item) => {
         formdata.append('allImg', item)
@@ -95,9 +118,7 @@ export default function FormProduct({ type, initialValue }) {
       formdata.append('name', values.name || '')
       formdata.append('price', values.price || '')
       formdata.append('description', values.description || '')
-      formdata.append('size', argS)
-      formdata.append('color', argC)
-
+      formdata.append('option', JSON.stringify(variantSend))
       if (type === 'edit') {
         await productApi.updateProduct(initialValue?.id, formdata)
         history.push('/product')
@@ -154,53 +175,76 @@ export default function FormProduct({ type, initialValue }) {
           />
         </CCol>
       </CRow>
-
-      <CRow className="mb-3 align-items-center">
-        <CFormLabel htmlFor="image" className="col-sm-2 col-form-label flex-grow-1">
-          Kích thước
-        </CFormLabel>
-        <CCol sm={9} className="d-flex">
-          {filter &&
-            filter.size.map((e, index) => {
-              return (
-                <CFormCheck
-                  key={index}
-                  name="size"
-                  value={e.content}
-                  label={e.content}
-                  className="me-4"
-                  checked={
-                    false || (values.hasOwnProperty('size') && values.size[e.content]) || false
-                  }
-                  onClick={(e) => handleChange(e)}
-                />
-              )
-            })}
-        </CCol>
-      </CRow>
-      <CRow className="mb-3 align-items-center">
-        <CFormLabel htmlFor="image" className="col-sm-2 col-form-label flex-grow-1">
-          Màu sắc
+      <CRow className="mb-3">
+        <CFormLabel
+          htmlFor="image"
+          className="col-sm-2 col-form-label flex-grow-1"
+          style={{ cursor: 'pointer' }}
+        >
+          Thêm thuộc tính
         </CFormLabel>
         <CCol sm={9} className="d-flex flex-wrap align-item-center">
-          {filter &&
-            filter.color.map((e, index) => {
-              return (
-                <CFormCheck
-                  key={index}
-                  name="color"
-                  value={e.content}
-                  label={e.content}
-                  className="me-4 pb-2"
-                  checked={
-                    false || (values.hasOwnProperty('color') && values.color[e.content]) || false
+          {selectData.length > 0 && (
+            <CFormSelect
+              size="sm"
+              className="mb-12"
+              aria-label="Small select example"
+              value={selectForm}
+              onChange={(e) => {
+                setSelectForm(e.target.value)
+                if (e.target.value === 'default') return
+                var data = selectData.find((item) => item.id === parseInt(e.target.value))
+                if (data) {
+                  const checkDataExist = variantTemp.find((item) => item.id === data.id)
+                  if (checkDataExist) {
+                    toast.info('Đã Thêm Thuộc tính này')
+                    return
                   }
-                  onChange={(e) => handleChange(e)}
-                />
-              )
-            })}
+                  data = {
+                    ...data,
+                    optionValue: data.optionValue.map((item) => {
+                      return { ...item, use: false }
+                    }),
+                  }
+                  const newPush = [data, ...variantTemp]
+                  setVariantTemp(newPush)
+                }
+              }}
+            >
+              <option value="default">Open this select menu</option>
+              {selectData?.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </CFormSelect>
+          )}
+          {selectData.length === 0 && <CSpinner size="sm" />}
         </CCol>
       </CRow>
+      {variantTemp.length > 0 &&
+        variantTemp.map((item, index) => (
+          <CRow className="mb-3" key={index}>
+            <CFormLabel htmlFor="description" className="col-sm-2 col-form-label flex-grow-1">
+              {item.name}
+            </CFormLabel>
+            <CCol sm={9} className={'flex_type_1'}>
+              {item.optionValue &&
+                item.optionValue.map((data, index) => (
+                  <span key={index}>
+                    <input
+                      type="checkbox"
+                      name={item.id}
+                      value={data.id}
+                      checked={data.use}
+                      onChange={handleChangeOptionVariant}
+                    />{' '}
+                    {data.name}
+                  </span>
+                ))}
+            </CCol>
+          </CRow>
+        ))}
       <CRow className="mb-3">
         <CFormLabel
           htmlFor="image"
