@@ -37,7 +37,7 @@ class UserController {
       const { username, password, address, phone } = req.body;
       const user = await getRepository(User)
         .createQueryBuilder('user')
-        .where('user.username = :name', { name: `%${String(username)}%` })
+        .where('user.username = :name', { name: `${String(username)}` })
         .getOne();
 
       if (user) {
