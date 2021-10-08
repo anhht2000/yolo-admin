@@ -18,7 +18,8 @@ import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
 import { fun } from 'src/data/FilterDataPage'
 
-export default function FormProduct({ type, initialValue }) {
+export default function FormEditProduct({ type, initialValue }) {
+  console.log('initial', initialValue)
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
@@ -46,16 +47,14 @@ export default function FormProduct({ type, initialValue }) {
   }
 
   useEffect(() => {
-    if (type === 'edit') {
-      setValues({ ...initialValue })
+    setValues({ ...initialValue })
 
-      if (initialValue?.productImg) {
-        const dtTest = initialValue?.productImg.map((e) => ({
-          preview: process.env.REACT_APP_API_URL + e?.imgPath,
-          name: e?.name,
-        }))
-        setAcceptFile(dtTest)
-      }
+    if (initialValue?.productImg) {
+      const dtTest = initialValue?.productImg.map((e) => ({
+        preview: process.env.REACT_APP_API_URL + e?.imgPath,
+        name: e?.name,
+      }))
+      setAcceptFile(dtTest)
     }
   }, [type, initialValue])
   const handleChange = (e) => {
@@ -132,6 +131,7 @@ export default function FormProduct({ type, initialValue }) {
   }
   return (
     <CForm>
+      {console.log('variant', variantSend, variantTemp)}
       <CRow className="mb-3">
         <CFormLabel htmlFor="name" className="col-sm-2 col-form-label flex-grow-1">
           Tên
@@ -236,7 +236,8 @@ export default function FormProduct({ type, initialValue }) {
                       type="checkbox"
                       name={item.id}
                       value={data.id}
-                      checked={data.use}
+                      check={data.use}
+                      // defaultChecked={values?.color?.includes(data.name)}
                       onChange={handleChangeOptionVariant}
                     />{' '}
                     {data.name}
