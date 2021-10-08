@@ -56,6 +56,13 @@ export default function FormEditProduct({ type, initialValue }) {
       }))
       setAcceptFile(dtTest)
     }
+
+    const arrOption = []
+    initialValue?.productOption.forEach((item) => {
+      if (!arrOption.includes(item.option.name)) {
+        arrOption.push(item.option.name)
+      }
+    })
   }, [type, initialValue])
   const handleChange = (e) => {
     const { name, value } = e.target

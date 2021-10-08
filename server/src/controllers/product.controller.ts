@@ -41,6 +41,42 @@ class ProductController {
     }
   }
 
+  public async getProductByPage(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { id } = request.params as { id: string };
+
+      const product = await getManager().findOne(Product, {
+        relations: ['productImg'],
+        where: { id: id },
+      });
+
+      const productOption = await getManager().find(ProductOption, {
+        relations: ['option', 'optionValue'],
+        where: { product: product },
+      });
+
+      let resValue: any[] = [];
+      productOption.forEach((item) => {
+        const check = resValue.find((data) => item.option.id === data.id);
+        if (!check) {
+          resValue.push({ ...item.option, OptionVal: [item.optionValue] });
+        } else {
+          resValue = resValue.map((temp) =>
+            item.option.id === temp.id
+              ? { ...temp, OptionVal: [...temp['OptionVal'], item.optionValue] }
+              : temp
+          );
+        }
+      });
+
+      const resData = { ...product, option: resValue };
+
+      return response.status(200).json({ success: true, data: resData });
+    } catch (error) {
+      return response.status(500).json({ success: false, message: 'Get list fail' });
+    }
+  }
+
   public async getOneProduct(request: Request, response: Response, next: NextFunction) {
     try {
       const { productId } = request.params;
@@ -126,97 +162,6 @@ class ProductController {
   }
   //update
   public async updateProduct(request: Request, response: Response, next: NextFunction) {
-    // try {
-    //   const { id } = request.params;
-    //   const { name, description, price, size, color } = request.body;
-
-    //   await getRepository(Product)
-    //     .createQueryBuilder('product')
-    //     .update(Product)
-    //     .set({
-    //       name,
-    //       description,
-    //       price,
-    //     })
-    //     .where('id = :idProduct', { idProduct: id })
-    //     .execute();
-    //   const data = await getRepository(Product)
-    //     .createQueryBuilder('product')
-    //     .where('id = :idProduct', { idProduct: id })
-    //     .getOne();
-
-    //   await getRepository(ProductImg)
-    //     .createQueryBuilder('productImg')
-    //     .leftJoinAndSelect('productImg.product', 'product')
-    //     .delete()
-    //     .from(ProductImg)
-    //     .where('product.id = :idT', { idT: id })
-    //     .execute();
-
-    //   if (request.files) {
-    //     request.files = request.files as Array<any>;
-    //     request.files.forEach(async (item, index) => {
-    //       const productImg = await getRepository(ProductImg)
-    //         .createQueryBuilder('productImg')
-    //         .insert()
-    //         .into(ProductImg)
-    //         .values({
-    //           imgPath: item.filename,
-    //           name: item.originalname,
-    //           product: data,
-    //         })
-    //         .execute();
-    //     });
-    //   }
-
-    //   await getRepository(ProductOption)
-    //     .createQueryBuilder('ProductOption')
-    //     .leftJoinAndSelect('ProductOption.product', 'product')
-    //     .delete()
-    //     .from(ProductOption)
-    //     .where('product.id = :idP', { idP: id })
-    //     .execute();
-
-    //   const dtsize = await getRepository(Option).createQueryBuilder().where("name = 'size'").getOne();
-    //   size.split(',').forEach(async (e: string) => {
-    //     const sizeT = await getRepository(OptionValue)
-    //       .createQueryBuilder('OptionValue')
-    //       .where('name = :nameSizeU', { nameSizeU: `${e}` })
-    //       .getOne();
-    //     await getRepository(ProductOption)
-    //       .createQueryBuilder('ProductOption')
-    //       .insert()
-    //       .into(ProductOption)
-    //       .values({
-    //         product: data,
-    //         option: dtsize,
-    //         optionValue: sizeT,
-    //       })
-    //       .execute();
-    //   });
-
-    //   const dtcolor = await getRepository(Option).createQueryBuilder().where("name = 'color'").getOne();
-    //   color.split(',').forEach(async (e: string) => {
-    //     const colorT = await getRepository(OptionValue)
-    //       .createQueryBuilder('OptionValue')
-    //       .where('name = :nameColorU', { nameColorU: `${e}` })
-    //       .getOne();
-    //     await getRepository(ProductOption)
-    //       .createQueryBuilder('ProductOption')
-    //       .insert()
-    //       .into(ProductOption)
-    //       .values({
-    //         product: data,
-    //         option: dtcolor,
-    //         optionValue: colorT,
-    //       })
-    //       .execute();
-    //   });
-
-    //   return response.status(200).json({
-    //     success: true,
-    //     message: 'Update successfully',
-    //   });
     const processManager = await getConnection().createQueryRunner();
     processManager.startTransaction();
     try {
@@ -275,6 +220,7 @@ class ProductController {
           message: 'Update successfully',
         });
       }
+
       return response.status(500).json({ success: false, message: "Product don't exited" });
     } catch (error) {
       return response.status(500).json({ success: false, message: error });
