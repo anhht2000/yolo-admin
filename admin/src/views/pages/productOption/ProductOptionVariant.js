@@ -27,6 +27,7 @@ const ProductOptionVariant = (props) => {
   const [tempVariant, setTempVariant] = useState({})
   const setPress = async (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault()
       try {
         const response = await createOptionVariant(variant, option.id)
         setOption({
