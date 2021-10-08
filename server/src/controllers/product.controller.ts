@@ -41,37 +41,37 @@ class ProductController {
     }
   }
 
-  public async getProductByPage (request: Request, response: Response, next: NextFunction ) {
+  public async getProductByPage(request: Request, response: Response, next: NextFunction) {
     try {
       const { id } = request.params as { id: string };
 
-      const product = await getManager().findOne(Product,{
+      const product = await getManager().findOne(Product, {
         relations: ['productImg'],
         where: { id: id },
-      })
+      });
 
-      const productOption = await getManager().find(ProductOption,{
+      const productOption = await getManager().find(ProductOption, {
         relations: ['option', 'optionValue'],
-        where: { product: product }
-      })
+        where: { product: product },
+      });
 
-      let resValue: any[] = []
-      productOption.forEach((item)=> {
-        const check = resValue.find((data) => item.option.id === data.id)
-        if(!check) {
-          resValue.push({...item.option, OptionVal: [item.optionValue]})
+      let resValue: any[] = [];
+      productOption.forEach((item) => {
+        const check = resValue.find((data) => item.option.id === data.id);
+        if (!check) {
+          resValue.push({ ...item.option, OptionVal: [item.optionValue] });
         } else {
           resValue = resValue.map((temp) =>
             item.option.id === temp.id
-            ? { ...temp, OptionVal: [...temp['OptionVal'], item.optionValue] }
-            : temp
-          )
+              ? { ...temp, OptionVal: [...temp['OptionVal'], item.optionValue] }
+              : temp
+          );
         }
-      })
+      });
 
-      const resData = {...product, option: resValue }
+      const resData = { ...product, option: resValue };
 
-      return response.status(200).json({success: true, data: resData})
+      return response.status(200).json({ success: true, data: resData });
     } catch (error) {
       return response.status(500).json({ success: false, message: 'Get list fail' });
     }
@@ -100,8 +100,8 @@ class ProductController {
   }
   //add
   public async addProduct(request: Request, response: Response, next: NextFunction) {
-    const processManager = await getConnection().createQueryRunner()
-    processManager.startTransaction()
+    const processManager = await getConnection().createQueryRunner();
+    processManager.startTransaction();
     try {
       const { name, description, price, option } = request.body;
 
@@ -115,48 +115,44 @@ class ProductController {
       const options = [];
       const variants = [];
       for (const id in optionVariant) {
-        options.push(id)
+        options.push(id);
         for (const data of optionVariant[id]) {
-          variants.push(data)
+          variants.push(data);
         }
       }
 
-      const optionsEntity = await getManager().find(Option,
-        { where: { id: In(options) } }
-      )
+      const optionsEntity = await getManager().find(Option, { where: { id: In(options) } });
 
-      const variantEntity = await getManager().find(OptionValue,
-        { where: { id: In(variants)} }
-      )
+      const variantEntity = await getManager().find(OptionValue, { where: { id: In(variants) } });
 
-      const dataTemp = []
+      const dataTemp = [];
       for (const id in optionVariant) {
         for (const data of optionVariant[id]) {
           dataTemp.push({
             product: product,
-            option: optionsEntity.find(item => item.id === parseInt(id)),
-            optionValue: variantEntity.find(item => item.id === parseInt(data))
-          })
+            option: optionsEntity.find((item) => item.id === parseInt(id)),
+            optionValue: variantEntity.find((item) => item.id === parseInt(data)),
+          });
         }
       }
       await processManager.manager.save(ProductOption, dataTemp);
 
       const filesImg = request.files as Express.Multer.File[];
-      await processManager.manager.save(ProductImg,filesImg.map((item) => {
-        return {
-          product: product,
-          name: item.fieldname,
-          imgPath: item.filename
-        }
-      }))
-
-      processManager.commitTransaction()
-
+      await processManager.manager.save(
+        ProductImg,
+        filesImg.map((item) => {
+          return {
+            product: product,
+            name: item.originalname,
+            imgPath: item.filename,
+          };
+        })
+      );
+      processManager.commitTransaction();
       response.status(200).json({
         success: true,
         message: 'Add successfully',
       });
-
     } catch (error) {
       processManager.rollbackTransaction();
       response.status(500).json({ success: false, message: error });
@@ -166,97 +162,66 @@ class ProductController {
   }
   //update
   public async updateProduct(request: Request, response: Response, next: NextFunction) {
+    const processManager = await getConnection().createQueryRunner();
+    processManager.startTransaction();
     try {
+      const { name, description, price, option } = request.body;
       const { id } = request.params;
-      const { name, description, price, size, color } = request.body;
 
-      await getRepository(Product)
-        .createQueryBuilder('product')
-        .update(Product)
-        .set({
-          name,
-          description,
-          price,
-        })
-        .where('id = :idProduct', { idProduct: id })
-        .execute();
-      const data = await getRepository(Product)
-        .createQueryBuilder('product')
-        .where('id = :idProduct', { idProduct: id })
-        .getOne();
+      const product = await processManager.manager.findOne(Product, id);
+      if (product) {
+        product.name = name;
+        product.price = price;
+        product.description = description;
+        await processManager.manager.save(product);
 
-      await getRepository(ProductImg)
-        .createQueryBuilder('productImg')
-        .leftJoinAndSelect('productImg.product', 'product')
-        .delete()
-        .from(ProductImg)
-        .where('product.id = :idT', { idT: id })
-        .execute();
+        const optionVariant = JSON.parse(option);
+        const options = [];
+        const variants = [];
+        for (const id in optionVariant) {
+          options.push(id);
+          for (const data of optionVariant[id]) {
+            variants.push(data);
+          }
+        }
 
-      if (request.files) {
-        request.files = request.files as Array<any>;
-        request.files.forEach(async (item, index) => {
-          const productImg = await getRepository(ProductImg)
-            .createQueryBuilder('productImg')
-            .insert()
-            .into(ProductImg)
-            .values({
-              imgPath: item.filename,
+        const optionsEntity = await getManager().find(Option, { where: { id: In(options) } });
+
+        const variantEntity = await getManager().find(OptionValue, { where: { id: In(variants) } });
+
+        const dataTemp = [];
+        for (const id in optionVariant) {
+          for (const data of optionVariant[id]) {
+            dataTemp.push({
+              product: product,
+              option: optionsEntity.find((item) => item.id === parseInt(id)),
+              optionValue: variantEntity.find((item) => item.id === parseInt(data)),
+            });
+          }
+        }
+        await processManager.manager.delete(ProductOption, { product: id });
+        await processManager.manager.save(ProductOption, dataTemp);
+
+        await processManager.manager.delete(ProductImg, { product: id });
+        const filesImg = request.files as Express.Multer.File[];
+        await processManager.manager.save(
+          ProductImg,
+          filesImg.map((item) => {
+            return {
+              product: product,
               name: item.originalname,
-              product: data,
-            })
-            .execute();
+              imgPath: item.filename,
+            };
+          })
+        );
+        processManager.commitTransaction();
+        return response.status(200).json({
+          success: true,
+          message: 'Update successfully',
         });
       }
 
-      await getRepository(ProductOption)
-        .createQueryBuilder('ProductOption')
-        .leftJoinAndSelect('ProductOption.product', 'product')
-        .delete()
-        .from(ProductOption)
-        .where('product.id = :idP', { idP: id })
-        .execute();
-
-      const dtsize = await getRepository(Option).createQueryBuilder().where("name = 'size'").getOne();
-      size.split(',').forEach(async (e: string) => {
-        const sizeT = await getRepository(OptionValue)
-          .createQueryBuilder('OptionValue')
-          .where('name = :nameSizeU', { nameSizeU: `${e}` })
-          .getOne();
-        await getRepository(ProductOption)
-          .createQueryBuilder('ProductOption')
-          .insert()
-          .into(ProductOption)
-          .values({
-            product: data,
-            option: dtsize,
-            optionValue: sizeT,
-          })
-          .execute();
-      });
-
-      const dtcolor = await getRepository(Option).createQueryBuilder().where("name = 'color'").getOne();
-      color.split(',').forEach(async (e: string) => {
-        const colorT = await getRepository(OptionValue)
-          .createQueryBuilder('OptionValue')
-          .where('name = :nameColorU', { nameColorU: `${e}` })
-          .getOne();
-        await getRepository(ProductOption)
-          .createQueryBuilder('ProductOption')
-          .insert()
-          .into(ProductOption)
-          .values({
-            product: data,
-            option: dtcolor,
-            optionValue: colorT,
-          })
-          .execute();
-      });
-
-      return response.status(200).json({
-        success: true,
-        message: 'Update successfully',
-      });
+      return response.status(500).json({ success: false, message: "Product don't exited" });
     } catch (error) {
       return response.status(500).json({ success: false, message: error });
     }

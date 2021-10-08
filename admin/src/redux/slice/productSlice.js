@@ -28,10 +28,10 @@ const productSlice = createSlice({
       state.currentPage = 1
     },
     actionGeOneProduct: (state, action) => {
-      state.loading = false
+      state.loading = true
     },
     actionGeOneProductSuccess: (state, action) => {
-      state.loading = true
+      state.loading = false
       state.currentProduct = action.payload.data
     },
     actionGeOneProductFail: (state, action) => {
@@ -39,10 +39,10 @@ const productSlice = createSlice({
       state.currentProduct = {}
     },
     actionSearchProduct: (state, action) => {
-      state.loading = false
+      state.loading = true
     },
     actionSearchProductSuccess: (state, action) => {
-      state.loading = true
+      state.loading = false
       state.data = action.payload.data
       state.totalPage = action.payload.page.totalPage
       state.currentPage = action.payload.page.currentPage
@@ -54,10 +54,10 @@ const productSlice = createSlice({
       state.currentPage = 1
     },
     actionSortProduct: (state, action) => {
-      state.loading = false
+      state.loading = true
     },
     actionSortProductSuccess: (state, action) => {
-      state.loading = true
+      state.loading = false
       state.data = action.payload.data
       state.totalPage = action.payload.page.totalPage
       state.currentPage = action.payload.page.currentPage

@@ -18,7 +18,7 @@ import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
 import { fun } from 'src/data/FilterDataPage'
 
-export default function FormProduct({ type, initialValue }) {
+export default function FormAddProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
@@ -45,19 +45,6 @@ export default function FormProduct({ type, initialValue }) {
     setAcceptFile(newArrImage)
   }
 
-  useEffect(() => {
-    if (type === 'edit') {
-      setValues({ ...initialValue })
-
-      if (initialValue?.productImg) {
-        const dtTest = initialValue?.productImg.map((e) => ({
-          preview: process.env.REACT_APP_API_URL + e?.imgPath,
-          name: e?.name,
-        }))
-        setAcceptFile(dtTest)
-      }
-    }
-  }, [type, initialValue])
   const handleChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
@@ -119,16 +106,9 @@ export default function FormProduct({ type, initialValue }) {
       formdata.append('price', values.price || '')
       formdata.append('description', values.description || '')
       formdata.append('option', JSON.stringify(variantSend))
-      if (type === 'edit') {
-        await productApi.updateProduct(initialValue?.id, formdata)
-        history.push('/product')
-      } else {
-        await productApi.createProduct(formdata)
-        history.push('/product')
-      }
-    } catch (error) {
-      console.log(error)
-    }
+      await productApi.createProduct(formdata)
+      history.push('/product')
+    } catch (error) {}
   }
   return (
     <CForm>
