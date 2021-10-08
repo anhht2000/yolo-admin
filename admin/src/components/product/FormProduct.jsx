@@ -10,7 +10,9 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
+import { getLoading } from 'src/redux/slice/productSlice'
 import { toast } from 'react-toastify'
 import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
@@ -20,6 +22,7 @@ export default function FormProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
+  const isLoading = useSelector(getLoading)
   const [selectData, setSelectData] = useState([])
   const [selectForm, setSelectForm] = useState('default')
   const [variantTemp, setVariantTemp] = useState([])
@@ -270,6 +273,7 @@ export default function FormProduct({ type, initialValue }) {
       </CRow>
       <CRow className="text-center justify-content-center">
         <CButton className="w-auto" onClick={handleSubmit}>
+          {isLoading && <CSpinner component="span" size="sm" />}
           Lưu
         </CButton>
       </CRow>
