@@ -46,21 +46,21 @@ class ProductController {
       const { id } = request.params as { id: string };
 
       const product = await getManager().findOne(Product,{
-          relations: ['productImg',],
-          where: { id: id },
+        relations: ['productImg'],
+        where: { id: id },
       })
 
       const productOption = await getManager().find(ProductOption,{
-        relations: ['option','optionValue'],
+        relations: ['option', 'optionValue'],
         where: { product: product }
       })
 
-      var resValue: any[] = []
+      let resValue: any[] = []
       productOption.forEach((item)=> {
         const check = resValue.find((data) => item.option.id === data.id)
         if(!check) {
           resValue.push({...item.option, OptionVal: [item.optionValue]})
-        }else {
+        } else {
           resValue = resValue.map((temp) =>
             item.option.id === temp.id
             ? { ...temp, OptionVal: [...temp['OptionVal'], item.optionValue] }
@@ -70,7 +70,8 @@ class ProductController {
       })
 
       const resData = {...product, option: resValue }
-      response.status(200).json({success: true, data: resData})
+
+      return response.status(200).json({success: true, data: resData})
     } catch (error) {
       return response.status(500).json({ success: false, message: 'Get list fail' });
     }
