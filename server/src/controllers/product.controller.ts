@@ -41,6 +41,45 @@ class ProductController {
     }
   }
 
+  public async getProductByPage (request: Request, response: Response, next: NextFunction ) {
+    try {
+      const { id } = request.params as { id: string };
+
+      const product = await getManager().findOne(Product,
+        {
+          relations: [
+            'productImg',
+          ],
+          where: { id: id },
+        }
+      )
+
+      const productOption = await getManager().find(ProductOption,{
+        relations: ['option','optionValue'],
+        where: { product: product }
+      })
+
+      var resValue: any[] = []
+      productOption.forEach((item)=> {
+        const check = resValue.find((data) => item.option.id === data.id)
+        if(!check) {
+          resValue.push({...item.option, OptionVal: [item.optionValue]})
+        }else {
+          resValue = resValue.map((temp) =>
+            item.option.id === temp.id
+            ? { ...temp, OptionVal: [...temp['OptionVal'], item.optionValue] }
+            : temp
+          )
+        }
+      })
+
+      const resData = {...product, option: resValue }
+      response.status(200).json({success: true, data: resData})
+    } catch (error) {
+      return response.status(500).json({ success: false, message: 'Get list fail' });
+    }
+  }
+
   public async getOneProduct(request: Request, response: Response, next: NextFunction) {
     try {
       const { productId } = request.params;
@@ -110,14 +149,17 @@ class ProductController {
         return {
           product: product,
           name: item.fieldname,
-          imgPath: item.path
+          imgPath: item.filename
         }
       }))
+
       processManager.commitTransaction()
+
       response.status(200).json({
         success: true,
         message: 'Add successfully',
       });
+
     } catch (error) {
       processManager.rollbackTransaction();
       response.status(500).json({ success: false, message: error });
