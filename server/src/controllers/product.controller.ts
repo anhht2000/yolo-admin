@@ -45,14 +45,10 @@ class ProductController {
     try {
       const { id } = request.params as { id: string };
 
-      const product = await getManager().findOne(Product,
-        {
-          relations: [
-            'productImg',
-          ],
+      const product = await getManager().findOne(Product,{
+          relations: ['productImg',],
           where: { id: id },
-        }
-      )
+      })
 
       const productOption = await getManager().find(ProductOption,{
         relations: ['option','optionValue'],
