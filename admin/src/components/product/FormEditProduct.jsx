@@ -19,7 +19,6 @@ import { getAllOption } from 'src/config/productOptionAPI'
 import { fun } from 'src/data/FilterDataPage'
 
 export default function FormEditProduct({ type, initialValue }) {
-  console.log('initial', initialValue)
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
@@ -132,13 +131,10 @@ export default function FormEditProduct({ type, initialValue }) {
         await productApi.createProduct(formdata)
         history.push('/product')
       }
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
   return (
     <CForm>
-      {console.log('variant', variantSend, variantTemp)}
       <CRow className="mb-3">
         <CFormLabel htmlFor="name" className="col-sm-2 col-form-label flex-grow-1">
           Tên

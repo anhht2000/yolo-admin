@@ -108,9 +108,7 @@ export default function FormAddProduct({ type, initialValue }) {
       formdata.append('option', JSON.stringify(variantSend))
       await productApi.createProduct(formdata)
       history.push('/product')
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
   return (
     <CForm>
