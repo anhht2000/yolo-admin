@@ -1,14 +1,14 @@
-import { OneToMany } from "typeorm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Common } from "./helper/common.helper";
-import { Receipt } from "./receipt.entity";
+import { OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Common } from './helper/common.helper';
+import { Receipt } from './receipt.entity';
 
 @Entity()
 export class User extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()

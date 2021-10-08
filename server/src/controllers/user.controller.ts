@@ -4,6 +4,7 @@ import { User } from './../models/user.entity';
 import { getConnection, getRepository } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 class UserController {
   public async getAllUser(req: Request, res: Response, next: NextFunction) {
@@ -34,8 +35,19 @@ class UserController {
   public async createUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password, address, phone } = req.body;
-      var hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
       const user = await getRepository(User)
+        .createQueryBuilder('user')
+        .where('user.username = :name', { name: `${String(username)}` })
+        .getOne();
+
+      if (user) {
+        return res.status(500).json({
+          success: false,
+          message: 'This account is existed',
+        });
+      }
+      var hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
+      await getRepository(User)
         .createQueryBuilder('user')
         .insert()
         .into(User)
@@ -45,10 +57,47 @@ class UserController {
       return res.status(200).json({
         success: true,
         message: 'Add successfully',
-        data: { username, password, address, phone, ...user.generatedMaps[0] },
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Add Fail' });
+    }
+  }
+  public async logIn(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { username, password } = req.body;
+      const user = await getRepository(User)
+        .createQueryBuilder('user')
+        .where('user.username = :uname', { uname: `${String(username)}` })
+        .getOne();
+      if (!user) {
+        return res.status(500).json({
+          success: false,
+          message: "Account don't exist",
+        });
+      }
+      const checkPass = await bcrypt.compare(password, user.password);
+      if (!checkPass) {
+        return res.status(500).json({
+          success: false,
+          message: 'Invalid password',
+        });
+      }
+      const token = await jwt.sign(
+        {
+          iss: 'Tuan Anh',
+          sub: user.username,
+          iat: new Date().getTime(),
+          exp: new Date().setDate(new Date().getHours() + 3),
+        },
+        String(process.env.SCREET_KEY)
+      );
+      return res.status(200).setHeader('Authorization', token).json({
+        success: true,
+        message: 'Login successfully',
+        data: user,
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: 'Login Fail' });
     }
   }
   public async updateUser(req: Request, res: Response, next: NextFunction) {
