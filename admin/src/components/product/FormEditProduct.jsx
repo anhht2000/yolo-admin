@@ -59,15 +59,10 @@ export default function FormEditProduct({ initialValue }) {
 
   const handleRemoveImage = (image) => {
     const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
-    console.log(image)
     if (image.id)
       setDeleteFile([...deleteFile, { id: image.id.toString(), filePath: image.filePath }])
     setAcceptFile(newArrImage)
   }
-
-  useEffect(() => {
-    console.log(deleteFile)
-  }, [deleteFile])
 
   useEffect(() => {
     setValues({ ...initialValue })
@@ -110,7 +105,6 @@ export default function FormEditProduct({ initialValue }) {
           }
           return check ? { ...temp1, use: true } : { ...temp1, use: false }
         })
-        console.log(variantSend)
         return { ...item, optionValue: optionValue }
       }
     })
