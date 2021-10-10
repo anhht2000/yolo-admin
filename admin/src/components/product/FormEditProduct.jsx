@@ -16,17 +16,34 @@ import { getLoading } from 'src/redux/slice/productSlice'
 import { toast } from 'react-toastify'
 import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
-import { fun } from 'src/data/FilterDataPage'
+// import { fun } from 'src/data/FilterDataPage'
 
-export default function FormEditProduct({ type, initialValue }) {
+export default function FormEditProduct({ initialValue }) {
   const [values, setValues] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
+  const [deleteFile, setDeleteFile] = useState([])
   const history = useHistory()
   const isLoading = useSelector(getLoading)
   const [selectData, setSelectData] = useState([])
+  /** select Form Data value */
   const [selectForm, setSelectForm] = useState('default')
+  /**
+   * [
+   *  id: '',
+   *  meta: '',
+   *  name: '',
+   *  optionValue: [
+   *    {
+   *       id: '',
+   *       name: '',
+   *       use: bool
+   *    }
+   *  ]
+   * ]
+   */
   const [variantTemp, setVariantTemp] = useState([])
   const [variantSend, setVariantSend] = useState({})
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -42,31 +59,70 @@ export default function FormEditProduct({ type, initialValue }) {
 
   const handleRemoveImage = (image) => {
     const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
+    console.log(image)
+    if (image.id)
+      setDeleteFile([...deleteFile, { id: image.id.toString(), filePath: image.filePath }])
     setAcceptFile(newArrImage)
   }
 
   useEffect(() => {
-    setValues({ ...initialValue })
+    console.log(deleteFile)
+  }, [deleteFile])
 
+  useEffect(() => {
+    setValues({ ...initialValue })
     if (initialValue?.productImg) {
       const dtTest = initialValue?.productImg.map((e) => ({
+        id: e.id,
         preview: process.env.REACT_APP_API_URL + e?.imgPath,
         name: e?.name,
+        filePath: e?.imgPath,
       }))
       setAcceptFile(dtTest)
     }
 
-    const arrOption = []
-    initialValue?.productOption.forEach((item) => {
-      if (!arrOption.includes(item.option.name)) {
-        arrOption.push(item.option.name)
+    let resValue = []
+    initialValue?.productOption?.forEach((item) => {
+      let check = resValue.find((temp) => item.option.id === temp.id)
+      if (!check) {
+        resValue.push({ ...item.option, optionValue: [item.optionValue] })
+        return
+      }
+      resValue = resValue.map((temp) =>
+        temp.id === item.option.id
+          ? { ...temp, optionValue: [...temp['optionValue'], item.optionValue] }
+          : temp,
+      )
+    })
+    let temp = [...selectData]
+    temp = temp.map((item) => {
+      const dataPre = resValue.find((data) => data.id === item.id)
+      if (dataPre) {
+        let templateDataPre = dataPre.optionValue?.map((item) => item.id)
+        let optionValue = item.optionValue?.map((temp1) => {
+          const check = templateDataPre.find((item) => item === temp1.id)
+          if (check) {
+            setVariantSend((pre) => {
+              if (pre[dataPre.id])
+                return { ...pre, [dataPre.id]: [...pre[dataPre.id], check.toString()] }
+              return { ...pre, [dataPre.id]: [check.toString()] }
+            })
+          }
+          return check ? { ...temp1, use: true } : { ...temp1, use: false }
+        })
+        console.log(variantSend)
+        return { ...item, optionValue: optionValue }
       }
     })
-  }, [type, initialValue])
+    temp = temp.filter((item) => item !== undefined)
+    setVariantTemp(temp)
+  }, [initialValue])
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
   }
+
   const handleChangeOptionVariant = (e) => {
     const data = variantTemp.find((item) => item.id === parseInt(e.target.name))
     const temp = data.optionValue.find((item) => item.id === parseInt(e.target.value))
@@ -76,7 +132,6 @@ export default function FormEditProduct({ type, initialValue }) {
       optionValue: data.optionValue.map((item) => (item.id === newTemp.id ? newTemp : item)),
     }
     setVariantTemp(variantTemp.map((item) => (newData.id === item.id ? newData : item)))
-
     if (variantSend[e.target.name]) {
       const data = variantSend[e.target.name].find((item) => item === e.target.value)
       if (data) {
@@ -103,7 +158,7 @@ export default function FormEditProduct({ type, initialValue }) {
   const LoadOptions = async () => {
     try {
       const { data } = await getAllOption()
-      await fun()
+      // await fun() //side effect
       setSelectData(data.data)
     } catch (error) {
       toast.error(`System error`)
@@ -123,15 +178,13 @@ export default function FormEditProduct({ type, initialValue }) {
       formdata.append('name', values.name || '')
       formdata.append('price', values.price || '')
       formdata.append('description', values.description || '')
+      formdata.append('imageDelete', JSON.stringify(deleteFile))
       formdata.append('option', JSON.stringify(variantSend))
-      if (type === 'edit') {
-        await productApi.updateProduct(initialValue?.id, formdata)
-        history.push('/product')
-      } else {
-        await productApi.createProduct(formdata)
-        history.push('/product')
-      }
-    } catch (error) {}
+      await productApi.updateProduct(initialValue?.id, formdata)
+      history.push('/product')
+    } catch (error) {
+      toast.error('System Error')
+    }
   }
   return (
     <CForm>
@@ -229,18 +282,17 @@ export default function FormEditProduct({ type, initialValue }) {
         variantTemp.map((item, index) => (
           <CRow className="mb-3" key={index}>
             <CFormLabel htmlFor="description" className="col-sm-2 col-form-label flex-grow-1">
-              {item.name}
+              {item?.name}
             </CFormLabel>
             <CCol sm={9} className={'flex_type_1'}>
-              {item.optionValue &&
+              {item?.optionValue &&
                 item.optionValue.map((data, index) => (
                   <span key={index}>
                     <input
                       type="checkbox"
                       name={item.id}
                       value={data.id}
-                      check={data.use}
-                      // defaultChecked={values?.color?.includes(data.name)}
+                      checked={data.use}
                       onChange={handleChangeOptionVariant}
                     />{' '}
                     {data.name}
