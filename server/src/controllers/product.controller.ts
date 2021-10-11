@@ -228,6 +228,7 @@ class ProductController {
         );
 
         processManager.commitTransaction();
+
         return response.status(200).json({
           success: true,
           message: 'Update successfully',

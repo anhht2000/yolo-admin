@@ -85,6 +85,7 @@ export const {
   actionSortProductSuccess,
   actionSortProductFail,
 } = productSlice.actions
+
 //selector
 export const getLoading = (state) => state.product.loading
 export const getProduct = (state) => state.product.data
