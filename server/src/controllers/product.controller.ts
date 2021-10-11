@@ -6,7 +6,8 @@ import { Product } from '../models/product.entity';
 import { ProductOption } from './../models/productOption.entity';
 import { CommonConfig } from './index';
 import { Option } from '../models/option.entity';
-
+import { deleteFiles } from '../common/deleteFiles';
+import path from 'path';
 class ProductController {
   //get
   public async getProduct(request: Request, response: Response, next: NextFunction) {
@@ -148,6 +149,7 @@ class ProductController {
           };
         })
       );
+
       processManager.commitTransaction();
       response.status(200).json({
         success: true,
@@ -165,9 +167,8 @@ class ProductController {
     const processManager = await getConnection().createQueryRunner();
     processManager.startTransaction();
     try {
-      const { name, description, price, option } = request.body;
+      const { name, description, price, option, imageDelete } = request.body;
       const { id } = request.params;
-
       const product = await processManager.manager.findOne(Product, id);
       if (product) {
         product.name = name;
@@ -199,10 +200,25 @@ class ProductController {
             });
           }
         }
+        const deleteImg = JSON.parse(imageDelete).map(
+          (item: {id: string, filePath: string}) => item.id
+        )
         await processManager.manager.delete(ProductOption, { product: id });
         await processManager.manager.save(ProductOption, dataTemp);
+        await processManager.manager.delete(ProductImg,{ id: In(deleteImg) });
 
-        await processManager.manager.delete(ProductImg, { product: id });
+        const deleteImgPath = JSON.parse(imageDelete).map(
+          (item: {id: string, filePath: string}) => {
+            return path.resolve(__dirname,'../../','public') + '/' + item.filePath
+          }
+        )
+
+        deleteFiles(deleteImgPath, function(err: any) {
+          if (err) {
+            // return response.status(500).json({ success: false, message: err });
+          }
+        })
+
         const filesImg = request.files as Express.Multer.File[];
         await processManager.manager.save(
           ProductImg,
@@ -214,6 +230,7 @@ class ProductController {
             };
           })
         );
+
         processManager.commitTransaction();
         return response.status(200).json({
           success: true,
@@ -223,7 +240,10 @@ class ProductController {
 
       return response.status(500).json({ success: false, message: "Product don't exited" });
     } catch (error) {
+      processManager.rollbackTransaction()
       return response.status(500).json({ success: false, message: error });
+    } finally {
+      processManager.release()
     }
   }
   //delete
@@ -231,9 +251,19 @@ class ProductController {
     const { id } = request.params;
     const queryRunner = getConnection().createQueryRunner();
     queryRunner.startTransaction();
+
     try {
+      const deleteImg = await getManager().find(ProductImg, { where: { product: id }})
+      const deleteImgPath = deleteImg.map(( item: any ) => {
+        return path.resolve(__dirname,'../../','public') + '/' + item.imgPath
+      })
+      deleteFiles(deleteImgPath, function(err: any) {
+        if (err) {
+          // return response.status(500).json({ success: false, message: err });
+        }
+      })
       await queryRunner.manager.delete(ProductOption, { product: id });
-      await queryRunner.manager.delete(ProductImg, { product: id });
+      await queryRunner.manager.delete(ProductImg, { product: id }  );
       await queryRunner.manager.delete(Product, { id: id });
       queryRunner.commitTransaction();
 
