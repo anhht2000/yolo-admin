@@ -7,8 +7,10 @@ const productDetailApi = {
   },
   getCardContent: () => {
     const url = '/product/sort';
+    const loadProduct = 8;
+    const desc = 0;
     return AxiosClient.get(url, {
-      params: { sortBy: 'name', order: 0, limit: 8 },
+      params: { sortBy: 'name', order: desc, limit: loadProduct },
     });
   },
 };
