@@ -200,24 +200,20 @@ class ProductController {
             });
           }
         }
-        const deleteImg = JSON.parse(imageDelete).map(
-          (item: {id: string, filePath: string}) => item.id
-        )
+        const deleteImg = JSON.parse(imageDelete).map((item: { id: string; filePath: string }) => item.id);
         await processManager.manager.delete(ProductOption, { product: id });
         await processManager.manager.save(ProductOption, dataTemp);
-        await processManager.manager.delete(ProductImg,{ id: In(deleteImg) });
+        await processManager.manager.delete(ProductImg, { id: In(deleteImg) });
 
-        const deleteImgPath = JSON.parse(imageDelete).map(
-          (item: {id: string, filePath: string}) => {
-            return path.resolve(__dirname,'../../','public') + '/' + item.filePath
-          }
-        )
+        const deleteImgPath = JSON.parse(imageDelete).map((item: { id: string; filePath: string }) => {
+          return path.resolve(__dirname, '../../', 'public') + '/' + item.filePath;
+        });
 
-        deleteFiles(deleteImgPath, function(err: any) {
+        deleteFiles(deleteImgPath, function (err: any) {
           if (err) {
             // return response.status(500).json({ success: false, message: err });
           }
-        })
+        });
 
         const filesImg = request.files as Express.Multer.File[];
         await processManager.manager.save(
@@ -240,10 +236,10 @@ class ProductController {
 
       return response.status(500).json({ success: false, message: "Product don't exited" });
     } catch (error) {
-      processManager.rollbackTransaction()
+      processManager.rollbackTransaction();
       return response.status(500).json({ success: false, message: error });
     } finally {
-      processManager.release()
+      processManager.release();
     }
   }
   //delete
@@ -253,17 +249,17 @@ class ProductController {
     queryRunner.startTransaction();
 
     try {
-      const deleteImg = await getManager().find(ProductImg, { where: { product: id }})
-      const deleteImgPath = deleteImg.map(( item: any ) => {
-        return path.resolve(__dirname,'../../','public') + '/' + item.imgPath
-      })
-      deleteFiles(deleteImgPath, function(err: any) {
+      const deleteImg = await getManager().find(ProductImg, { where: { product: id } });
+      const deleteImgPath = deleteImg.map((item: any) => {
+        return path.resolve(__dirname, '../../', 'public') + '/' + item.imgPath;
+      });
+      deleteFiles(deleteImgPath, function (err: any) {
         if (err) {
           // return response.status(500).json({ success: false, message: err });
         }
-      })
+      });
       await queryRunner.manager.delete(ProductOption, { product: id });
-      await queryRunner.manager.delete(ProductImg, { product: id }  );
+      await queryRunner.manager.delete(ProductImg, { product: id });
       await queryRunner.manager.delete(Product, { id: id });
       queryRunner.commitTransaction();
 
@@ -331,6 +327,9 @@ class ProductController {
           .orWhere('optionValue.name like :value4', { value4: dataOption[3] })
           .orWhere('optionValue.name like :value5', { value5: dataOption[4] })
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
+          .orWhere('optionValue.name like :value7', { value7: dataOption[6] })
+          .orWhere('optionValue.name like :value8', { value8: dataOption[7] })
+          .orWhere('optionValue.name like :value9', { value9: dataOption[8] })
           .getCount();
 
         const productList = await getRepository(Product)
@@ -347,6 +346,9 @@ class ProductController {
           .orWhere('optionValue.name like :value4', { value4: dataOption[3] })
           .orWhere('optionValue.name like :value5', { value5: dataOption[4] })
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
+          .orWhere('optionValue.name like :value7', { value7: dataOption[6] })
+          .orWhere('optionValue.name like :value8', { value8: dataOption[7] })
+          .orWhere('optionValue.name like :value9', { value9: dataOption[8] })
           .getMany();
 
         const _total = Math.ceil(count / _limit);

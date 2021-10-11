@@ -15,7 +15,7 @@ const productApi = {
   filterProduct: (filter: string) => {
     const url = 'product/search';
     return AxiosClient.get(url, {
-      params: { filter, limit: 9 },
+      params: { filter },
     });
   },
 };
