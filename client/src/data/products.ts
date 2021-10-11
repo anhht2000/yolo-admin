@@ -22,6 +22,12 @@ export interface IProductsApi {
   deleteDate?: string;
 }
 
+export interface IResponse<T> {
+  success: boolean;
+  message: string;
+  data?: Array<T>;
+}
+
 export const products: IProducts[] = [
   {
     title: 'Áo thun Dinosaur 01',

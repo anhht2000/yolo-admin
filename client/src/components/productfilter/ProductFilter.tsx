@@ -1,7 +1,7 @@
-import { ChangeEvent } from "react";
-import React from "react";
-import { useState } from "react";
-import { FilterInterFace } from "../../data/FilterDataPage";
+import { ChangeEvent } from 'react';
+import React from 'react';
+import { useState } from 'react';
+import { FilterInterFace } from '../../data/FilterDataPage';
 
 interface IProductFilter {
   helper?: string[];
@@ -13,13 +13,14 @@ interface IProductFilter {
 
 const ProductFilter: React.FC<IProductFilter> = (props) => {
   const { filter, helper, onChange, onDelete, loading } = props;
+
   const [active, setActive] = useState(false);
   const toggleActive = () => setActive(!active);
   return (
     <>
-      {loading ? "loading" : ""}
+      {loading ? 'loading' : ''}
       <i className="bx bx-filter product-filter-mb" onClick={toggleActive}></i>
-      <div className={`product-filter ${active ? "" : "hidden"}`}>
+      <div className={`product-filter ${active ? '' : 'hidden'}`}>
         {helper &&
           helper.map((element, index) => {
             return (
@@ -28,17 +29,14 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
                 <div className="product-filter__content">
                   {filter &&
                     filter[element].map((e, index) => (
-                      <div
-                        className="product-filter__content-child"
-                        key={index}
-                      >
+                      <div className="product-filter__content-child" key={index}>
                         <input
                           type="checkbox"
                           name={e.content}
                           value={element}
                           checked={e.use as boolean}
                           onChange={onChange}
-                        />{" "}
+                        />{' '}
                         &nbsp; {e.content}
                       </div>
                     ))}

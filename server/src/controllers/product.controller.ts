@@ -286,6 +286,7 @@ class ProductController {
     } else {
       try {
         const dataOption = String(filter).split(',');
+
         const count = await getRepository(Product)
           .createQueryBuilder('Product')
           .leftJoinAndSelect('Product.productOption', 'ProductOption')
@@ -302,7 +303,7 @@ class ProductController {
           .orWhere('optionValue.name like :value6', { value6: dataOption[5] })
           .getCount();
 
-        const productList = getRepository(Product)
+        const productList = await getRepository(Product)
           .createQueryBuilder('Product')
           .leftJoinAndSelect('Product.productOption', 'ProductOption')
           .leftJoinAndSelect('ProductOption.option', 'option')
