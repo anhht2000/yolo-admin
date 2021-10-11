@@ -30,40 +30,39 @@ const Product = () => {
   return (
     <div>
       <h2>Quản lý sản phẩm</h2>
-      <CButton color="dark my-3" onClick={handleClickAdd}>
+      <CButton color="primary my-3" onClick={handleClickAdd}>
         Thêm sản phẩm
       </CButton>
-      <CRow className="mt-2">
-        <CCol xs={6}>
-          <CForm className="row g-0">
-            <CCol xs="auto">
+      <CRow className="mt-2 mb-4">
+        <CCol xs={4}>
+          <CForm className="row g-0 position-relative">
+            <CCol xs="12">
               <CFormInput
                 type="text"
-                placeholder="Enter to search"
+                className="input__search"
+                placeholder="Nhập để tìm kiếm"
                 onChange={(e) => {
                   handleChangeSearch(e)
                 }}
               />
             </CCol>
-            <CCol xs="auto">
-              <CButton className="mb-3" disabled>
-                Tìm kiếm
-              </CButton>
-            </CCol>
+            <div className=".flex-{grow|shrink}-1 search__box">
+              <i className="bx bx-search-alt-2" />
+            </div>
           </CForm>
         </CCol>
-        <CCol xs={6} className="text-end">
+        <CCol xs={8} className="text-end ">
           <CForm className="row justify-content-end">
             <CCol xs="auto">
               <CFormSelect name="createDate" onChange={(e) => handleSort(e)}>
-                <option value="">Time</option>
+                <option value="">Thời gian</option>
                 <option value="0">Cũ nhất</option>
                 <option value="1">Mới nhất</option>
               </CFormSelect>
             </CCol>
             <CCol xs="auto">
               <CFormSelect name="price" onChange={(e) => handleSort(e)}>
-                <option value="">Price</option>
+                <option value="">Giá</option>
                 <option value="0">Thấp nhất</option>
                 <option value="1">Cao nhất</option>
               </CFormSelect>
@@ -71,7 +70,6 @@ const Product = () => {
           </CForm>
         </CCol>
       </CRow>
-      {/* table  */}
       <ProductTable products={products} />
     </div>
   )
