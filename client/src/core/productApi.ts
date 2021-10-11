@@ -1,11 +1,10 @@
-import { filter } from './../data/FilterDataPage';
 import AxiosClient from './AxiosClient';
 
 const productApi = {
   getAllProduct: (page: number = 1) => {
     const url = '/product';
     return AxiosClient.get(url, {
-      params: { page: page, limit: 9 },
+      params: { page: page },
     });
   },
   getAllOption: () => {
