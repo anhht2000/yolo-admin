@@ -15,6 +15,7 @@ const CardContainer: React.FC<ICardContainerProps> = (props) => {
         data.map((e, index) => (
           <CardContent
             key={index}
+            id={e.id}
             title={e.name}
             price={e.price}
             img={process.env.REACT_APP_API_URL + e?.productImg[0].imgPath}

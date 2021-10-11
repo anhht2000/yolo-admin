@@ -34,7 +34,7 @@ const ProductSlice = createSlice({
     getAllProduct(state) {
       state.loadingProduct = true;
     },
-    getAllProductSuccess(state,action) {
+    getAllProductSuccess(state, action) {
       state.loadingProduct = false;
       state.products = action.payload;
     },
