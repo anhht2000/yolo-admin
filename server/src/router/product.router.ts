@@ -14,6 +14,6 @@ router.delete('/delete/:id', productController.deleteProduct);
 router.get('/search', productController.searchProduct);
 router.get('/sort', productController.sortProduct);
 router.get('/:productId', productController.getOneProduct);
-router.get('/all/:id', productController.getProductByPage)
+router.get('/client/:id', productController.getProductByPage)
 
 export default router;

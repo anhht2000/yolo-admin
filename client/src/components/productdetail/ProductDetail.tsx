@@ -2,11 +2,10 @@ import React, { ChangeEvent } from "react";
 import { useLayoutEffect } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { IProducts } from "../../data/products";
 import { FormatMoney } from "../../lib/FunctHelper";
 
 interface IProductDetailProps {
-  source: IProducts;
+  source: any;
   toggleOverLay: () => void;
 }
 
@@ -14,8 +13,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const { source, toggleOverLay } = props;
   //data for send
   const [imgCore, setImgCore] = useState<string>("");
-  const [color, setColor] = useState<string>("");
-  const [size, setSize] = useState<string>("");
+  const [optionVal, setOptionVal] = useState<{[a: string]: string}>({});
   const [number, setNumber] = useState<number>(1);
 
   //static data
@@ -41,104 +39,36 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
     setNumber(number - 1);
   };
   const saveToLocal = () => {
-    const data = JSON.parse(localStorage.getItem("cartProduct") as string) as {
-      title: string;
-      image01: string;
-      variant: string[];
-      variant_value: string[];
-      price: string;
-      number: number;
-    }[];
-
-    if (data) {
-      let flag = false;
-
-      let temp = data.map((e) => {
-        if (
-          JSON.stringify({
-            title: e.title,
-            variant: e.variant,
-            variant_value: e.variant_value,
-            image01: e.image01,
-          }) ===
-          JSON.stringify({
-            title: source.title,
-            variant: ["color", "size"],
-            variant_value: [color, size],
-            image01: source.image01,
-          })
-        ) {
-          flag = true;
-          return { ...e, number: e.number + number };
-        }
-        return e;
-      });
-
-      if (flag) {
-        localStorage.setItem("cartProduct", JSON.stringify([...temp]));
-      } else {
-        localStorage.setItem(
-          "cartProduct",
-          JSON.stringify([
-            ...data,
-            {
-              title: source.title,
-              image01: source.image01,
-              variant: ["color", "size"],
-              variant_value: [color, size],
-              price: source.price,
-              number: number,
-            },
-          ])
-        );
-      }
-    } else {
-      localStorage.setItem(
-        "cartProduct",
-        JSON.stringify([
-          {
-            title: source.title,
-            image01: source.image01,
-            variant: ["color", "size"],
-            variant_value: [color, size],
-            price: source.price,
-            number: number,
-          },
-        ])
-      );
-    }
     toggleActive();
   };
+
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, [props.source]);
 
   useEffect(() => {
-    setImgCore(props.source.image01);
-    props.source.colors && setColor(props.source.colors[0]);
-    props.source.size && setSize(props.source.size[0]);
+    props.source.productImg && setImgCore(props.source.productImg[0].imgPath);
+    props.source.option && props.source.option.forEach((item: any)=>{
+      setOptionVal((pre) => {
+        return {...pre, [item.name]: item.OptionVal[0].name}
+      })
+    })
   }, [props.source]);
 
   return (
     <div className="product-detail">
       <div className="product-detail__list">
-        <img
-          src={source.image01}
-          alt="img-list1"
-          onClick={() => {
-            setImgCore(source.image01);
-          }}
-        />
-        <img
-          src={source.image02}
-          alt="img-list2"
-          onClick={() => {
-            setImgCore(source.image02);
-          }}
-        />
+        {source.productImg && source.productImg.map((item: any, index: number)=> (
+          <img
+            src={`${process.env.REACT_APP_API_URL}${item.imgPath}`}
+            alt={`img_${index}`}
+            onClick={()=>{setImgCore(item.imgPath)}}
+            key={index}
+          />
+        ))}
       </div>
       <div className="product-detail__core-img">
-        <img src={imgCore} alt="coreimg" />
+        <img src={`${process.env.REACT_APP_API_URL}${imgCore}`} alt="coreimg" />
       </div>
       <div className={`product-detail__price-option ${seller ? "active" : ""}`}>
         <i
@@ -146,48 +76,49 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
           onClick={toggleActive}
         ></i>
         <div className="product-detail__price-option--title">
-          {source.title}
+          {source.name}
         </div>
         <div className="product-detail__price-option--price">
           {source.price && FormatMoney(source.price)}
         </div>
-        <div className="price-option__title">Màu sắc</div>
-        <div className="product-detail__price-option--circle">
-          {source.colors &&
-            source.colors.map((e) => {
-              return (
-                <div
-                  className={`circle ${color === e ? "active" : ""}`}
-                  onClick={() => {
-                    setColor(e);
-                  }}
-                  key={e}
-                >
-                  <div
-                    className="circle-content"
-                    style={{ backgroundColor: e }}
-                  ></div>
+        {source.option?.map((item:any, index: string) => (
+          <div key={index}>
+            <div className="price-option__title">{item.name}</div>
+            {
+              item.meta === 'text' && (
+                <div className="product-detail__price-option--circle">
+                  {item.OptionVal.map((temp: any,key: string)=> (
+                    <div
+                      className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
+                      onClick={()=> {setOptionVal({...optionVal, [item.name]: temp.name})}}
+                      key={key}
+                    >
+                    <div className="circle-content">{temp.name}</div>
+                  </div>
+                  ))}
                 </div>
-              );
-            })}
-        </div>
-        <div className="price-option__title">Kíck cỡ</div>
-        <div className="product-detail__price-option--circle">
-          {source.size &&
-            source.size.map((e) => {
-              return (
-                <div
-                  className={`circle ${size === e ? "active" : ""}`}
-                  onClick={() => {
-                    setSize(e);
-                  }}
-                  key={e}
-                >
-                  <div className="circle-content">{e}</div>
+              )
+            }
+            {
+              item.meta === 'color' && (
+                <div className="product-detail__price-option--circle">
+                  {item.OptionVal.map((temp: any,key: string)=> (
+                    <div
+                    className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
+                    onClick={()=> {setOptionVal({...optionVal,[item.name]: temp.name})}}
+                    key={key}
+                  >
+                    <div
+                      className="circle-content"
+                      style={{ backgroundColor: temp.name }}
+                    ></div>
+                  </div>
+                  ))}
                 </div>
-              );
-            })}
-        </div>
+              )
+            }
+          </div>
+        ))}
         <div className="price-option__title">Số Lượng</div>
         <div className="product-detail__price-option--number">
           <i className="bx bx-minus" onClick={minusClick}></i>
@@ -215,24 +146,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
             active ? "" : "active"
           }`}
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore
-          arch itecto eveniet laborum vel atque praesentium quo sequi.
-          Repudiandae, pariatur nisi consequatur rerum maxime quas laudantium
-          repellendus, nam, id aliquid illum. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Inventore arch itecto eveniet laborum
-          vel atque praesentium quo sequi. Repudiandae, pariatur nisi
-          consequatur rerum maxime quas laudantium repellendus, nam, id aliquid
-          illum. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Inventore arch itecto eveniet laborum vel atque praesentium quo sequi.
-          Repudiandae, pariatur nisi consequatur rerum maxime quas laudantium
-          repellendus, nam, id aliquid illum. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Inventore arch itecto eveniet laborum
-          vel atque praesentium quo sequi. Repudiandae, pariatur nisi
-          consequatur rerum maxime quas laudantium repellendus, nam, id aliquid
-          illum. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Inventore arch itecto eveniet laborum vel atque praesentium quo sequi.
-          Repudiandae, pariatur nisi consequatur rerum maxime quas laudantium
-          repellendus, nam, id aliquid illum.
+          {source.description}
         </div>
         <div className="product-detail__btn-wapper">
           <div
