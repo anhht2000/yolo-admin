@@ -190,6 +190,7 @@ export default function FormEditProduct({ initialValue }) {
           <CFormInput
             type="text"
             id="name"
+            placeholder="Vui lòng nhập tên sản phẩm"
             name="name"
             defaultValue={values?.name}
             onChange={(e) => handleChange(e)}
@@ -204,6 +205,7 @@ export default function FormEditProduct({ initialValue }) {
           <CFormInput
             type="text"
             id="price"
+            placeholder="Vui lòng nhập giá sản phẩm"
             name="price"
             defaultValue={values?.price}
             onChange={(e) => handleChange(e)}
@@ -218,6 +220,7 @@ export default function FormEditProduct({ initialValue }) {
           <CFormInput
             type="text"
             id="description"
+            placeholder="Vui lòng nhập miêu tả sản phẩm"
             name="description"
             multiple
             defaultValue={values?.description}
@@ -261,7 +264,7 @@ export default function FormEditProduct({ initialValue }) {
                 }
               }}
             >
-              <option value="default">Open this select menu</option>
+              <option value="default">Ấn vào đây để chọn loại sản phẩm</option>
               {selectData?.map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
@@ -307,15 +310,17 @@ export default function FormEditProduct({ initialValue }) {
           <div {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
             <div className="upload">
-              <i className="bx bx-cloud-upload"></i> Upload
+              <i className="bx bx-cloud-upload"></i> Tải lên
             </div>
           </div>
           <div className="preview">
             {acceptFile.map((item, index) => (
               <div key={index} className="preview__img__flex">
+                <div>
+                  <i className="bx bx-x preview__icon" onClick={() => handleRemoveImage(item)} />
+                </div>
                 <img src={item.preview} alt={index} className="preview__img" />
                 <div className={'preview__title'}>{item.name}</div>
-                <i className="bx bx-x preview__icon" onClick={() => handleRemoveImage(item)} />
               </div>
             ))}
           </div>
@@ -325,6 +330,15 @@ export default function FormEditProduct({ initialValue }) {
         <CButton className="w-auto" onClick={handleSubmit}>
           {isLoading && <CSpinner component="span" size="sm" />}
           Lưu
+        </CButton>
+        <CButton
+          className="w-auto ms-3"
+          color="secondary"
+          onClick={() => {
+            history.push('/product')
+          }}
+        >
+          Hủy bỏ
         </CButton>
       </CRow>
     </CForm>

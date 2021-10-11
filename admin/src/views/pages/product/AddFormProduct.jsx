@@ -6,7 +6,7 @@ export default function AddFormProduct() {
   return (
     <CContainer>
       <CRow>
-        <CCol xs="12" lg={9} xl={9} className="mx-auto shadow bg-body rounded py-3">
+        <CCol xs={12} className="mx-auto shadow bg-body rounded py-3">
           <h4 className="text-center mb-3">Thêm sản phẩm</h4>
           <FormAddProduct initialValue={{ name: '', price: '', size: {}, color: {} }} />
         </CCol>

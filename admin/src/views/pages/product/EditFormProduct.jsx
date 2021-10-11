@@ -16,7 +16,7 @@ export default function EditFormProduct() {
   return (
     <CContainer>
       <CRow>
-        <CCol xs="12" lg={9} xl={9} className="mx-auto shadow bg-body rounded py-3">
+        <CCol xs={12} className="mx-auto shadow bg-body rounded py-3">
           <h4 className="text-center mb-3">Sửa sản phẩm</h4>
           <FormEditProduct type={'edit'} initialValue={{ ...productCurrent }} />
         </CCol>

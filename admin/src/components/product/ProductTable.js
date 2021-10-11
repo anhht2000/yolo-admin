@@ -31,14 +31,10 @@ export default function ProductTable(props) {
     dispatch(actionGetAllProduct())
     setVisible({ ...visible, status: false })
   }
-  const handleChangeCheck = (value) => {
-    //post api
-    //get list again
-  }
 
   return (
     <CContainer>
-      <CTable width="100%">
+      <CTable width="100%" color="light">
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
@@ -54,12 +50,7 @@ export default function ProductTable(props) {
             products.map((e, index) => {
               return (
                 <CTableRow key={index}>
-                  <CTableHeaderCell scope="row">
-                    {/* <CFormCheck
-                      defaultChecked={e.active}
-                      onChange={() => handleChangeCheck(e.active)}
-                    /> */}
-                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                   <CTableDataCell>
                     <img
                       style={{ height: '80px', width: '100px', objectFit: 'cover' }}
