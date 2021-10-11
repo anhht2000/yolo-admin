@@ -13,7 +13,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const { source, toggleOverLay } = props;
   //data for send
   const [imgCore, setImgCore] = useState<string>("");
-  const [optionVal, setOptionVal] = useState({});
+  const [optionVal, setOptionVal] = useState<{[a: string]: string}>({});
   const [number, setNumber] = useState<number>(1);
 
   //static data
@@ -39,7 +39,6 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
     setNumber(number - 1);
   };
   const saveToLocal = () => {
-
     toggleActive();
   };
 
@@ -49,6 +48,11 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
 
   useEffect(() => {
     props.source.productImg && setImgCore(props.source.productImg[0].imgPath);
+    props.source.option && props.source.option.forEach((item: any)=>{
+      setOptionVal((pre) => {
+        return {...pre, [item.name]: item.OptionVal[0].name}
+      })
+    })
   }, [props.source]);
 
   return (
@@ -77,15 +81,16 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         <div className="product-detail__price-option--price">
           {source.price && FormatMoney(source.price)}
         </div>
-        {source.option.map((item:any, index: string) => (
-          <>
+        {source.option?.map((item:any, index: string) => (
+          <div key={index}>
             <div className="price-option__title">{item.name}</div>
             {
               item.meta === 'text' && (
                 <div className="product-detail__price-option--circle">
                   {item.OptionVal.map((temp: any,key: string)=> (
                     <div
-                      className={`circle ${size === temp.name ? "active" : ""}`}
+                      className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
+                      onClick={()=> {setOptionVal({...optionVal, [item.name]: temp.name})}}
                       key={key}
                     >
                     <div className="circle-content">{temp.name}</div>
@@ -99,7 +104,8 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
                 <div className="product-detail__price-option--circle">
                   {item.OptionVal.map((temp: any,key: string)=> (
                     <div
-                    className={`circle ${color === temp.name ? "active" : ""}`}
+                    className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
+                    onClick={()=> {setOptionVal({...optionVal,[item.name]: temp.name})}}
                     key={key}
                   >
                     <div
@@ -111,7 +117,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
                 </div>
               )
             }
-          </>
+          </div>
         ))}
         <div className="price-option__title">Số Lượng</div>
         <div className="product-detail__price-option--number">

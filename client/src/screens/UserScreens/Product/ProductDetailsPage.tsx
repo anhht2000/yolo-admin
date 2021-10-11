@@ -24,7 +24,7 @@ const ProductDetailsPage = () => {
     <>
       <div className={`${overlay ? "overlay" : ""}`}></div>
       <LayoutContainer>
-        <ProductDetail source={data} toggleOverLay={toggleOverlay} />
+        {data && <ProductDetail source={data} toggleOverLay={toggleOverlay} />}
         <Section title="Khám Phá Thêm">
           {/* <CardContainer content={dataSection} /> */}
         </Section>
