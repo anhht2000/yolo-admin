@@ -9,6 +9,7 @@ interface ICardContainerProps {
 
 const CardContainer: React.FC<ICardContainerProps> = (props) => {
   const data = props.content as any[];
+
   return (
     <div className="card__container">
       {data &&
@@ -17,7 +18,7 @@ const CardContainer: React.FC<ICardContainerProps> = (props) => {
             key={index}
             title={e.name}
             price={e.price}
-            img={process.env.REACT_APP_API_URL + e?.productImg[0].imgPath}
+            img={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
             layout_3={props.layout_3}
           />
         ))}
