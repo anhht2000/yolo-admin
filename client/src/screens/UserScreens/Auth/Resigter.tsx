@@ -49,32 +49,32 @@ const Resigter = () => {
     const checkPhone = validatePhone(values.phone);
     if (!checkEmail) {
       setErrors((prev) => {
-        return { ...prev, username: 'Invalid type email or empty email' };
+        return { ...prev, username: 'Email không được để trống hoặc sai kiểu dữ liệu' };
       });
     }
     if (!checkPass) {
       setErrors((prev) => {
-        return { ...prev, password: 'Invalid type password or empty password' };
+        return { ...prev, password: 'Mật khẩu không được để trống hoặc sai kiểu dữ liệu' };
       });
     }
     if (!checkPhone) {
       setErrors((prev) => {
-        return { ...prev, phone: 'Invalid type phone or empty phone' };
+        return { ...prev, phone: 'Số điện thoại không được để trống hoặc sai kiểu dữ liệu' };
       });
     }
     if (!values.address) {
       setErrors((prev) => {
-        return { ...prev, address: 'You must typing address' };
+        return { ...prev, address: 'Bạn phải nhập địa chỉ' };
       });
     }
     if (!values.name) {
       setErrors((prev) => {
-        return { ...prev, name: 'You must typing your name' };
+        return { ...prev, name: 'Bạn phải nhập tên' };
       });
     }
     if (!values.confirm || values.confirm !== values.password) {
       setErrors((prev) => {
-        return { ...prev, confirm: 'You must typing confirm password as password' };
+        return { ...prev, confirm: 'Bạn phải nhập trùng mật khẩu ' };
       });
     }
     setErrors((prev) => {
@@ -87,23 +87,23 @@ const Resigter = () => {
   const callApi = useCallback(async (value) => {
     const data = await userApi.signUp(value);
     if (data?.status === 200) {
-      toast.success('Login successfully');
+      toast.success('Đăng ký thành công');
       history.push('/login');
     } else {
-      toast.error('Login fail user existed');
+      toast.error('Đăng ký thất bại vì tài khoản này đã tồn tại');
     }
   }, []);
   return (
     <div className="container_login">
       <div className="background_img"></div>
       <div className="content_login">
-        <Box textAlign="center">
-          <Typography variant="h4">Sign Up</Typography>
+        <Box textAlign="center" mb={2}>
+          <Typography variant="h4">Đăng ký</Typography>
         </Box>
         <div className="form">
           <div className="acount">
             <TextField
-              label={string.Acount}
+              label={'Tên người dùng*'}
               fullWidth={true}
               error={Boolean(errors.username)}
               helperText={errors?.username}
@@ -124,7 +124,7 @@ const Resigter = () => {
           <div className="password">
             <TextField
               type={'text'}
-              label={string.Password}
+              label={'Mật khẩu*'}
               fullWidth={true}
               error={Boolean(errors.password)}
               helperText={errors?.password}
@@ -145,7 +145,7 @@ const Resigter = () => {
           <div className="password">
             <TextField
               type={'text'}
-              label={'Confirm password*'}
+              label={'Nhập lại mật khẩu*'}
               fullWidth
               error={Boolean(errors.confirm)}
               helperText={errors?.confirm}
@@ -166,7 +166,7 @@ const Resigter = () => {
           <div className="password">
             <TextField
               type={'text'}
-              label={'Name*'}
+              label={'Tên*'}
               fullWidth
               error={Boolean(errors.name)}
               helperText={errors?.name}
@@ -187,7 +187,7 @@ const Resigter = () => {
           <div className="password">
             <TextField
               type={'text'}
-              label={'Address*'}
+              label={'Địa chỉ*'}
               fullWidth
               error={Boolean(errors.address)}
               helperText={errors?.address}
@@ -208,7 +208,7 @@ const Resigter = () => {
           <div className="password">
             <TextField
               type={'text'}
-              label={'Phone*'}
+              label={'Số điện thoại*'}
               fullWidth
               error={Boolean(errors.phone)}
               helperText={errors?.phone}
@@ -229,14 +229,14 @@ const Resigter = () => {
         </div>
         <div className="button_login">
           <Button variant="contained" color="primary" onClick={handleSubmit}>
-            {'Sign Up'}
+            {'Đăng ký'}
           </Button>
         </div>
         <div className="option_resigter">
           <label className="resigter_login">
-            {'You have account.Please sign in.'}
+            {'Nếu bạn có tài khoản rồi.Vui lòng '}
             <NavLink exact to="/login" style={{ textDecoration: 'none' }}>
-              <label className="resigter">{'Sign In'}</label>
+              <label className="resigter">{'Đăng nhập'}</label>
             </NavLink>
           </label>
         </div>

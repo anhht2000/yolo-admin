@@ -30,12 +30,12 @@ const Login = () => {
     const checkPass = validatePassword(values.password);
     if (!checkEmail) {
       setErrors((prev) => {
-        return { ...prev, username: 'Invalid type email or empty email' };
+        return { ...prev, username: 'Email không được để trống hoặc sai kiểu dữ liệu' };
       });
     }
     if (!checkPass) {
       setErrors((prev) => {
-        return { ...prev, password: 'Invalid type password or empty password' };
+        return { ...prev, password: 'Mật khẩu không được để trống hoặc sai kiểu dữ liệu' };
       });
     }
     setErrors((prev) => {
@@ -48,13 +48,13 @@ const Login = () => {
     <form className="container_login">
       <div className="background_img"></div>
       <div className="content_login">
-        <Box textAlign="center">
-          <Typography variant="h4">Sign In</Typography>
+        <Box textAlign="center" mb={2}>
+          <Typography variant="h4">Đăng nhập</Typography>
         </Box>
         <div className="form">
           <div className="acount">
             <TextField
-              label={string.Acount}
+              label={'Tên người dùng*'}
               fullWidth={true}
               error={Boolean(errors.username)}
               helperText={errors?.username}
@@ -75,7 +75,7 @@ const Login = () => {
           <div className="password">
             <TextField
               type={isShowPass ? 'text' : 'password'}
-              label={string.Password}
+              label={'Mật khẩu*'}
               fullWidth={true}
               error={Boolean(errors.password)}
               helperText={errors?.password}
@@ -107,22 +107,22 @@ const Login = () => {
         <div className="option_login">
           <div>
             <input type="checkbox" />
-            <label className="remember_login">{'Remember'}</label>
+            <label className="remember_login">{'Ghi nhớ đăng nhập'}</label>
           </div>
           <NavLink exact to="/forgotpass" style={{ textDecoration: 'none' }}>
-            <label className="forgotpassword_login">{'Forgot Password'}</label>
+            <label className="forgotpassword_login">{'Quên mật khẩu'}</label>
           </NavLink>
         </div>
         <div className="button_login">
           <Button variant="contained" color="primary" onClick={handleSubmit}>
-            {string.Login}
+            {'Đăng nhập'}
           </Button>
         </div>
         <div className="option_resigter">
           <label className="resigter_login">
-            {"You don't have account.Please sign up."}
+            {'Nếu bạn chưa có tài khoản .Vui lòng '}
             <NavLink exact to="/resigter" style={{ textDecoration: 'none' }}>
-              <label className="resigter">{'Sign Up'}</label>
+              <label className="resigter">{'Đăng ký.'}</label>
             </NavLink>
           </label>
         </div>

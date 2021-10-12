@@ -1,6 +1,6 @@
 import AxiosClient from './AxiosClient';
 
-interface IsignUp {
+interface ISignUp {
   username: string;
   password: string;
   address: string;
@@ -9,7 +9,7 @@ interface IsignUp {
 }
 
 const userApi = {
-  signUp: (data: IsignUp) => {
+  signUp: (data: ISignUp) => {
     const url = '/user/sign-up';
     return AxiosClient.post(url, data);
   },

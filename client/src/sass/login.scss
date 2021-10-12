@@ -17,7 +17,7 @@
   .content_login {
     background-color: white;
     width: 47rem;
-    padding: 3rem 2rem;
+    padding: 1.5rem 2rem;
     margin: auto;
     border-radius: 0.5em;
     border: 1px solid #ccc;
@@ -82,13 +82,11 @@
       justify-content: space-between;
       margin-bottom: 1em;
       input {
-        margin-top: 0.4em;
-        margin-right: 0.2em;
+        margin-right: 0.5rem;
       }
       .remember_login {
         color: #656a7a;
         font-size: 1.4rem;
-        width: 80%;
       }
       .forgotpassword_login {
         color: #656a7a;
@@ -116,7 +114,7 @@
       }
     }
     .button_login {
-      width: 6em;
+      max-width: 15rem;
       margin: auto;
       .MuiButton-root {
         font-size: 0.9em;

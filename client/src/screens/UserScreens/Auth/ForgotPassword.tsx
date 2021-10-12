@@ -10,7 +10,6 @@ import '../../../sass/forgotpass.scss';
 const ForgotPassword = () => {
   const [values, setValues] = useState({ username: '' });
   const [errors, setErrors] = useState({ username: '' });
-  const [isShowPass, setIsShowPass] = useState(false);
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = target;
     setValues({
@@ -43,13 +42,13 @@ const ForgotPassword = () => {
     <form className="container_login">
       <div className="background_img"></div>
       <div className="content_login">
-        <Box textAlign="center">
-          <Typography variant="h4">Forget Password</Typography>
+        <Box textAlign="center" mb={2}>
+          <Typography variant="h4">Quên mật khẩu</Typography>
         </Box>
         <div className="form">
           <div className="acount">
             <TextField
-              label={string.Acount}
+              label={'Tên người dùng*'}
               fullWidth={true}
               error={Boolean(errors.username)}
               helperText={errors?.username}
@@ -76,9 +75,9 @@ const ForgotPassword = () => {
         </div>
         <div className="option_resigter">
           <label className="resigter_login">
-            {'You have account.Please sign in.'}
+            {'Nếu bạn có tài khoản rồi.Vui lòng '}
             <NavLink exact to="/login" style={{ textDecoration: 'none' }}>
-              <label className="resigter">{'Sign In'}</label>
+              <label className="resigter">{'Đăng nhập'}</label>
             </NavLink>
           </label>
         </div>
