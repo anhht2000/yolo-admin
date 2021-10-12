@@ -90,7 +90,7 @@ const Resigter = () => {
       toast.success('Login successfully');
       history.push('/login');
     } else {
-      toast.error('Login fail');
+      toast.error('Login fail user existed');
     }
   }, []);
   return (
