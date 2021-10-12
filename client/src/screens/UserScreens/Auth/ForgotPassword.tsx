@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     const checkEmail = validateEmail(values.username);
     if (!checkEmail) {
       setErrors((prev) => {
-        return { ...prev, username: 'Invalid type email or empty email' };
+        return { ...prev, username: 'Email không được để trống hoặc sai kiểu dữ liệu' };
       });
     }
     setErrors((prev) => {
