@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
-import { IProducts, products } from "../../../data/products";
 import ProductDetail from "../../../components/productdetail/ProductDetail";
 import Section from "../../../components/section/Section";
 import CardContainer from "../../../components/cardcontent/CardContainer";
@@ -12,9 +11,9 @@ import { getProduct } from "../../../redux/reducers/productDetail.reducer";
 
 const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-  const dataSection = Object.assign([], products.slice(7, 15)) as IProducts[];
   const dispatch = useAppDispatch()
   const data = useAppSelector((state)=> state.productDetails.product)
+  const dataSection = useAppSelector((state)=> state.productDetails.cardContent)
   const [overlay, setOverlay] = useState(false);
   const toggleOverlay = () => setOverlay(!overlay);
   useEffect(() => {
@@ -26,7 +25,7 @@ const ProductDetailsPage = () => {
       <LayoutContainer>
         {data && <ProductDetail source={data} toggleOverLay={toggleOverlay} />}
         <Section title="Khám Phá Thêm">
-          {/* <CardContainer content={dataSection} /> */}
+          <CardContainer content={dataSection} />
         </Section>
       </LayoutContainer>
     </>
