@@ -45,6 +45,7 @@ class UserController {
   public async createUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password, address, phone } = req.body;
+
       const user = await getRepository(User)
         .createQueryBuilder('user')
         .where('user.username = :name', { name: `${String(username)}` })
@@ -104,7 +105,8 @@ class UserController {
       );
       return res.status(200).json({
         success: true,
-        token
+        message: 'Login successfully',
+        data: token,
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Login Fail' });
