@@ -1,270 +1,244 @@
-import React, { useState, useRef, useEffect } from "react";
-import "../../../sass/resigter.scss";
-import { string } from "../../../assets/string";
-import {
-  TextField,
-  Button,
-  InputAdornment,
-  IconButton,
-  MenuItem,
-} from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {validateEmail,validatePassword, validatePhone} from "../../../lib/FunctHelper";
-import { imgLogo } from "../../../assets";
+import { Box, Button, InputAdornment, TextField, Typography } from '@material-ui/core';
+import { AccountCircle, Fingerprint } from '@material-ui/icons';
+import GroupIcon from '@material-ui/icons/Group';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import PhoneIcon from '@material-ui/icons/Phone';
+import { ChangeEvent } from 'hoist-non-react-statics/node_modules/@types/react';
+import React, { useCallback, useState } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { string } from '../../../assets/string';
+import userApi from '../../../core/userApi';
+import { validateEmail, validatePassword, validatePhone } from '../../../lib/FunctHelper';
+
 const Resigter = () => {
-  const [sex, setSex] = useState({
-    showSex: "10",
-  });
-  const sexRef = useRef(null);
+  const history = useHistory();
   const [values, setValues] = useState({
-    amount: "",
-    password: "",
-    confirm: "",
-    weight: "",
-    weightRange: "",
-    sex: "",
-    date_of_birth: "",
-    phone: "",
-    showPassword: false,
-    showPasswordConfirm: false,
-    errorE: false,
-    erroremail: "",
-    errorP: false,
-    errorpassword: "",
-    errorPhone: false,
-    content_error_phone: "",
-    error_confirm: false,
-    error_confirm_password: "",
+    username: '',
+    password: '',
+    confirm: '',
+    address: '',
+    name: '',
+    phone: '',
   });
-  const handleChangeAge = (event: any) => {
-    setSex({
-      ...sex,
-      showSex: event.target.value,
-    });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword});
-  };
-
-  const handleClickShowPasswordConfirm = () => {
-    setValues({ ...values, showPasswordConfirm: !values.showPasswordConfirm});
-  };
-  const handleMouseDownPassword = (event: any) => {
-    event.preventDefault();
-  };
-  const handleEmail = (event: any) => {
+  const [errors, setErrors] = useState({
+    username: '',
+    password: '',
+    confirm: '',
+    address: '',
+    name: '',
+    phone: '',
+  });
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = target;
     setValues({
       ...values,
-      amount: event.target.value,
+      [name]: value,
     });
   };
-  const handlePassword = (event: any) => {
-    setValues({
-      ...values,
-      password: event.target.value,
+  const handleRemoveErr = ({ target }: any) => {
+    const { name } = target;
+    setErrors({
+      ...errors,
+      [name]: '',
     });
   };
-  const handleConfirmPassword = (event: any) => {
-    setValues({
-      ...values,
-      confirm: event.target.value,
+  const handleSubmit = () => {
+    const checkEmail = validateEmail(values.username);
+    const checkPass = validatePassword(values.password);
+    const checkPhone = validatePhone(values.phone);
+    if (!checkEmail) {
+      setErrors((prev) => {
+        return { ...prev, username: 'Invalid type email or empty email' };
+      });
+    }
+    if (!checkPass) {
+      setErrors((prev) => {
+        return { ...prev, password: 'Invalid type password or empty password' };
+      });
+    }
+    if (!checkPhone) {
+      setErrors((prev) => {
+        return { ...prev, phone: 'Invalid type phone or empty phone' };
+      });
+    }
+    if (!values.address) {
+      setErrors((prev) => {
+        return { ...prev, address: 'You must typing address' };
+      });
+    }
+    if (!values.name) {
+      setErrors((prev) => {
+        return { ...prev, name: 'You must typing your name' };
+      });
+    }
+    if (!values.confirm || values.confirm !== values.password) {
+      setErrors((prev) => {
+        return { ...prev, confirm: 'You must typing confirm password as password' };
+      });
+    }
+    setErrors((prev) => {
+      if (Object.values(prev).every((e) => e === '')) {
+        callApi(values);
+      }
+      return prev;
     });
   };
-  const handlePhone = (event: any) => {
-    setValues({
-      ...values,
-      phone: event.target.value,
-    });
-  };
-  const CheckEmail = (email: string) => {
-    if (!validateEmail(email) && values.amount.length > 0) {
-      return setValues({
-        ...values,
-        errorE: true,
-        erroremail: `${string.ErrorEmail}`,
-      });
+  const callApi = useCallback(async (value) => {
+    const data = await userApi.signUp(value);
+    if (data?.status === 200) {
+      toast.success('Login successfully');
+      history.push('/login');
     } else {
-      return setValues({ ...values, errorE: false, erroremail: "" });
+      toast.error('Login fail');
     }
-  };
-  const CheckPassword = (password: string) => {
-    if (!validatePassword(password) && values.password.length > 0) {
-      return setValues({
-        ...values,
-        errorP: true,
-        errorpassword: `${string.ErrorPass}`,
-      });
-    } else {
-      return setValues({ ...values, errorP: false, errorpassword: "" });
-    }
-  };
-  const CheckConfirmPassword = (confirm_password: string) => {
-    if (confirm_password !== values.password && values.confirm.length > 0) {
-      return setValues({
-        ...values,
-        error_confirm: true,
-        error_confirm_password: `${string.ErrorConfirm}`,
-      });
-    } else {
-      return setValues({
-        ...values,
-        error_confirm: false,
-        error_confirm_password: "",
-      });
-    }
-  };
-  const CheckPhone = (phone: string) => {
-    if (!validatePhone(phone) && values.phone.length > 0) {
-      return setValues({
-        ...values,
-        errorPhone: true,
-        content_error_phone: `${string.ErrorPhone}`,
-      });
-    } else {
-      return setValues({
-        ...values,
-        errorPhone: false,
-        content_error_phone: "",
-      });
-    }
-  };
-  useEffect(() => {
-    CheckEmail(values.amount);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.amount]);
-  useEffect(() => {
-    CheckPassword(values.password);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.password]);
-  useEffect(() => {
-    CheckPhone(values.phone);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.phone]);
-  useEffect(() => {
-    CheckConfirmPassword(values.confirm);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.confirm]);
-
+  }, []);
   return (
-    <div className="container_resigter">
+    <div className="container_login">
       <div className="background_img"></div>
-      <div className="content_resigter">
-        <div className="header_resigter">
-          <div>
-            <img
-              src={imgLogo.logo_2}
-              alt="Logo resigter"
-              className="logo_resigter"
-            />
-          </div>
-          <label>{string.SignIn}</label>
-        </div>
-        <div className="form_resigter">
-          <div className="acount_resigter">
+      <div className="content_login">
+        <Box textAlign="center">
+          <Typography variant="h4">Sign Up</Typography>
+        </Box>
+        <div className="form">
+          <div className="acount">
             <TextField
               label={string.Acount}
               fullWidth={true}
-              error={values.errorE}
-              helperText={values.erroremail}
-              value={values.amount}
-              onChange={handleEmail}
+              error={Boolean(errors.username)}
+              helperText={errors?.username}
+              name="username"
+              value={values?.username}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
               placeholder={string.HolderEmail}
-            />
-          </div>
-          <div className="acount_resigter">
-            <TextField label={string.Name} fullWidth={true} />
-          </div>
-          <div className="acount_resigter_sex" ref={sexRef}>
-            <TextField
-              label={string.Sex}
-              fullWidth={true}
-              onChange={handleChangeAge}
-              value={sex.showSex}
-              select
-            >
-              <MenuItem value="10">Nam</MenuItem>
-              <MenuItem value="20">Nữ</MenuItem>
-            </TextField>
-          </div>
-          <div className="acount_resigter_date">
-            <TextField
-              label={string.DateOfBirth}
-              type="date"
-              fullWidth={true}
-              defaultValue="2017-05-18"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </div>
-          <div className="acount_resigter">
-            <TextField
-              label={string.Phone}
-              fullWidth={true}
-              error={values.errorPhone}
-              helperText={values.content_error_phone}
-              value={values.phone}
-              onChange={handlePhone}
-            />
-          </div>
-          <div className="acount_resigter_password">
-            <TextField
-              type={values.showPassword?"text" : "password"}
-              label={string.Password}
-              fullWidth={true}
-              placeholder={string.HolderPass}
-              error={values.errorP}
-              helperText={values.errorpassword}
-              value={values.password}
-              onChange={handlePassword}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
                   </InputAdornment>
                 ),
               }}
             />
           </div>
-          <div className="acount_resigter_password">
+          <div className="password">
             <TextField
-             type={values.showPasswordConfirm?"text":"password"}
-              label={string.ConfirmPassword}
+              type={'text'}
+              label={string.Password}
               fullWidth={true}
-              error={values.error_confirm}
-              helperText={values.error_confirm_password}
-              value={values.confirm}
+              error={Boolean(errors.password)}
+              helperText={errors?.password}
+              name="password"
+              value={values?.password}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
               placeholder={string.HolderPass}
-              onChange={handleConfirmPassword}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClickShowPasswordConfirm}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {values.showPasswordConfirm ? (
-                        <Visibility />
-                      ) : (
-                        <VisibilityOff />
-                      )}
-                    </IconButton>
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Fingerprint />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div className="password">
+            <TextField
+              type={'text'}
+              label={'Confirm password*'}
+              fullWidth
+              error={Boolean(errors.confirm)}
+              helperText={errors?.confirm}
+              name="confirm"
+              value={values?.confirm}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
+              placeholder={string.HolderPass}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Fingerprint />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div className="password">
+            <TextField
+              type={'text'}
+              label={'Name*'}
+              fullWidth
+              error={Boolean(errors.name)}
+              helperText={errors?.name}
+              name="name"
+              value={values?.name}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
+              placeholder={'Nguyen Van A ...'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <GroupIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div className="password">
+            <TextField
+              type={'text'}
+              label={'Address*'}
+              fullWidth
+              error={Boolean(errors.address)}
+              helperText={errors?.address}
+              name="address"
+              value={values?.address}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
+              placeholder={'Ha Noi, HCM,...'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <ImportContactsIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div className="password">
+            <TextField
+              type={'text'}
+              label={'Phone*'}
+              fullWidth
+              error={Boolean(errors.phone)}
+              helperText={errors?.phone}
+              name="phone"
+              value={values?.phone}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
+              placeholder={'098747854...'}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneIcon />
                   </InputAdornment>
                 ),
               }}
             />
           </div>
         </div>
-        <div className="button_resigter">
-          <Button variant="contained" color="primary">
-            {string.SignIn}
+        <div className="button_login">
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            {'Sign Up'}
           </Button>
+        </div>
+        <div className="option_resigter">
+          <label className="resigter_login">
+            {'You have account.Please sign in.'}
+            <NavLink exact to="/login" style={{ textDecoration: 'none' }}>
+              <label className="resigter">{'Sign In'}</label>
+            </NavLink>
+          </label>
         </div>
       </div>
     </div>

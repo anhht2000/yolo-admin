@@ -30,6 +30,32 @@ class ReceiptController {
       });
     }
   }
+  public async createReceipt(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { uId } = req.query;
+      // const { productId,productName,quantity,unitPrice,totalPrice } = req.body;
+      const data = await getRepository(Receipt)
+        .createQueryBuilder('Receipt')
+        .leftJoinAndSelect('Receipt.user', 'User')
+        .leftJoinAndSelect('Receipt.receiptProducts', 'ReceiptProducts')
+        .leftJoinAndSelect('ReceiptProducts.receiptOptionProducts', 'ReceiptOptionProducts')
+        .where('User.id = :Uid', {
+          Uid: uId,
+        })
+        .getMany();
+
+      res.status(200).json({
+        success: true,
+        message: 'Get All Successfully',
+        data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Get All Fail',
+      });
+    }
+  }
 }
 const receiptController = new ReceiptController();
 export default receiptController;

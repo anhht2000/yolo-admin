@@ -8,19 +8,20 @@
   .background_img {
     width: 100%;
     filter: blur(10px);
-    height: 150vh;
+    height: 100vh;
     position: absolute;
-    background: url('../assets/png//background/background.jpg') center center / cover no-repeat;
+    background: url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')
+      center center / cover no-repeat;
   }
+
   .content_login {
     background-color: white;
-    width: 30em;
-    height: 35em;
+    width: 47rem;
+    padding: 3rem 2rem;
     margin: auto;
     border-radius: 0.5em;
     border: 1px solid #ccc;
     z-index: 99;
-    box-shadow: 5px 5px 5px #d9d9d9;
     .header_login {
       width: 12em;
       height: 15em;
@@ -38,10 +39,10 @@
         color: #656a7a;
       }
     }
+
     .form {
       margin: auto;
       width: 22em;
-      height: 10em;
       padding: auto;
       .acount {
         height: 5em;
@@ -75,9 +76,10 @@
       }
     }
     .option_login {
-      width: 75%;
+      padding: 0 4rem;
       margin: auto;
       display: flex;
+      justify-content: space-between;
       margin-bottom: 1em;
       input {
         margin-top: 0.4em;
@@ -85,12 +87,17 @@
       }
       .remember_login {
         color: #656a7a;
+        font-size: 1.4rem;
         width: 80%;
       }
       .forgotpassword_login {
         color: #656a7a;
         width: 20%;
         cursor: pointer;
+        font-size: 1.4rem;
+        &:hover {
+          color: rgba(21, 21, 207, 0.753);
+        }
       }
     }
     .option_resigter {
@@ -99,8 +106,8 @@
       display: flex;
       margin-top: 1em;
       .resigter_login {
-        font-weight: bold;
         color: #656a7a;
+        font-size: 1.5rem;
       }
       .resigter {
         font-weight: bold;
@@ -112,7 +119,7 @@
       width: 6em;
       margin: auto;
       .MuiButton-root {
-        font-size: 1em;
+        font-size: 0.9em;
       }
     }
   }
@@ -244,4 +251,17 @@
       }
     }
   }
+}
+.container_login .content_login .form .password .MuiInputBase-input,
+.container_login .content_login .form .acount .MuiInputBase-input {
+  font-size: 1.6em;
+}
+.container_login .content_login .form .password .MuiFormLabel-root,
+.container_login .content_login .form .acount .MuiFormLabel-root {
+  font-size: 1.4em;
+}
+.container_login .content_login .form .password .MuiFormHelperText-root,
+.container_login .content_login .form .acount .MuiFormHelperText-root {
+  font-size: 1.2rem;
+  opacity: 0.8;
 }

@@ -1,96 +1,67 @@
-import React, { useEffect, useState } from "react";
-import "../../../sass/login.scss";
-import { NavLink } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
-import { AccountCircle, Visibility, VisibilityOff,Fingerprint} from "@material-ui/icons";
-import { imgLogo } from "../../../assets";
-import { string } from "../../../assets/string";
-import { validateEmail, validatePassword } from "../../../lib/FunctHelper";
-const Login = () => {
-  const [values, setValues] = useState({
-    amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
-    showPassword: false,
-    errorE: false,
-    erroremail: "",
-    errorP: false,
-    errorpassword: "",
-  });
-  const CheckEmail = (email: string) => {
-    if (!validateEmail(email) && values.amount.length > 0) {
-      return setValues({
-        ...values,
-        errorE: true,
-        erroremail: `${string.ErrorEmail}`,
-      });
-    } else {
-      return setValues({ ...values, errorE: false, erroremail: "" });
-    }
-  };
-  const CheckPassword = (password: string) => {
-    if (!validatePassword(password) && values.password.length > 0) {
-      return setValues({
-        ...values,
-        errorP: true,
-        errorpassword: `${string.ErrorPass}`,
-      });
-    } else {
-      return setValues({ ...values, errorP: false, errorpassword: "" });
-    }
-  };
-  const handleEmail = (event: any) => {
-    setValues({
-      ...values,
-      amount: event.target.value,
-    });
-  };
-  const handlePassword = (event: any) => {
-    setValues({
-      ...values,
-      password: event.target.value,
-    });
-  };
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword});
-  };
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@material-ui/core';
+import { AccountCircle, Fingerprint, Visibility, VisibilityOff } from '@material-ui/icons';
+import { ChangeEvent } from 'hoist-non-react-statics/node_modules/@types/react';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { string } from '../../../assets/string';
+import { validateEmail, validatePassword } from '../../../lib/FunctHelper';
+import '../../../sass/login.scss';
 
-  const handleMouseDownPassword = (event: any) => {
-    event.preventDefault();
+const Login = () => {
+  const [values, setValues] = useState({ username: '', password: '' });
+  const [errors, setErrors] = useState({ username: '', password: '' });
+  const [isShowPass, setIsShowPass] = useState(false);
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
   };
-  useEffect(() => {
-    CheckEmail(values.amount);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.amount]);
-  useEffect(() => {
-    CheckPassword(values.password);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.password]);
+  const handleRemoveErr = ({ target }: any) => {
+    const { name } = target;
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
+  };
+  const handleSubmit = () => {
+    const checkEmail = validateEmail(values.username);
+    const checkPass = validatePassword(values.password);
+    if (!checkEmail) {
+      setErrors((prev) => {
+        return { ...prev, username: 'Invalid type email or empty email' };
+      });
+    }
+    if (!checkPass) {
+      setErrors((prev) => {
+        return { ...prev, password: 'Invalid type password or empty password' };
+      });
+    }
+    setErrors((prev) => {
+      if (Object.values(prev).every((e) => e === '')) {
+      }
+      return prev;
+    });
+  };
   return (
-    <div className="container_login">
+    <form className="container_login">
       <div className="background_img"></div>
       <div className="content_login">
-        <div className="header_login">
-          <div>
-            <img src={imgLogo.logo_2} alt="Logo Login" className="logo_login" />
-          </div>
-          <label>{string.Login}</label>
-        </div>
+        <Box textAlign="center">
+          <Typography variant="h4">Sign In</Typography>
+        </Box>
         <div className="form">
           <div className="acount">
             <TextField
               label={string.Acount}
               fullWidth={true}
-              error={values.errorE}
-              helperText={values.erroremail}
-              value={values.amount}
-              onChange={handleEmail}
+              error={Boolean(errors.username)}
+              helperText={errors?.username}
+              name="username"
+              value={values?.username}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
               placeholder={string.HolderEmail}
               InputProps={{
                 startAdornment: (
@@ -103,13 +74,15 @@ const Login = () => {
           </div>
           <div className="password">
             <TextField
-              type={values.showPassword?"text" : "password"}
+              type={isShowPass ? 'text' : 'password'}
               label={string.Password}
               fullWidth={true}
-              error={values.errorP}
-              helperText={values.errorpassword}
-              value={values.password}
-              onChange={handlePassword}
+              error={Boolean(errors.password)}
+              helperText={errors?.password}
+              name="password"
+              value={values?.password}
+              onChange={handleChange}
+              onMouseDown={handleRemoveErr}
               placeholder={string.HolderPass}
               InputProps={{
                 startAdornment: (
@@ -120,10 +93,10 @@ const Login = () => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                      onClick={() => {
+                        setIsShowPass(!isShowPass);
+                      }}>
+                      {isShowPass ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -132,29 +105,29 @@ const Login = () => {
           </div>
         </div>
         <div className="option_login">
-          <input type="checkbox" />
-          <label className="remember_login">{string.RememberPassword}</label>
-          <NavLink exact to="/forgotpass" style={{ textDecoration: "none" }}>
-            <label className="forgotpassword_login">
-              {string.ForgotPassword}
-            </label>
+          <div>
+            <input type="checkbox" />
+            <label className="remember_login">{'Remember'}</label>
+          </div>
+          <NavLink exact to="/forgotpass" style={{ textDecoration: 'none' }}>
+            <label className="forgotpassword_login">{'Forgot Password'}</label>
           </NavLink>
         </div>
         <div className="button_login">
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
             {string.Login}
           </Button>
         </div>
         <div className="option_resigter">
-          <label className="resigter_login">{string.ComentResigter}</label>
-          <NavLink
-          exact to="/resigter"
-          style={{ textDecoration: "none" }}>
-            <label className="resigter">{string.SignIn}</label>
-          </NavLink>
+          <label className="resigter_login">
+            {"You don't have account.Please sign up."}
+            <NavLink exact to="/resigter" style={{ textDecoration: 'none' }}>
+              <label className="resigter">{'Sign Up'}</label>
+            </NavLink>
+          </label>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
