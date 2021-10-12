@@ -16,6 +16,14 @@
   }
 }
 
+.flex {
+  display: flex;
+  &.flex_end {
+    justify-content: flex-end;
+  }
+}
+
+
 .icon-hover {
   cursor: pointer;
 }
