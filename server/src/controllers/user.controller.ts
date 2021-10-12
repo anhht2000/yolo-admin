@@ -35,6 +35,7 @@ class UserController {
   public async createUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password, address, phone } = req.body;
+
       const user = await getRepository(User)
         .createQueryBuilder('user')
         .where('user.username = :name', { name: `${String(username)}` })
@@ -91,10 +92,10 @@ class UserController {
         },
         String(process.env.SCREET_KEY)
       );
-      return res.status(200).setHeader('Authorization', token).json({
+      return res.status(200).json({
         success: true,
         message: 'Login successfully',
-        data: user,
+        data: token,
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Login Fail' });
