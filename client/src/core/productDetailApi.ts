@@ -2,11 +2,11 @@ import AxiosClient from './AxiosClient';
 
 const productDetailApi = {
   getProduct: (id: string) => {
-    const url = `/product/client/${id}`;
+    const url = `/products/client/${id}`;
     return AxiosClient.get(url);
   },
   getCardContent: () => {
-    const url = '/product/sort';
+    const url = '/products/sort';
     const loadProduct = 8;
     const desc = 0;
     return AxiosClient.get(url, {

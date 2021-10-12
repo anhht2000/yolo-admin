@@ -6,8 +6,8 @@ interface IRouterConstant {
   router: Router;
 }
 export const RouterConstant: IRouterConstant[] = [
-  { path: '/user', router: userRouter },
-  { path: '/option', router: optionRouter },
-  { path: '/product', router: productRouter },
-  { path: '/home', router: homeRouter },
+  { path: '/users', router: userRouter },
+  { path: '/options', router: optionRouter },
+  { path: '/products', router: productRouter },
+  { path: '/homes', router: homeRouter },
 ];
