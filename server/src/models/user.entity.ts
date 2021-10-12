@@ -11,14 +11,17 @@ export class User extends Common {
   @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()
   address: string;
 
   @Column()
-  phone: number;
+  phone: string;
+
+  @Column({ default: true })
+  active: boolean;
 
   @OneToMany(() => Receipt, (receipt: any) => receipt.user)
   receipts: Receipt[];

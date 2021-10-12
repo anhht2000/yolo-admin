@@ -5,7 +5,7 @@
   "username": "root",
   "password": "",
   "database": "pre-eav",
-  "entities": ["src/models/*.entity.js"],
+  "entities": ["src/models/*.entity.ts"],
   "synchronize": true,
   "logging": false
 }

@@ -6,7 +6,7 @@ import checkToken from '../middleware/checktokenMiddleware';
 
 const router = Router();
 
-router.get('/', checkToken, userController.getAllUser);
+router.get('/', userController.getAllUser);
 router.post('/sign-up', createUpdateRuleUser, ValidateData, userController.createUser);
 router.post('/log-in', userController.logIn);
 router.put('/:userId', checkToken, createUpdateRuleUser, ValidateData, userController.updateUser);

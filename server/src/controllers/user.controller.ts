@@ -1,33 +1,43 @@
 import { Receipt } from './../models/receipt.entity';
 import { CommonConfig } from '.';
 import { User } from './../models/user.entity';
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository, Like } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 class UserController {
   public async getAllUser(req: Request, res: Response, next: NextFunction) {
-    const { page, limit } = req.query;
-    const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
-    const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
+    const _page = parseInt(req.query.page as string) || CommonConfig.DEFAUT_PAGE;
+    const _limit = parseInt(req.query.limit as string) || CommonConfig.DEFAUT_PERPAGE;
+    const _search = req.query.search || CommonConfig.DEFAUT_SEARCH;
+
     try {
-      const count = await getRepository(User).createQueryBuilder('user').getCount();
-      const _total = Math.ceil(count / _limit);
-      const userList = await getRepository(User)
+      const users = await getManager()
+        .getRepository(User)
         .createQueryBuilder('user')
+        .loadRelationCountAndMap('user.receipts','user.receipts')
         .skip((_page - 1) * _limit)
         .take(_limit)
-        .getMany();
+        .where('user.username like :search', {search : `%${_search}%`})
+        .orWhere('user.phone like :search', {search : `%${_search}%`})
+        .getMany()
 
-      return res.status(200).json({
-        data: userList,
+      const optionRepPage = await getManager()
+        .getRepository(User)
+        .count( { where: [
+          { username: Like(`%${_search}%`) },
+          { phone: Like(`%${_search}%`) }
+        ]})
+
+      res.status(200).send({
+        user: users,
         page: {
-          totalPage: _total,
+          totalPage: Math.ceil(optionRepPage / _limit),
           perPage: _limit,
           currentPage: _page,
-        },
-      });
+        }
+      })
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -67,6 +77,7 @@ class UserController {
       const { username, password } = req.body;
       const user = await getRepository(User)
         .createQueryBuilder('user')
+        .addSelect('user.password')
         .where('user.username = :uname', { uname: `${String(username)}` })
         .getOne();
       if (!user) {
@@ -91,10 +102,9 @@ class UserController {
         },
         String(process.env.SCREET_KEY)
       );
-      return res.status(200).setHeader('Authorization', token).json({
+      return res.status(200).json({
         success: true,
-        message: 'Login successfully',
-        data: user,
+        token
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Login Fail' });
