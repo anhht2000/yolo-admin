@@ -20,13 +20,13 @@ class ReceiptController {
 
       res.status(200).json({
         success: true,
-        message: 'Get All Successfully',
+        message: 'Lấy hóa đơn thành công',
         data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: 'Get All Fail',
+        message: 'Lấy hóa đơn thất bại',
       });
     }
   }
@@ -46,13 +46,13 @@ class ReceiptController {
 
       res.status(200).json({
         success: true,
-        message: 'Get All Successfully',
+        message: 'Lấy hóa đơn thành công',
         data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: 'Get All Fail',
+        message: 'Lấy hóa đơn thất bại',
       });
     }
   }
