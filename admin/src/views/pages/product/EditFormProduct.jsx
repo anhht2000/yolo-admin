@@ -12,7 +12,7 @@ export default function EditFormProduct() {
 
   useEffect(() => {
     dispatch(actionGeOneProduct(slug))
-  }, [dispatch])
+  }, [dispatch, slug])
   return (
     <CContainer>
       <CRow>

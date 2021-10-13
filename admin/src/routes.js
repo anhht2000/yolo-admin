@@ -1,4 +1,5 @@
 import React from 'react'
+import ManageUser from './views/pages/pageManageUser/ManageUser'
 import AddFormProduct from './views/pages/product/AddFormProduct'
 import EditFormProduct from './views/pages/product/EditFormProduct'
 import Product from './views/pages/product/Product'
@@ -104,10 +105,10 @@ const routes = [
   // path
   //MANAGE pRODUCT
   { path: '/product/option', name: 'Option', component: ProductOption, exact: true },
-
   { path: '/product', name: 'Product', component: Product, exact: true },
   { path: '/product/add', name: 'Form Add Product', component: AddFormProduct, exact: true },
   { path: '/product/:slug', name: 'Form Edit Product', component: EditFormProduct, exact: true },
+  { path: '/enduser', name: 'Manage End User Account', component: ManageUser, exact: true },
 ]
 
 export default routes

@@ -9,6 +9,6 @@ export class Admin extends Common {
   @Column()
   username: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 }

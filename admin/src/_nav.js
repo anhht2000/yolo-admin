@@ -34,6 +34,19 @@ const _nav = [
     ],
   },
   {
+    component: CNavGroup,
+    name: 'Quản lý Người dùng',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Quản lý khách hàng',
+        to: '/enduser',
+      },
+    ],
+  },
+  {
     component: CNavItem,
     name: 'Dashboard',
     to: '/dashboard',
