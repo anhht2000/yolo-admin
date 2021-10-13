@@ -1,13 +1,16 @@
 import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@material-ui/core';
 import { AccountCircle, Fingerprint, Visibility, VisibilityOff } from '@material-ui/icons';
 import { ChangeEvent } from 'hoist-non-react-statics/node_modules/@types/react';
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { string } from '../../../assets/string';
+import userApi, { ISignIn } from '../../../core/userApi';
 import { validateEmail, validatePassword } from '../../../lib/FunctHelper';
 import '../../../sass/login.scss';
 
 const Login = () => {
+  const history = useHistory();
   const [values, setValues] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({ username: '', password: '' });
   const [isShowPass, setIsShowPass] = useState(false);
@@ -40,10 +43,21 @@ const Login = () => {
     }
     setErrors((prev) => {
       if (Object.values(prev).every((e) => e === '')) {
+        callApi(values);
       }
       return prev;
     });
   };
+  const callApi = useCallback(async (value: ISignIn) => {
+    const data = await userApi.signIn(value);
+    if (data?.status === 200) {
+      localStorage.setItem('token', data?.data?.data);
+      toast.success('Đăng nhập thành công');
+      history.push('/');
+    } else {
+      toast.error('Đăng nhập thất bại');
+    }
+  }, []);
   return (
     <form className="container_login">
       <div className="background_img"></div>

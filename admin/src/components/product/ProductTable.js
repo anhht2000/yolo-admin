@@ -1,5 +1,7 @@
 import {
   CButton,
+  CCard,
+  CCardHeader,
   CContainer,
   CModal,
   CModalBody,
@@ -31,9 +33,18 @@ export default function ProductTable(props) {
     dispatch(actionGetAllProduct())
     setVisible({ ...visible, status: false })
   }
+  const handleClickAdd = () => {
+    history.push('/product/add')
+  }
 
   return (
-    <CContainer>
+    <CCard>
+      <CCardHeader className="text-end">
+        <CButton color="primary" onClick={handleClickAdd}>
+          Thêm sản phẩm
+        </CButton>
+      </CCardHeader>
+
       <CTable width="100%" color="light">
         <CTableHead>
           <CTableRow>
@@ -109,6 +120,6 @@ export default function ProductTable(props) {
           </CButton>
         </CModalFooter>
       </CModal>
-    </CContainer>
+    </CCard>
   )
 }
