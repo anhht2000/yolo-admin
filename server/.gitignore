@@ -3,3 +3,5 @@ node_modules/
 .prettierrc
 declare_modules.d.ts
 public/**
+.env
+

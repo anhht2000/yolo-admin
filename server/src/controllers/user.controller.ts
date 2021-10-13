@@ -1,10 +1,11 @@
 import { Receipt } from './../models/receipt.entity';
 import { CommonConfig } from '.';
 import { User } from './../models/user.entity';
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import * as nodemailer from 'nodemailer';
 
 class UserController {
   public async getAllUser(req: Request, res: Response, next: NextFunction) {
@@ -66,10 +67,13 @@ class UserController {
   public async logIn(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
+
       const user = await getRepository(User)
         .createQueryBuilder('user')
+        .addSelect('user.password')
         .where('user.username = :uname', { uname: `${String(username)}` })
         .getOne();
+
       if (!user) {
         return res.status(500).json({
           success: false,
@@ -99,6 +103,86 @@ class UserController {
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Login Fail' });
+    }
+  }
+  public async forgetPass(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { username } = req.body;
+      const user = await getManager().find(User, { where: { username: username } });
+      console.log('ủe', user);
+
+      if (user.length === 0) {
+        res.status(500).send({
+          success: false,
+          message: 'Gửi mail thất bại',
+        });
+      }
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.USER_GMAIL,
+          pass: process.env.PASS_GMAIL,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+      const token = await jwt.sign(
+        {
+          iss: 'Tuan Anh',
+          sub: username,
+          iat: new Date().getTime(),
+          exp: new Date().setDate(new Date().getHours() + 3),
+        },
+        String(process.env.SCREET_KEY)
+      );
+      await transporter.sendMail({
+        from: `${process.env.USER_GMAIL}`,
+        to: `${username}`,
+        subject: 'Confirm forget password ✔',
+        text: `Click this link to change password: ${process.env.HOST}/change-pass/${token}`,
+      });
+      res.status(200).send({
+        success: true,
+        message: 'Gửi mail thành công',
+        data: token,
+      });
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: 'Gửi mail thất bại',
+      });
+    }
+  }
+  public async changePass(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { password } = req.body;
+      const authHeader: string = req.headers['authorization'] as string;
+      const token = authHeader?.split(' ')[1];
+      if (!token) {
+        res.status(500).send({
+          success: false,
+          message: 'Đổi mật khẩu thất bại',
+        });
+      }
+      const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+      let hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
+      const user = await getRepository(User)
+        .createQueryBuilder('user')
+        .update()
+        .set({ password: hash })
+        .where('user.username = :uSSname', { uSSname: `${String(sub)}` })
+        .execute();
+
+      res.status(200).send({
+        success: true,
+        message: 'Đổi mật khẩu thành công',
+      });
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: 'Đổi mật khẩu thất bại',
+      });
     }
   }
   public async updateUser(req: Request, res: Response, next: NextFunction) {
