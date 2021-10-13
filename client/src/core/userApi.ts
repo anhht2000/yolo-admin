@@ -15,10 +15,12 @@ export interface ISignIn {
 const userApi = {
   signUp: (data: ISignUp) => {
     const url = '/user/sign-up';
+
     return AxiosClient.post(url, data);
   },
   signIn: (data: ISignIn) => {
     const url = '/user/log-in';
+
     return AxiosClient.post(url, data);
   },
 };
