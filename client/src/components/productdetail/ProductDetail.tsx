@@ -87,7 +87,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
             {
               item.meta === 'text' && (
                 <div className="product-detail__price-option--circle">
-                  {item.OptionVal.map((temp: any,key: string)=> (
+                  {item.OptionVal.map((temp: any, key: string)=> (
                     <div
                       className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
                       onClick={()=> {setOptionVal({...optionVal, [item.name]: temp.name})}}
