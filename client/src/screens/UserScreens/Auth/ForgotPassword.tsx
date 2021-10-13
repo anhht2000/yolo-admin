@@ -1,9 +1,11 @@
 import { Box, Button, InputAdornment, TextField, Typography } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 import { ChangeEvent } from 'hoist-non-react-statics/node_modules/@types/react';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { string } from '../../../assets/string';
+import userApi, { IForget } from '../../../core/userApi';
 import { validateEmail } from '../../../lib/FunctHelper';
 import '../../../sass/forgotpass.scss';
 
@@ -33,11 +35,20 @@ const ForgotPassword = () => {
     }
     setErrors((prev) => {
       if (Object.values(prev).every((e) => e === '')) {
+        callApi(values);
       }
       return prev;
     });
   };
-
+  const callApi = useCallback(async (value: IForget) => {
+    const data = await userApi.forget(value);
+    if (data?.status === 200) {
+      localStorage.setItem('token_forget', data?.data?.data);
+      toast.success('Vui lòng kiểm tra lại email để thay đổi mật khẩu');
+    } else {
+      toast.error('Tên người dùng của bạn không tồn tại ');
+    }
+  }, []);
   return (
     <form className="container_login">
       <div className="background_img"></div>

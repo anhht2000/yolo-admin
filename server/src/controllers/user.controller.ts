@@ -109,7 +109,6 @@ class UserController {
     try {
       const { username } = req.body;
       const user = await getManager().find(User, { where: { username: username } });
-      console.log('ủe', user);
 
       if (user.length === 0) {
         res.status(500).send({
