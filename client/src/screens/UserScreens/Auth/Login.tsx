@@ -123,7 +123,7 @@ const Login = () => {
             <input type="checkbox" />
             <label className="remember_login">{'Ghi nhớ đăng nhập'}</label>
           </div>
-          <NavLink exact to="/forgotpass" style={{ textDecoration: 'none' }}>
+          <NavLink exact to="/forgot-pass" style={{ textDecoration: 'none' }}>
             <label className="forgotpassword_login">{'Quên mật khẩu'}</label>
           </NavLink>
         </div>

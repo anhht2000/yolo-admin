@@ -1,18 +1,19 @@
-import Dashboard from "../screens/AdminScreens/Dashboard";
-import ForgetPass from "../screens/AdminScreens/ForgetPass";
-import Login from "../screens/AdminScreens/Login";
-import SignUp from "../screens/AdminScreens/SignUp";
-import ForgotPasswordEndUser from "../screens/UserScreens/Auth/ForgotPassword";
-import LandingPage from "../screens/UserScreens/Home/LandingPage";
-import LoginEndUser from "../screens/UserScreens/Auth/Login";
-import ProductDetailsPage from "../screens/UserScreens/Product/ProductDetailsPage";
-import ProductPage from "../screens/UserScreens/Product/ProductPage";
-import ResigterEndUser from "../screens/UserScreens/Auth/Resigter";
-import ListProdcutAddCart from "../screens/UserScreens/Product/ListProdcutAddCart";
-import ListPayProduct from "../screens/UserScreens/Product/ListPayProduct";
+import Dashboard from '../screens/AdminScreens/Dashboard';
+import ForgetPass from '../screens/AdminScreens/ForgetPass';
+import Login from '../screens/AdminScreens/Login';
+import SignUp from '../screens/AdminScreens/SignUp';
+import ForgotPasswordEndUser from '../screens/UserScreens/Auth/ForgotPassword';
+import LandingPage from '../screens/UserScreens/Home/LandingPage';
+import LoginEndUser from '../screens/UserScreens/Auth/Login';
+import ProductDetailsPage from '../screens/UserScreens/Product/ProductDetailsPage';
+import ProductPage from '../screens/UserScreens/Product/ProductPage';
+import ResigterEndUser from '../screens/UserScreens/Auth/Resigter';
+import ListProdcutAddCart from '../screens/UserScreens/Product/ListProdcutAddCart';
+import ListPayProduct from '../screens/UserScreens/Product/ListPayProduct';
+import ChangePass from '../screens/UserScreens/Auth/ChangePass';
 enum ETYPE {
-  ADMIN = "ADMIN",
-  USER = "USER",
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }
 
 interface IAppRouterConfig {
@@ -25,58 +26,65 @@ interface IAppRouterConfig {
 // name => path => component => exact => type
 export const AppRouterConfig: IAppRouterConfig[] = [
   {
-    name: "Landing Pages",
-    path: "/",
+    name: 'Landing Pages',
+    path: '/',
     component: LandingPage,
     exact: true,
     type: ETYPE.USER,
   },
   {
-    name: "Product Page",
-    path: "/product",
+    name: 'Product Page',
+    path: '/product',
     component: ProductPage,
     exact: true,
     type: ETYPE.USER,
   },
   {
-    name: "Product Detail Page",
-    path: "/product/:id",
+    name: 'Product Detail Page',
+    path: '/product/:id',
     component: ProductDetailsPage,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: "List Product add cart",
-    path: "/list_product_add",
+    name: 'List Product add cart',
+    path: '/list_product_add',
     component: ListProdcutAddCart,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: "List Pay Product",
-    path: "/list_pay_product",
+    name: 'List Pay Product',
+    path: '/list_pay_product',
     component: ListPayProduct,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: "login",
-    path: "/login",
+    name: 'login',
+    path: '/login',
     component: LoginEndUser,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: "resigter",
-    path: "/resigter",
+    name: 'resigter',
+    path: '/resigter',
     component: ResigterEndUser,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: "forgotpass",
-    path: "/forgotpass",
+    name: 'forgotpass',
+    path: '/forgot-pass',
     component: ForgotPasswordEndUser,
+    exact: false,
+    type: ETYPE.USER,
+  },
+  {
+    name: 'Change pasword',
+    path: '/change-pass/:token',
+    component: ChangePass,
     exact: false,
     type: ETYPE.USER,
   },
@@ -84,29 +92,29 @@ export const AppRouterConfig: IAppRouterConfig[] = [
   // admin
 
   {
-    name: "Forget password",
-    path: "/admin/forget-password",
+    name: 'Forget password',
+    path: '/admin/forget-password',
     component: ForgetPass,
     exact: true,
     type: ETYPE.ADMIN,
   },
   {
-    name: "login",
-    path: "/admin/login",
+    name: 'login',
+    path: '/admin/login',
     component: Login,
     exact: true,
     type: ETYPE.ADMIN,
   },
   {
-    name: "Sign Up",
-    path: "/admin/sign-up",
+    name: 'Sign Up',
+    path: '/admin/sign-up',
     component: SignUp,
     exact: true,
     type: ETYPE.ADMIN,
   },
   {
-    name: "admin",
-    path: "/admin",
+    name: 'admin',
+    path: '/admin',
     exact: true,
     component: Dashboard,
     type: ETYPE.ADMIN,

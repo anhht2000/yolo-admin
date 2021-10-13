@@ -11,6 +11,13 @@ export interface ISignIn {
   username: string;
   password: string;
 }
+export interface IForget {
+  username: string;
+}
+export interface IChangePass {
+  confirm: string;
+  password: string;
+}
 
 const userApi = {
   signUp: (data: ISignUp) => {
@@ -20,6 +27,18 @@ const userApi = {
   signIn: (data: ISignIn) => {
     const url = '/user/log-in';
     return AxiosClient.post(url, data);
+  },
+  forget: (data: IForget) => {
+    const url = '/user/forget-pass';
+    return AxiosClient.post(url, data);
+  },
+  changePass: (data: IChangePass, token: string) => {
+    const url = '/user/change-pass';
+    return AxiosClient.post(url, data, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
   },
 };
 export default userApi;

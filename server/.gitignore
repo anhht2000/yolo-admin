@@ -4,3 +4,5 @@ node_modules/
 declare_modules.d.ts
 public/**
 .env
+.env.test
+.env.production
