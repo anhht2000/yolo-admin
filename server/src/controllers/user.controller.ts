@@ -66,10 +66,13 @@ class UserController {
   public async logIn(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
+
       const user = await getRepository(User)
         .createQueryBuilder('user')
+        .addSelect('user.password')
         .where('user.username = :uname', { uname: `${String(username)}` })
         .getOne();
+
       if (!user) {
         return res.status(500).json({
           success: false,
