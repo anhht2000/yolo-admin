@@ -22,18 +22,22 @@ export interface IChangePass {
 const userApi = {
   signUp: (data: ISignUp) => {
     const url = '/user/sign-up';
+
     return AxiosClient.post(url, data);
   },
   signIn: (data: ISignIn) => {
     const url = '/user/log-in';
+
     return AxiosClient.post(url, data);
   },
   forget: (data: IForget) => {
     const url = '/user/forget-pass';
+
     return AxiosClient.post(url, data);
   },
   changePass: (data: IChangePass, token: string) => {
     const url = '/user/change-pass';
+
     return AxiosClient.post(url, data, {
       headers: {
         Authorization: 'Bearer ' + token,
