@@ -107,9 +107,11 @@ export default function FormEditProduct({ initialValue }) {
         })
         return { ...item, optionValue: optionValue }
       }
+      return undefined
     })
     temp = temp.filter((item) => item !== undefined)
     setVariantTemp(temp)
+    // eslint-disable-next-line
   }, [initialValue])
 
   const handleChange = (e) => {

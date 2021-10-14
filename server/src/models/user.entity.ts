@@ -18,7 +18,10 @@ export class User extends Common {
   address: string;
 
   @Column()
-  phone: number;
+  phone: string;
+
+  @Column({ default: true })
+  active: boolean;
 
   @OneToMany(() => Receipt, (receipt: any) => receipt.user)
   receipts: Receipt[];

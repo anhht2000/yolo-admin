@@ -3,9 +3,15 @@
   "host": "localhost",
   "port": 3306,
   "username": "root",
-  "password": "",
-  "database": "pre-eav",
-  "entities": ["src/models/*.entity.js"],
-  "synchronize": true,
-  "logging": false
+  "password": "Fa123123@",
+  "database": "dbs",
+  "synchronize": false,
+  "logging": false,
+  "migrationsTableName": "custom_migration_table",
+  "entities": ["src/models/*.entity.ts"],
+  "migrations" : ["src/migration/*.ts"],
+  "cli": {
+    "entitiesDir": "src/models",
+    "migrationsDir": "src/migration"
+  }
 }

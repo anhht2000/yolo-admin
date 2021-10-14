@@ -51,8 +51,7 @@ export default function ProductTable(props) {
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
             <CTableHeaderCell scope="col">Ảnh</CTableHeaderCell>
             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Kích cỡ</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Màu sắc</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Giá Tiền</CTableHeaderCell>
             <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
@@ -71,18 +70,7 @@ export default function ProductTable(props) {
                     />
                   </CTableDataCell>
                   <CTableDataCell>{e.name}</CTableDataCell>
-                  <CTableDataCell>
-                    {e?.productOption
-                      .filter((e) => e?.option?.name === 'size')
-                      .map((e) => e?.optionValue?.name)
-                      .join(' ')}
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    {e?.productOption
-                      .filter((e) => e?.option?.name === 'color')
-                      .map((e) => e?.optionValue?.name)
-                      .join(' ')}
-                  </CTableDataCell>
+                  <CTableDataCell>{e.price}</CTableDataCell>
                   <CTableDataCell>
                     <CButton
                       color="success"

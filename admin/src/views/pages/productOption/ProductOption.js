@@ -49,12 +49,6 @@ const ProductOption = () => {
   const deleteOptionApi = async (id) => {
     try {
       await deleteProductOption(id)
-      // setOptions({
-      //   ...options,
-      //   data: options['data'].filter((option) => {
-      //     return option.id !== id
-      //   }),
-      // })
       getOptionApi()
       toast.info(`Xóa dữ liệu thành công`)
     } catch (err) {
@@ -64,11 +58,7 @@ const ProductOption = () => {
 
   const createOptionApi = async ({ name, meta }) => {
     try {
-      const response = await createProductOption({ name, meta })
-      setOptions({
-        ...options,
-        data: [response, ...options['data']],
-      })
+      await createProductOption({ name, meta })
       getOptionApi()
     } catch (err) {
       toast.error(`System Error`)
