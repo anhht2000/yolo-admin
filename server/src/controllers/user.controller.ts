@@ -116,14 +116,12 @@ class UserController {
           message: 'Gửi mail thất bại',
         });
       }
-      let transporter = nodemailer.createTransport({
-        service: 'gmail',
+      var transporter = nodemailer.createTransport({
+        host: 'smtp.mailtrap.io',
+        port: 2525,
         auth: {
-          user: process.env.USER_GMAIL,
-          pass: process.env.PASS_GMAIL,
-        },
-        tls: {
-          rejectUnauthorized: false,
+          user: 'a404f3037d75a6',
+          pass: 'bcaa523b830b11',
         },
       });
       const token = await jwt.sign(
@@ -135,8 +133,9 @@ class UserController {
         },
         String(process.env.SCREET_KEY)
       );
+
       await transporter.sendMail({
-        from: `${process.env.USER_GMAIL}`,
+        from: `"Admin System 👻"${process.env.USER_GMAIL}`,
         to: `${username}`,
         subject: 'Confirm forget password ✔',
         text: `Click this link to change password: ${process.env.HOST}/change-pass/${token}`,
