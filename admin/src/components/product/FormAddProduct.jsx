@@ -109,7 +109,6 @@ export default function FormAddProduct({ type, initialValue }) {
       const checkName = validateName(values?.name)
       const checkDe = validateDe(values?.description)
       const checkPrice = validatePrice(values.price)
-      console.log('check', { checkName, checkDe, checkPrice })
 
       if (!checkName) {
         setError((prev) => {
