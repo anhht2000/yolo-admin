@@ -23,7 +23,6 @@
   }
 }
 
-
 .icon-hover {
   cursor: pointer;
 }
@@ -113,4 +112,10 @@
 .row__line {
   background-color: #ebedef;
   border: 2px solid #ebedef;
+}
+.row__table {
+  max-width: 6rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

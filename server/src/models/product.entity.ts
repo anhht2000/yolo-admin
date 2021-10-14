@@ -15,7 +15,7 @@ export class Product extends Common {
   description: string;
 
   @Column()
-  price: string;
+  price: number;
 
   @OneToMany(() => ProductImg, (productImg) => productImg.product)
   productImg: ProductImg[];

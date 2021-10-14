@@ -78,7 +78,6 @@ const Product = () => {
           </CCol>
         </CRow>
       </CCardHeader>
-      <div className="pt-3 row__line"></div>
       <ProductTable products={products} />
     </CCard>
   )

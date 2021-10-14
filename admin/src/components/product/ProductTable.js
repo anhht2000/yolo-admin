@@ -1,3 +1,5 @@
+import { cilDelete, cilPencil, cilPlus } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
 import {
   CButton,
   CCard,
@@ -18,6 +20,7 @@ import {
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
+import { toast } from 'react-toastify'
 import productApi from 'src/config/productApi'
 import { actionGetAllProduct } from 'src/redux/slice/productSlice'
 import Pagination from './Pagination'
@@ -30,18 +33,26 @@ export default function ProductTable(props) {
   const [visible, setVisible] = useState({ status: false, id: '' })
   const handleDelete = async (id) => {
     await productApi.deleteProduct(id)
+    toast.success('Xóa sản phẩm thành công')
     dispatch(actionGetAllProduct())
     setVisible({ ...visible, status: false })
   }
   const handleClickAdd = () => {
     history.push('/product/add')
   }
-
+  const formatDate = (time) => {
+    const day = `0${new Date(time).getDate()}`.slice(0, 2)
+    const month = `0${new Date(time).getMonth()}`.slice(0, 2)
+    const year = new Date(time).getFullYear()
+    const value = `${day} / ${month} / ${year}`
+    return value
+  }
   return (
     <CCard>
       <CCardHeader className="text-end">
         <CButton color="primary" onClick={handleClickAdd}>
-          Thêm sản phẩm
+          <CIcon icon={cilPlus} className="me-2" style={{ height: '15px', width: '15px' }} />
+          Thêm
         </CButton>
       </CCardHeader>
 
@@ -52,6 +63,7 @@ export default function ProductTable(props) {
             <CTableHeaderCell scope="col">Ảnh</CTableHeaderCell>
             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
             <CTableHeaderCell scope="col">Giá Tiền</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Ngày Tạo</CTableHeaderCell>
             <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
@@ -70,23 +82,23 @@ export default function ProductTable(props) {
                     />
                   </CTableDataCell>
                   <CTableDataCell>{e.name}</CTableDataCell>
-                  <CTableDataCell>{e.price}</CTableDataCell>
+                  <CTableDataCell className="row__table">{e.price}</CTableDataCell>
+                  <CTableDataCell>{formatDate(e?.createDate)}</CTableDataCell>
                   <CTableDataCell>
-                    <CButton
-                      color="success"
-                      variant="outline"
-                      className="me-1"
+                    <CIcon
+                      icon={cilPencil}
+                      className="me-2 icon-hover"
+                      style={{ height: '15px', width: '15px', color: 'green' }}
                       onClick={() => history.push('/product/' + e.id)}
-                    >
-                      Sửa
-                    </CButton>
-                    <CButton
-                      color="danger"
-                      variant="outline"
-                      onClick={() => setVisible({ ...visible, status: true, id: e.id })}
-                    >
-                      Xóa
-                    </CButton>
+                    />
+                    <CIcon
+                      icon={cilDelete}
+                      onClick={() =>
+                        setVisible({ ...visible, status: true, name: e.name, id: e.id })
+                      }
+                      className="me-2 icon-hover"
+                      style={{ height: '15px', width: '15px', color: 'red' }}
+                    />
                   </CTableDataCell>
                 </CTableRow>
               )
@@ -98,7 +110,7 @@ export default function ProductTable(props) {
         <CModalHeader onDismiss={() => setVisible({ ...visible, status: false })}>
           <CModalTitle>Xác nhận</CModalTitle>
         </CModalHeader>
-        <CModalBody>Bạn có chắc chắn muốn xóa sản phẩm có id = {visible.id} không?</CModalBody>
+        <CModalBody>Bạn có chắc chắn muốn xóa sản phẩm `{visible.name}` không?</CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisible({ ...visible, status: false })}>
             Đóng

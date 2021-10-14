@@ -107,6 +107,8 @@ export default function FormAddProduct({ type, initialValue }) {
       formdata.append('description', values.description || '')
       formdata.append('option', JSON.stringify(variantSend))
       await productApi.createProduct(formdata)
+      toast.success('Thêm sản phẩm thành công')
+
       history.push('/product')
     } catch (error) {}
   }

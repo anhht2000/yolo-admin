@@ -177,6 +177,7 @@ export default function FormEditProduct({ initialValue }) {
       formdata.append('imageDelete', JSON.stringify(deleteFile))
       formdata.append('option', JSON.stringify(variantSend))
       await productApi.updateProduct(initialValue?.id, formdata)
+      toast.success('Sửa sản phẩm thành công')
       history.push('/product')
     } catch (error) {
       toast.error('System Error')
