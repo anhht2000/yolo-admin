@@ -110,7 +110,7 @@ const Login = () => {
                       onClick={() => {
                         setIsShowPass(!isShowPass);
                       }}>
-                      {isShowPass ? <Visibility /> : <VisibilityOff />}
+                      {isShowPass ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
