@@ -52,7 +52,7 @@ const ProductPage: React.FC = (props) => {
         />
         <div className="product-content">
           {productloading ? 'loadingProduct' : <CardContainer content={products} layout_3={true} />}
-          <Pagination totalPage={totalPage} currentPage={currentPage} />
+          {products.length > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} />}
         </div>
       </div>
     </LayoutContainer>

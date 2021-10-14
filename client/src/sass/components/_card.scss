@@ -46,7 +46,7 @@
         margin: 0 auto;
         display: block;
         height: 28.5rem;
-        object-fit: contain;
+        object-fit: cover;
       }
     }
     &--title {
@@ -68,11 +68,19 @@
       display: flex;
       justify-content: space-around;
       &-current {
+        max-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-weight: 600;
       }
       &-discount {
         text-decoration-line: line-through;
         color: rgb(153, 153, 153);
+        max-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
@@ -93,4 +101,9 @@
       }
     }
   }
+}
+.text__error {
+  color: red;
+  font-size: 2rem;
+  font-weight: 700;
 }

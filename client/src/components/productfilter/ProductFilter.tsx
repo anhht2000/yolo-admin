@@ -13,7 +13,9 @@ interface IProductFilter {
 
 const ProductFilter: React.FC<IProductFilter> = (props) => {
   const { filter, helper, onChange, onDelete, loading } = props;
-
+  function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   const [active, setActive] = useState(false);
   const toggleActive = () => setActive(!active);
   return (
@@ -25,7 +27,7 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
           helper.map((element, index) => {
             return (
               <div className="product-filter__header" key={index}>
-                {element}
+                {capitalizeFirstLetter(element)}
                 <div className="product-filter__content">
                   {filter &&
                     filter[element].map((e, index) => (
@@ -37,7 +39,7 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
                           checked={e.use as boolean}
                           onChange={onChange}
                         />{' '}
-                        &nbsp; {e.content}
+                        &nbsp; {capitalizeFirstLetter(e.content)}
                       </div>
                     ))}
                 </div>

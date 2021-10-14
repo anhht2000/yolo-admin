@@ -1,5 +1,5 @@
-import { Box, Button, InputAdornment, TextField, Typography } from '@material-ui/core';
-import { AccountCircle, Fingerprint } from '@material-ui/icons';
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@material-ui/core';
+import { AccountCircle, Fingerprint, Visibility, VisibilityOff } from '@material-ui/icons';
 import GroupIcon from '@material-ui/icons/Group';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -13,6 +13,9 @@ import { validateEmail, validatePassword, validatePhone } from '../../../lib/Fun
 
 const Resigter = () => {
   const history = useHistory();
+  const [isShowPass, setIsShowPass] = useState(false);
+  const [isShowConfirm, setIsShowConfirm] = useState(false);
+
   const [values, setValues] = useState({
     username: '',
     password: '',
@@ -123,7 +126,7 @@ const Resigter = () => {
           </div>
           <div className="password">
             <TextField
-              type={'text'}
+              type={isShowPass ? 'text' : 'password'}
               label={'Mật khẩu*'}
               fullWidth={true}
               error={Boolean(errors.password)}
@@ -139,12 +142,22 @@ const Resigter = () => {
                     <Fingerprint />
                   </InputAdornment>
                 ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => {
+                        setIsShowPass(!isShowPass);
+                      }}>
+                      {isShowPass ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
           </div>
           <div className="password">
             <TextField
-              type={'text'}
+              type={isShowConfirm ? 'text' : 'password'}
               label={'Nhập lại mật khẩu*'}
               fullWidth
               error={Boolean(errors.confirm)}
@@ -158,6 +171,16 @@ const Resigter = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <Fingerprint />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => {
+                        setIsShowConfirm(!isShowConfirm);
+                      }}>
+                      {isShowConfirm ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}

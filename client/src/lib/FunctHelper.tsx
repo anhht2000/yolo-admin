@@ -7,8 +7,17 @@ function validateEmail(Email: string) {
   return REG_EMAIL.test(Email);
 }
 
+function format(n: string) {
+  let te = Number(n);
+  return (
+    te
+      .toFixed(1)
+      .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+      .slice(0, -2) + ' VND'
+  );
+}
 const FormatMoney = (data: string) => {
-  return data.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return format(data);
 };
 
 function validatePassword(Password: string) {
