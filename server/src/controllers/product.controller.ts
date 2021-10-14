@@ -278,8 +278,9 @@ class ProductController {
     const { page, limit, search, filter } = request.query;
     const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
     const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
-    const _search = String(search) || CommonConfig.DEFAUT_SEARCH;
-    if (!filter) {
+    const _search = search || CommonConfig.DEFAUT_SEARCH;
+
+    if (!filter || filter == '') {
       try {
         const count = await getRepository(Product)
           .createQueryBuilder('product')
@@ -294,7 +295,7 @@ class ProductController {
           .leftJoinAndSelect('Product.productImg', 'productImg')
           .skip((_page - 1) * _limit)
           .take(_limit)
-          .where('Product.name like :name', { name: `%${_search}%` })
+          .where('Product.name like :Sname', { Sname: `%${_search}%` })
           .getMany();
 
         return response.status(200).json({
@@ -313,6 +314,9 @@ class ProductController {
     } else {
       try {
         const dataOption = String(filter).split(',');
+        // if (dataOption.length < 1) {
+        //   dataOption[0] = '';
+        // }
 
         const count = await getRepository(Product)
           .createQueryBuilder('Product')

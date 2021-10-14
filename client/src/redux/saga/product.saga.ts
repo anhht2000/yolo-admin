@@ -36,7 +36,9 @@ export function* getFilterProductSaga() {
 
     let helper: string[] = [];
     data.data?.forEach((e) => {
-      helper.push(e.name);
+      if (e.optionValue && e?.optionValue?.length > 0) {
+        helper.push(e.name);
+      }
     });
     const filter = data.data?.map((e) => {
       let test = e.optionValue?.map((otva) => ({

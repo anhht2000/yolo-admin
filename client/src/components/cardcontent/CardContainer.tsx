@@ -12,7 +12,9 @@ const CardContainer: React.FC<ICardContainerProps> = (props) => {
 
   return (
     <div className="card__container">
-      {data &&
+      {data.length < 1 ? (
+        <div className="text__error">Không có sản phẩm nào được tìm thấy</div>
+      ) : (
         data.map((e, index) => (
           <CardContent
             key={index}
@@ -22,7 +24,8 @@ const CardContainer: React.FC<ICardContainerProps> = (props) => {
             img={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
             layout_3={props.layout_3}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 };
