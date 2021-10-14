@@ -8,7 +8,7 @@ import {
   CRow,
   CSpinner,
 } from '@coreui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
@@ -17,9 +17,11 @@ import { toast } from 'react-toastify'
 import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
 import { fun } from 'src/data/FilterDataPage'
+import { validateDe, validateName, validatePrice } from 'src/helper/CheckData'
 
 export default function FormAddProduct({ type, initialValue }) {
   const [values, setValues] = useState({})
+  const [error, setError] = useState({})
   const [acceptFile, setAcceptFile] = useState([])
   const history = useHistory()
   const isLoading = useSelector(getLoading)
@@ -95,21 +97,62 @@ export default function FormAddProduct({ type, initialValue }) {
   useEffect(() => {
     LoadOptions()
   }, [])
-
+  const handleRemoveErr = ({ target }) => {
+    const { name } = target
+    setError({
+      ...error,
+      [name]: '',
+    })
+  }
   const handleSubmit = async () => {
     try {
-      const formdata = new FormData()
-      acceptFile.forEach((item) => {
-        formdata.append('allImg', item)
-      })
-      formdata.append('name', values.name || '')
-      formdata.append('price', values.price || '')
-      formdata.append('description', values.description || '')
-      formdata.append('option', JSON.stringify(variantSend))
-      await productApi.createProduct(formdata)
-      history.push('/product')
+      const checkName = validateName(values?.name)
+      const checkDe = validateDe(values?.description)
+      const checkPrice = validatePrice(values.price)
+
+      if (!checkName) {
+        setError((prev) => {
+          return { ...prev, name: 'Bạn phải nhập tên sản phẩm' }
+        })
+      }
+      if (!checkDe) {
+        setError((prev) => {
+          return { ...prev, description: 'Bạn phải nhập miêu tả sản phẩm' }
+        })
+      }
+      if (!checkPrice) {
+        setError((prev) => {
+          return { ...prev, price: 'Bạn phải nhập giá là kiểu số ' }
+        })
+      } else {
+        setError((prev) => {
+          if (Object.values(prev).every((e) => e === '')) {
+            const formdata = new FormData()
+            acceptFile.forEach((item) => {
+              formdata.append('allImg', item)
+            })
+            formdata.append('name', values.name || '')
+            formdata.append('price', values.price || '')
+            formdata.append('description', values.description || '')
+            formdata.append('option', JSON.stringify(variantSend))
+            callApi(formdata)
+          }
+          return prev
+        })
+      }
     } catch (error) {}
   }
+  const callApi = useCallback(async (formdata) => {
+    const data = await productApi.createProduct(formdata)
+
+    if (data?.status === 200) {
+      toast.success('Thêm sản phẩm thành công')
+      history.push('/product')
+    } else {
+      toast.error('Thêm sản phẩm thất bại')
+    }
+  }, [])
+
   return (
     <CForm>
       <CRow className="mb-3">
@@ -122,9 +165,12 @@ export default function FormAddProduct({ type, initialValue }) {
             id="name"
             name="name"
             placeholder="Vui lòng nhập tên sản phẩm"
+            className={Boolean(error.name) ? 'input__err' : ''}
+            onMouseDown={handleRemoveErr}
             defaultValue={values?.name}
             onChange={(e) => handleChange(e)}
           />
+          <span className={'text__err'}>{error?.name}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">
@@ -135,11 +181,14 @@ export default function FormAddProduct({ type, initialValue }) {
           <CFormInput
             type="text"
             id="price"
+            onMouseDown={handleRemoveErr}
+            className={Boolean(error.price) ? 'input__err' : ''}
             placeholder="Vui lòng nhập giá sản phẩm"
             name="price"
             defaultValue={values?.price}
             onChange={(e) => handleChange(e)}
           />
+          <span className={'text__err'}>{error?.price}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">
@@ -151,11 +200,14 @@ export default function FormAddProduct({ type, initialValue }) {
             type="text"
             id="description"
             placeholder="Vui lòng nhập miêu tả sản phẩm"
+            onMouseDown={handleRemoveErr}
+            className={Boolean(error.description) ? 'input__err' : ''}
             name="description"
             multiple
             defaultValue={values?.description}
             onChange={(e) => handleChange(e)}
           />
+          <span className={'text__err'}>{error?.description}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">

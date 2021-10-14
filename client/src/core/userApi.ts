@@ -31,12 +31,12 @@ const userApi = {
     return AxiosClient.post(url, data);
   },
   forget: (data: IForget) => {
-    const url = '/user/forget-pass';
+    const url = '/users/forget-pass';
 
     return AxiosClient.post(url, data);
   },
   changePass: (data: IChangePass, token: string) => {
-    const url = '/user/change-pass';
+    const url = '/users/change-pass';
 
     return AxiosClient.post(url, data, {
       headers: {

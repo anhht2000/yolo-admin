@@ -48,7 +48,7 @@ const ProductOptionTable = (props) => {
                   <CIcon
                     icon={cilPencil}
                     className="me-2 icon-hover"
-                    style={{ height: '15px', width: '15px' }}
+                    style={{ height: '15px', width: '15px', color: 'green' }}
                     onClick={() => {
                       setVisibleUpdate(true)
                       setfakeOption(item)
@@ -61,7 +61,7 @@ const ProductOptionTable = (props) => {
                       setfakeOption(item)
                     }}
                     className="me-2 icon-hover"
-                    style={{ height: '15px', width: '15px' }}
+                    style={{ height: '15px', width: '15px', color: 'red' }}
                   />
                   <CIcon
                     icon={cilAperture}

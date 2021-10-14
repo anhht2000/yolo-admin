@@ -1,11 +1,7 @@
 import { Receipt } from './../models/receipt.entity';
 import { CommonConfig } from '.';
 import { User } from './../models/user.entity';
-<<<<<<< HEAD
 import { getConnection, getManager, getRepository, Like } from 'typeorm';
-=======
-import { getConnection, getManager, getRepository } from 'typeorm';
->>>>>>> develop
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
@@ -21,19 +17,16 @@ class UserController {
       const users = await getManager()
         .getRepository(User)
         .createQueryBuilder('user')
-        .loadRelationCountAndMap('user.receipts','user.receipts')
+        .loadRelationCountAndMap('user.receipts', 'user.receipts')
         .skip((_page - 1) * _limit)
         .take(_limit)
-        .where('user.username like :search', {search : `%${_search}%`})
-        .orWhere('user.phone like :search', {search : `%${_search}%`})
-        .getMany()
+        .where('user.username like :search', { search: `%${_search}%` })
+        .orWhere('user.phone like :search', { search: `%${_search}%` })
+        .getMany();
 
       const optionRepPage = await getManager()
         .getRepository(User)
-        .count( { where: [
-          { username: Like(`%${_search}%`) },
-          { phone: Like(`%${_search}%`) }
-        ]})
+        .count({ where: [{ username: Like(`%${_search}%`) }, { phone: Like(`%${_search}%`) }] });
 
       res.status(200).send({
         user: users,
@@ -41,8 +34,8 @@ class UserController {
           totalPage: Math.ceil(optionRepPage / _limit),
           perPage: _limit,
           currentPage: _page,
-        }
-      })
+        },
+      });
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -130,14 +123,12 @@ class UserController {
           message: 'Gửi mail thất bại',
         });
       }
-      let transporter = nodemailer.createTransport({
-        service: 'gmail',
+      var transporter = nodemailer.createTransport({
+        host: 'smtp.mailtrap.io',
+        port: 2525,
         auth: {
-          user: process.env.USER_GMAIL,
-          pass: process.env.PASS_GMAIL,
-        },
-        tls: {
-          rejectUnauthorized: false,
+          user: 'a404f3037d75a6',
+          pass: 'bcaa523b830b11',
         },
       });
       const token = await jwt.sign(
@@ -149,8 +140,9 @@ class UserController {
         },
         String(process.env.SCREET_KEY)
       );
+
       await transporter.sendMail({
-        from: `${process.env.USER_GMAIL}`,
+        from: `"Admin System 👻"${process.env.USER_GMAIL}`,
         to: `${username}`,
         subject: 'Confirm forget password ✔',
         text: `Click this link to change password: ${process.env.HOST}/change-pass/${token}`,
