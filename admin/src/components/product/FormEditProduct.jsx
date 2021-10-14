@@ -8,7 +8,7 @@ import {
   CRow,
   CSpinner,
 } from '@coreui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
@@ -16,10 +16,13 @@ import { getLoading } from 'src/redux/slice/productSlice'
 import { toast } from 'react-toastify'
 import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
+import { validateDe, validateName, validatePrice } from 'src/helper/CheckData'
 // import { fun } from 'src/data/FilterDataPage'
 
 export default function FormEditProduct({ initialValue }) {
   const [values, setValues] = useState({})
+  const [error, setError] = useState({})
+
   const [acceptFile, setAcceptFile] = useState([])
   const [deleteFile, setDeleteFile] = useState([])
   const history = useHistory()
@@ -164,25 +167,66 @@ export default function FormEditProduct({ initialValue }) {
   useEffect(() => {
     LoadOptions()
   }, [])
-
+  const handleRemoveErr = ({ target }) => {
+    const { name } = target
+    setError({
+      ...error,
+      [name]: '',
+    })
+  }
   const handleSubmit = async () => {
     try {
-      const formdata = new FormData()
-      acceptFile.forEach((item) => {
-        formdata.append('allImg', item)
-      })
-      formdata.append('name', values.name || '')
-      formdata.append('price', values.price || '')
-      formdata.append('description', values.description || '')
-      formdata.append('imageDelete', JSON.stringify(deleteFile))
-      formdata.append('option', JSON.stringify(variantSend))
-      await productApi.updateProduct(initialValue?.id, formdata)
-      toast.success('Sửa sản phẩm thành công')
-      history.push('/product')
+      const checkName = validateName(values?.name)
+      const checkDe = validateDe(values?.description)
+      const checkPrice = validatePrice(values.price)
+      console.log('check', { checkName, checkDe, checkPrice })
+
+      if (!checkName) {
+        setError((prev) => {
+          return { ...prev, name: 'Bạn phải nhập tên sản phẩm' }
+        })
+      }
+      if (!checkDe) {
+        setError((prev) => {
+          return { ...prev, description: 'Bạn phải nhập miêu tả sản phẩm' }
+        })
+      }
+      if (!checkPrice) {
+        setError((prev) => {
+          return { ...prev, price: 'Bạn phải nhập giá là kiểu số ' }
+        })
+      } else {
+        setError((prev) => {
+          if (Object.values(prev).every((e) => e === '')) {
+            const formdata = new FormData()
+            acceptFile.forEach((item) => {
+              formdata.append('allImg', item)
+            })
+            formdata.append('name', values.name || '')
+            formdata.append('price', values.price || '')
+            formdata.append('description', values.description || '')
+            formdata.append('imageDelete', JSON.stringify(deleteFile))
+            formdata.append('option', JSON.stringify(variantSend))
+            callApi(initialValue?.id, formdata)
+          }
+          return prev
+        })
+      }
     } catch (error) {
       toast.error('System Error')
     }
   }
+  const callApi = useCallback(async (id, formdata) => {
+    const data = await productApi.updateProduct(id, formdata)
+
+    if (data?.status === 200) {
+      toast.success('Sửa sản phẩm thành công')
+      history.push('/product')
+    } else {
+      toast.error('Sửa sản phẩm thất bại')
+    }
+  }, [])
+
   return (
     <CForm>
       <CRow className="mb-3">
@@ -195,9 +239,12 @@ export default function FormEditProduct({ initialValue }) {
             id="name"
             placeholder="Vui lòng nhập tên sản phẩm"
             name="name"
+            className={Boolean(error.name) ? 'input__err' : ''}
+            onMouseDown={handleRemoveErr}
             defaultValue={values?.name}
             onChange={(e) => handleChange(e)}
           />
+          <span className={'text__err'}>{error?.name}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">
@@ -209,10 +256,13 @@ export default function FormEditProduct({ initialValue }) {
             type="text"
             id="price"
             placeholder="Vui lòng nhập giá sản phẩm"
+            onMouseDown={handleRemoveErr}
+            className={Boolean(error.price) ? 'input__err' : ''}
             name="price"
             defaultValue={values?.price}
             onChange={(e) => handleChange(e)}
           />
+          <span className={'text__err'}>{error?.price}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">
@@ -226,9 +276,12 @@ export default function FormEditProduct({ initialValue }) {
             placeholder="Vui lòng nhập miêu tả sản phẩm"
             name="description"
             multiple
+            onMouseDown={handleRemoveErr}
+            className={Boolean(error.description) ? 'input__err' : ''}
             defaultValue={values?.description}
             onChange={(e) => handleChange(e)}
           />
+          <span className={'text__err'}>{error?.description}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">

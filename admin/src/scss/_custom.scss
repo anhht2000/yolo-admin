@@ -119,3 +119,10 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.input__err {
+  border: 2px solid #bf4a4a;
+}
+.text__err {
+  font-size: 0.9rem;
+  color: #bf4a4a;
+}
