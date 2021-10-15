@@ -126,3 +126,22 @@
   font-size: 0.9rem;
   color: #bf4a4a;
 }
+.logo-admin {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  & img {
+    height: 24px;
+    padding-bottom: 2px;
+  }
+
+  & strong {
+    font-size: 1.6rem;
+  }
+}
+.card {
+  .card-body {
+    overflow: auto;
+  }
+}
