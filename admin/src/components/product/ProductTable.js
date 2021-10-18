@@ -1,8 +1,9 @@
-import { cilDelete, cilPencil, cilPlus } from '@coreui/icons'
+import { cilDelete, cilPencil } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
   CButton,
   CCard,
+  CCardBody,
   CCardHeader,
   CContainer,
   CModal,
@@ -49,62 +50,64 @@ export default function ProductTable(props) {
   }
   return (
     <CCard>
-      <CCardHeader className="text-end">
-        <CButton color="primary" onClick={handleClickAdd}>
-          <CIcon icon={cilPlus} className="me-2" style={{ height: '15px', width: '15px' }} />
-          Thêm
-        </CButton>
-      </CCardHeader>
-
-      <CTable width="100%" color="light">
-        <CTableHead>
-          <CTableRow>
-            <CTableHeaderCell scope="col">#</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Ảnh</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Giá Tiền</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Ngày Tạo</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
-          </CTableRow>
-        </CTableHead>
-        <CTableBody>
-          {products &&
-            products.map((e, index) => {
-              return (
-                <CTableRow key={index}>
-                  <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                  <CTableDataCell>
-                    <img
-                      style={{ height: '80px', width: '100px', objectFit: 'cover' }}
-                      className="hei"
-                      src={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
-                      alt=""
-                    />
-                  </CTableDataCell>
-                  <CTableDataCell>{e.name}</CTableDataCell>
-                  <CTableDataCell className="row__table">{e.price}</CTableDataCell>
-                  <CTableDataCell>{formatDate(e?.createDate)}</CTableDataCell>
-                  <CTableDataCell>
-                    <CIcon
-                      icon={cilPencil}
-                      className="me-2 icon-hover"
-                      style={{ height: '15px', width: '15px', color: 'green' }}
-                      onClick={() => history.push('/product/' + e.id)}
-                    />
-                    <CIcon
-                      icon={cilDelete}
-                      onClick={() =>
-                        setVisible({ ...visible, status: true, name: e.name, id: e.id })
-                      }
-                      className="me-2 icon-hover"
-                      style={{ height: '15px', width: '15px', color: 'red' }}
-                    />
-                  </CTableDataCell>
-                </CTableRow>
-              )
-            })}
-        </CTableBody>
-      </CTable>
+      <CCardBody>
+        <CTable width="100%" color="light" hover>
+          <CTableHead>
+            <CTableRow>
+              <CTableHeaderCell scope="col">#</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Ảnh</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Tên</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Giá Tiền</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Ngày Tạo</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {products &&
+              products.map((e, index) => {
+                return (
+                  <CTableRow align="middle" key={index}>
+                    <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
+                    <CTableDataCell>
+                      <img
+                        style={{ height: '80px', width: '100px', objectFit: 'cover' }}
+                        className="hei"
+                        src={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
+                        alt=""
+                      />
+                    </CTableDataCell>
+                    <CTableDataCell>{e.name}</CTableDataCell>
+                    <CTableDataCell className="row__table">{e.price}</CTableDataCell>
+                    <CTableDataCell>{formatDate(e?.createDate)}</CTableDataCell>
+                    <CTableDataCell>
+                      <CIcon
+                        icon={cilPencil}
+                        className="me-2 icon-hover"
+                        style={{ height: '15px', width: '15px', color: 'green' }}
+                        onClick={() => history.push('/product/' + e.id)}
+                      />
+                      <CIcon
+                        icon={cilDelete}
+                        onClick={() =>
+                          setVisible({ ...visible, status: true, name: e.name, id: e.id })
+                        }
+                        className="me-2 icon-hover"
+                        style={{ height: '15px', width: '15px', color: 'red' }}
+                      />
+                    </CTableDataCell>
+                  </CTableRow>
+                )
+              })}
+          </CTableBody>
+        </CTable>
+      </CCardBody>
+      {/* <CCardHeader className="flex_option">
+              <Pagination
+                currentPage={options.page?.currentPage}
+                totalPage={options.page?.totalPage}
+                changeData={getOptionApi}
+              />
+            </CCardHeader> */}
       <Pagination />
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>
         <CModalHeader onDismiss={() => setVisible({ ...visible, status: false })}>
