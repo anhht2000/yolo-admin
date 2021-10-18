@@ -17,24 +17,23 @@ class ReceiptController {
       const { uId, page, limit } = req.query;
       const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
       const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
-      let data;
-      let _total;
+
+      let condition: any = {
+        skip: (_page - 1) * _limit,
+        take: _limit,
+        relations: ['receiptProducts', 'user', 'receiptProducts.receiptOptionProducts'],
+      };
+
       if (uId) {
-        data = await getManager().findAndCount(Receipt, {
-          skip: (_page - 1) * _limit,
-          take: _limit,
-          relations: ['receiptProducts', 'user', 'receiptProducts.receiptOptionProducts'],
-          where: { user: { id: uId } },
-        });
-        _total = Math.ceil(data[1] / _limit);
-      } else {
-        data = await getManager().findAndCount(Receipt, {
-          skip: (_page - 1) * _limit,
-          take: _limit,
-          relations: ['receiptProducts', 'user', 'receiptProducts.receiptOptionProducts'],
-        });
-        _total = Math.ceil(data[1] / _limit);
+        condition['where'] = {
+          user: {
+            id: uId,
+          },
+        };
       }
+
+      let data = await getManager().findAndCount(Receipt, condition);
+      let _total = Math.ceil(data[1] / _limit);
 
       res.status(200).json({
         success: true,
@@ -71,6 +70,7 @@ class ReceiptController {
         receipt.totalPrice = total;
         await getManager().save(receipt);
       }
+      const dataTemp = [];
 
       for (const data of request) {
         const receiptProduct = new ReceiptProduct();
@@ -92,7 +92,6 @@ class ReceiptController {
         }
         const optionsEntity = await getManager().find(Option, { where: { id: In(options) } });
         const variantEntity = await getManager().find(OptionValue, { where: { id: In(variants) } });
-        const dataTemp = [];
         for (const id in data.option) {
           for (const dt of data.option[id]) {
             dataTemp.push({
@@ -103,9 +102,8 @@ class ReceiptController {
             });
           }
         }
-
-        await getManager().save(ReceiptOptionProduct, dataTemp);
       }
+      await getManager().save(ReceiptOptionProduct, dataTemp);
 
       res.status(200).json({
         success: true,
