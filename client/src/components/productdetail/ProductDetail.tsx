@@ -1,8 +1,8 @@
-import React, { ChangeEvent } from "react";
-import { useLayoutEffect } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { FormatMoney } from "../../lib/FunctHelper";
+import React, { ChangeEvent } from 'react';
+import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { FormatMoney } from '../../lib/FunctHelper';
 
 interface IProductDetailProps {
   source: any;
@@ -12,8 +12,8 @@ interface IProductDetailProps {
 const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const { source, toggleOverLay } = props;
   //data for send
-  const [imgCore, setImgCore] = useState<string>("");
-  const [optionVal, setOptionVal] = useState<{[a: string]: string}>({});
+  const [imgCore, setImgCore] = useState<string>('');
+  const [optionVal, setOptionVal] = useState<{ [a: string]: string }>({});
   const [number, setNumber] = useState<number>(1);
 
   //static data
@@ -39,6 +39,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
     setNumber(number - 1);
   };
   const saveToLocal = () => {
+    localStorage.setItem('cartProduct', JSON.stringify(props.source));
     toggleActive();
   };
 
@@ -48,75 +49,67 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
 
   useEffect(() => {
     props.source.productImg && setImgCore(props.source.productImg[0].imgPath);
-    props.source.option && props.source.option.forEach((item: any)=>{
-      setOptionVal((pre) => {
-        return {...pre, [item.name]: item.OptionVal[0].name}
-      })
-    })
+    props.source.option &&
+      props.source.option.forEach((item: any) => {
+        setOptionVal((pre) => {
+          return { ...pre, [item.name]: item.OptionVal[0].name };
+        });
+      });
   }, [props.source]);
 
   return (
     <div className="product-detail">
       <div className="product-detail__list">
-        {source.productImg && source.productImg.map((item: any, index: number)=> (
-          <img
-            src={`${process.env.REACT_APP_API_URL}${item.imgPath}`}
-            alt={`img_${index}`}
-            onClick={()=>{setImgCore(item.imgPath)}}
-            key={index}
-          />
-        ))}
+        {source.productImg &&
+          source.productImg.map((item: any, index: number) => (
+            <img
+              src={`${process.env.REACT_APP_API_URL}${item.imgPath}`}
+              alt={`img_${index}`}
+              onClick={() => {
+                setImgCore(item.imgPath);
+              }}
+              key={index}
+            />
+          ))}
       </div>
       <div className="product-detail__core-img">
         <img src={`${process.env.REACT_APP_API_URL}${imgCore}`} alt="coreimg" />
       </div>
-      <div className={`product-detail__price-option ${seller ? "active" : ""}`}>
-        <i
-          className="bx bx-x product-detail__price-option--mb-icon"
-          onClick={toggleActive}
-        ></i>
-        <div className="product-detail__price-option--title">
-          {source.name}
-        </div>
-        <div className="product-detail__price-option--price">
-          {source.price && FormatMoney(source.price)}
-        </div>
-        {source.option?.map((item:any, index: string) => (
+      <div className={`product-detail__price-option ${seller ? 'active' : ''}`}>
+        <i className="bx bx-x product-detail__price-option--mb-icon" onClick={toggleActive}></i>
+        <div className="product-detail__price-option--title">{source.name}</div>
+        <div className="product-detail__price-option--price">{source.price && FormatMoney(source.price)}</div>
+        {source.option?.map((item: any, index: string) => (
           <div key={index}>
             <div className="price-option__title">{item.name}</div>
-            {
-              item.meta === 'text' && (
-                <div className="product-detail__price-option--circle">
-                  {item.OptionVal.map((temp: any, key: string)=> (
-                    <div
-                      className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
-                      onClick={()=> {setOptionVal({...optionVal, [item.name]: temp.name})}}
-                      key={key}
-                    >
+            {item.meta === 'text' && (
+              <div className="product-detail__price-option--circle">
+                {item.OptionVal.map((temp: any, key: string) => (
+                  <div
+                    className={`circle ${optionVal[`${item.name}`] === temp.name ? 'active' : ''}`}
+                    onClick={() => {
+                      setOptionVal({ ...optionVal, [item.name]: temp.name });
+                    }}
+                    key={key}>
                     <div className="circle-content">{temp.name}</div>
                   </div>
-                  ))}
-                </div>
-              )
-            }
-            {
-              item.meta === 'color' && (
-                <div className="product-detail__price-option--circle">
-                  {item.OptionVal.map((temp: any,key: string)=> (
-                    <div
-                    className={`circle ${optionVal[`${item.name}`] === temp.name ? "active" : ""}`}
-                    onClick={()=> {setOptionVal({...optionVal,[item.name]: temp.name})}}
-                    key={key}
-                  >
-                    <div
-                      className="circle-content"
-                      style={{ backgroundColor: temp.name }}
-                    ></div>
+                ))}
+              </div>
+            )}
+            {item.meta === 'color' && (
+              <div className="product-detail__price-option--circle">
+                {item.OptionVal.map((temp: any, key: string) => (
+                  <div
+                    className={`circle ${optionVal[`${item.name}`] === temp.name ? 'active' : ''}`}
+                    onClick={() => {
+                      setOptionVal({ ...optionVal, [item.name]: temp.name });
+                    }}
+                    key={key}>
+                    <div className="circle-content" style={{ backgroundColor: temp.name }}></div>
                   </div>
-                  ))}
-                </div>
-              )
-            }
+                ))}
+              </div>
+            )}
           </div>
         ))}
         <div className="price-option__title">Số Lượng</div>
@@ -138,14 +131,8 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         </div>
       </div>
       <div className="product-detail__description">
-        <div className="product-detail__description--header">
-          Chi tiết sản phẩm
-        </div>
-        <div
-          className={`product-detail__description--content ${
-            active ? "" : "active"
-          }`}
-        >
+        <div className="product-detail__description--header">Chi tiết sản phẩm</div>
+        <div className={`product-detail__description--content ${active ? '' : 'active'}`}>
           {source.description}
         </div>
         <div className="product-detail__btn-wapper">
@@ -153,9 +140,8 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
             className="product-detail--btn"
             onClick={() => {
               setActive(!active);
-            }}
-          >
-            {active ? "Thu gọn" : "Mở rộng"}
+            }}>
+            {active ? 'Thu gọn' : 'Mở rộng'}
           </div>
         </div>
       </div>

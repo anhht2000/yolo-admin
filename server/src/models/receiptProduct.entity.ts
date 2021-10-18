@@ -1,9 +1,9 @@
-import { ReceiptOptionProduct } from "./receiptOptionsProduct.entity";
-import { ManyToOne } from "typeorm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Receipt } from "./receipt.entity";
-import { OneToMany } from "typeorm";
-import { Common } from "./helper/common.helper";
+import { ReceiptOptionProduct } from './receiptOptionsProduct.entity';
+import { ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Receipt } from './receipt.entity';
+import { OneToMany } from 'typeorm';
+import { Common } from './helper/common.helper';
 
 @Entity()
 export class ReceiptProduct extends Common {
@@ -17,14 +17,11 @@ export class ReceiptProduct extends Common {
   quanlity: number;
 
   @Column()
-  unitPrice: string;
+  unitPrice: number;
 
   @ManyToOne(() => Receipt, (receipt: Receipt) => receipt.receiptProducts)
   receipt: Receipt;
 
-  @OneToMany(
-    () => ReceiptOptionProduct,
-    (receipt: any) => receipt.receiptProduct
-  )
+  @OneToMany(() => ReceiptOptionProduct, (receipt: any) => receipt.receiptProduct)
   receiptOptionProducts: ReceiptOptionProduct[];
 }

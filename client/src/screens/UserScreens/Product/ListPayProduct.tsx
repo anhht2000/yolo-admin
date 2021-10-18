@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import LayoutContainer from '../../../layout/HomeLayout/LayoutContainer';
 import InputInforUser from '../../../components/InputInforuser/InputInforUser';
 import ContentInput from '../../../components/InputInforuser/ContentInput';
+
 const ListPayProduct = () => {
   const data_list = JSON.parse(localStorage.getItem('cartProduct') as string) as {
     title: string;
