@@ -21,6 +21,7 @@ import {
 } from 'src/redux/slice/productSlice'
 import CIcon from '@coreui/icons-react'
 import { cilPlus } from '@coreui/icons'
+
 const Product = () => {
   const history = useHistory()
   const dispatch = useDispatch()

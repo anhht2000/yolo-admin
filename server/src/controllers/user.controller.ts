@@ -127,8 +127,8 @@ class UserController {
         host: 'smtp.mailtrap.io',
         port: 2525,
         auth: {
-          user: 'a404f3037d75a6',
-          pass: 'bcaa523b830b11',
+          user: process.env.USER_MAILTRAP,
+          pass: process.env.PASS_MAILTRAP,
         },
       });
       const token = await jwt.sign(

@@ -22,7 +22,6 @@ const _nav = [
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     badge: {
       color: 'info',
-      // text: 'NEW',
     },
   },
   {
@@ -53,6 +52,19 @@ const _nav = [
         component: CNavItem,
         name: 'Quản lý khách hàng',
         to: '/enduser',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Quản lý hóa đơn',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Danh sách đơn đặt hàng',
+        to: '/receipt',
       },
     ],
   },

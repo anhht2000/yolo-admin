@@ -3,10 +3,12 @@ import createSagaMiddleware from 'redux-saga'
 import rootSaga from './redux/saga/rootSaga'
 import appSlice from './redux/slice/index'
 import productReducer from './redux/slice/productSlice'
+import receiptReducer from './redux/slice/receiptSlice'
 
 const rootReducer = combineReducers({
   app: appSlice,
   product: productReducer,
+  receipt: receiptReducer,
 })
 
 const sagaMiddleware = createSagaMiddleware()

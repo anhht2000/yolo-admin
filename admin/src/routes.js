@@ -4,6 +4,7 @@ import AddFormProduct from './views/pages/product/AddFormProduct'
 import EditFormProduct from './views/pages/product/EditFormProduct'
 import Product from './views/pages/product/Product'
 import ProductOption from './views/pages/productOption/ProductOption'
+import Receipt from './views/pages/receipt/Receipt'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -109,6 +110,7 @@ const routes = [
   { path: '/product/add', name: 'Thêm sản phẩm', component: AddFormProduct, exact: true },
   { path: '/product/:slug', name: 'Sửa sản phẩm', component: EditFormProduct, exact: true },
   { path: '/enduser', name: 'Quản lý tài khoản người dùng', component: ManageUser, exact: true },
+  { path: '/receipt', name: 'Danh sách hóa đơn', component: Receipt, exact: true },
 ]
 
 export default routes
