@@ -4,11 +4,10 @@ import receiptApi from 'src/config/receiptApi'
 import { actionGeOneProductFail } from '../slice/productSlice'
 import { actionGetAllReceipt, actionGetAllReceiptSuccess } from '../slice/receiptSlice'
 
-function* handleGetAllReceipt() {
+function* handleGetAllReceipt({ payload }) {
   try {
-    const { data } = yield call(receiptApi.getReceipts)
-    console.log('data', data)
-    yield put(actionGetAllReceiptSuccess(data?.data))
+    const { data } = yield call(receiptApi.getReceipts, payload)
+    yield put(actionGetAllReceiptSuccess(data))
   } catch (error) {
     yield put(actionGeOneProductFail())
     toast.error('Lỗi hệ thống')

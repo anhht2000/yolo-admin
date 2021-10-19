@@ -19,17 +19,19 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { toast } from 'react-toastify'
 import productApi from 'src/config/productApi'
-import { actionGetAllProduct } from 'src/redux/slice/productSlice'
-import Pagination from './Pagination'
+import { actionGetAllProduct, getCurrentPage, getTotalPage } from 'src/redux/slice/productSlice'
+import Pagination from '../pagination/Pagination'
 
 export default function ProductTable(props) {
   const { products } = props
   const history = useHistory()
   const dispatch = useDispatch()
+  const totalPage = useSelector(getTotalPage)
+  const currentPage = useSelector(getCurrentPage)
 
   const [visible, setVisible] = useState({ status: false, id: '' })
   const handleDelete = async (id) => {
@@ -38,8 +40,8 @@ export default function ProductTable(props) {
     dispatch(actionGetAllProduct())
     setVisible({ ...visible, status: false })
   }
-  const handleClickAdd = () => {
-    history.push('/product/add')
+  const changePage = (value) => {
+    dispatch(actionGetAllProduct(value))
   }
   const formatDate = (time) => {
     const day = `0${new Date(time).getDate()}`.slice(0, 2)
@@ -108,7 +110,9 @@ export default function ProductTable(props) {
                 changeData={getOptionApi}
               />
             </CCardHeader> */}
-      <Pagination />
+      {products && (
+        <Pagination currentPage={currentPage} totalPage={totalPage} changeData={changePage} />
+      )}
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>
         <CModalHeader onDismiss={() => setVisible({ ...visible, status: false })}>
           <CModalTitle>Xác nhận</CModalTitle>

@@ -3,6 +3,8 @@ const { createSlice } = require('@reduxjs/toolkit')
 const initialState = {
   receipts: [],
   isLoading: false,
+  currentPage: 1,
+  totalPage: 3,
 }
 
 const receiptSlice = createSlice({
@@ -14,10 +16,15 @@ const receiptSlice = createSlice({
     },
     actionGetAllReceiptSuccess: (state, action) => {
       state.isLoading = false
-      state.receipts = action.payload
+      state.receipts = action.payload.data
+      state.totalPage = action.payload.page.totalPage
+      state.currentPage = action.payload.page.currentPage
     },
     actionGetAllReceiptFail: (state, action) => {
       state.isLoading = false
+      state.receipts = []
+      state.totalPage = 3
+      state.currentPage = 1
     },
   },
 })
@@ -25,6 +32,8 @@ const receiptSlice = createSlice({
 //selector
 export const getListReceipts = (state) => state.receipt.receipts
 export const getLoadingReceipts = (state) => state.receipt.isLoading
+export const getCurrentPageReceipts = (state) => state.receipt.currentPage
+export const getTotalPageReceipts = (state) => state.receipt.totalPage
 //action
 export const { actionGetAllReceipt, actionGetAllReceiptSuccess, actionGetAllReceiptFail } =
   receiptSlice.actions
