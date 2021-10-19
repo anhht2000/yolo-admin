@@ -15,6 +15,7 @@ import 'simplebar/dist/simplebar.min.css'
 // sidebar nav config
 import navigation from '../_nav'
 import { setSidebarUnfoldabel } from 'src/redux/slice'
+import { imgLogo } from 'src/assets'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -24,8 +25,12 @@ const AppSidebar = () => {
   return (
     <CSidebar position="fixed" unfoldable={unfoldable} visible={sidebarShow}>
       <CSidebarBrand className="d-none d-md-flex" to="/">
-        <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} />
-        <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
+        <div className="logo-admin">
+          <img src={imgLogo.logo_yolo}></img>
+          <strong>Admin</strong>
+        </div>
+        {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} />
+        <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>

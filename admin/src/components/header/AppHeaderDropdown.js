@@ -32,7 +32,7 @@ const AppHeaderDropdown = () => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
-        <CDropdownItem href="#">
+        {/* <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           Updates
           <CBadge color="info" className="ms-2">
@@ -60,12 +60,12 @@ const AppHeaderDropdown = () => {
             42
           </CBadge>
         </CDropdownItem>
-        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
+        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader> */}
         <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
-        <CDropdownItem href="#">
+        {/* <CDropdownItem href="#">
           <CIcon icon={cilSettings} className="me-2" />
           Settings
         </CDropdownItem>
@@ -83,7 +83,7 @@ const AppHeaderDropdown = () => {
             42
           </CBadge>
         </CDropdownItem>
-        <CDropdownDivider />
+        <CDropdownDivider /> */}
         <CDropdownItem href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
           Lock Account
