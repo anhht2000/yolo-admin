@@ -5,11 +5,17 @@
     border-radius: 50%;
   }
 }
+form {
+  font-size: 1.4rem;
+}
+.form-control-lg {
+  font-size: 1.75rem !important;
+}
 .app__container::-webkit-scrollbar {
   display: none;
 }
-#form3Example5 {
-  padding-right: 3rem;
+.form-control-lg {
+  padding: 1rem 2rem !important;
 }
 .pass__icon {
   position: absolute;
@@ -17,6 +23,7 @@
   right: 5%;
   transform: translateY(-50%);
   cursor: pointer;
+  font-size: 1.5rem;
 }
 
 .form__error {
@@ -25,6 +32,11 @@
 }
 .text__error {
   padding-left: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1.3rem;
   color: #b21b1b;
+  margin-top: 0.5rem;
+}
+.link-danger {
+  color: #dc3545 !important;
+  display: inline-block;
 }

@@ -1,7 +1,8 @@
-import ChangePass from '../screens/UserScreens/Auth/ChangePass';
 import ForgotPasswordEndUser from '../screens/UserScreens/Auth/ForgotPassword';
-import ResigterEndUser from '../screens/UserScreens/Auth/Resigter';
+import ChangePass from '../screens/UserScreens/Authen/ChangePass';
+import ForgetPassword from '../screens/UserScreens/Authen/ForgetPassword';
 import Login from '../screens/UserScreens/Authen/Login';
+import SignUp from '../screens/UserScreens/Authen/SignUp';
 import LandingPage from '../screens/UserScreens/Home/LandingPage';
 import ListPayProduct from '../screens/UserScreens/Product/ListPayProduct';
 import ListProdcutAddCart from '../screens/UserScreens/Product/ListProdcutAddCart';
@@ -64,16 +65,16 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     type: ETYPE.USER,
   },
   {
-    name: 'resigter',
-    path: '/resigter',
-    component: ResigterEndUser,
+    name: 'register',
+    path: '/register',
+    component: SignUp,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: 'forgotpass',
-    path: '/forgot-pass',
-    component: ForgotPasswordEndUser,
+    name: 'forgetpass',
+    path: '/forget-password',
+    component: ForgetPassword,
     exact: false,
     type: ETYPE.USER,
   },
