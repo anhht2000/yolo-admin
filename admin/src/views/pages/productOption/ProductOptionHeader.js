@@ -18,8 +18,12 @@ const ProductOptionHeader = (props) => {
             setVisibleAdd(true)
           }}
         >
-          <CIcon icon={cilPlus} className="me-2" style={{ height: '15px', width: '15px' }} />
-          Thêm
+          <CIcon
+            icon={cilPlus}
+            className="me-sm-2 me-0"
+            style={{ height: '15px', width: '15px' }}
+          />
+          <span className="d-sm-inline d-none">Thêm</span>
         </CButton>
       </div>
     </>

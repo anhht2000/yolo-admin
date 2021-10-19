@@ -26,18 +26,18 @@ const ProductOptionTable = (props) => {
     <CTable hover>
       <CTableHead>
         <CTableRow>
-          <CTableHeaderCell scope="col">STT</CTableHeaderCell>
-          <CTableHeaderCell scope="col">OptionName</CTableHeaderCell>
-          <CTableHeaderCell scope="col">Meta</CTableHeaderCell>
-          <CTableHeaderCell scope="col">DayCreate</CTableHeaderCell>
-          <CTableHeaderCell scope="col">DayUpdate</CTableHeaderCell>
-          <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+          <CTableHeaderCell scope="col">#</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Tên</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Loại</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Ngày tạo</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Ngày sửa</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
         </CTableRow>
       </CTableHead>
       <CTableBody>
         {options.data &&
           options.data.map((item, index) => (
-            <CTableRow key={index}>
+            <CTableRow align="middle" key={index}>
               <CTableHeaderCell scope="row">{(page - 1) * perPage + index + 1}</CTableHeaderCell>
               <CTableDataCell>{item.name}</CTableDataCell>
               <CTableDataCell>{item.meta}</CTableDataCell>
