@@ -1,4 +1,5 @@
 import React from 'react';
+import { imgBackground } from '../../assets';
 
 interface AuthLayoutProps {
   children: React.HTMLAttributes<any>;
@@ -9,11 +10,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <div className="container h-custom app__container">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-md-9 col-lg-6 col-xl-5">
-            <img
-              src={'https://mdbootstrap.com/img/Photos/new-templates/bootstrap-login-form/draw2.svg'}
-              className="img-fluid"
-              alt=""
-            />
+            <img src={imgBackground.background} className="img-fluid" alt="" />
           </div>
           <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">{children}</div>
         </div>
