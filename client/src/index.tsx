@@ -9,6 +9,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createTheme, CssBaseline } from '@material-ui/core';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const theme = createTheme({
   palette: {

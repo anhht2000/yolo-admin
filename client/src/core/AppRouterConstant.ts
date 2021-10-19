@@ -1,16 +1,13 @@
-import Dashboard from '../screens/AdminScreens/Dashboard';
-import ForgetPass from '../screens/AdminScreens/ForgetPass';
-import Login from '../screens/AdminScreens/Login';
-import SignUp from '../screens/AdminScreens/SignUp';
 import ForgotPasswordEndUser from '../screens/UserScreens/Auth/ForgotPassword';
+import ChangePass from '../screens/UserScreens/Authen/ChangePass';
+import ForgetPassword from '../screens/UserScreens/Authen/ForgetPassword';
+import Login from '../screens/UserScreens/Authen/Login';
+import SignUp from '../screens/UserScreens/Authen/SignUp';
 import LandingPage from '../screens/UserScreens/Home/LandingPage';
-import LoginEndUser from '../screens/UserScreens/Auth/Login';
+import ListPayProduct from '../screens/UserScreens/Product/ListPayProduct';
+import ListProdcutAddCart from '../screens/UserScreens/Product/ListProdcutAddCart';
 import ProductDetailsPage from '../screens/UserScreens/Product/ProductDetailsPage';
 import ProductPage from '../screens/UserScreens/Product/ProductPage';
-import ResigterEndUser from '../screens/UserScreens/Auth/Resigter';
-import ListProdcutAddCart from '../screens/UserScreens/Product/ListProdcutAddCart';
-import ListPayProduct from '../screens/UserScreens/Product/ListPayProduct';
-import ChangePass from '../screens/UserScreens/Auth/ChangePass';
 enum ETYPE {
   ADMIN = 'ADMIN',
   USER = 'USER',
@@ -63,21 +60,21 @@ export const AppRouterConfig: IAppRouterConfig[] = [
   {
     name: 'login',
     path: '/login',
-    component: LoginEndUser,
+    component: Login,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: 'resigter',
-    path: '/resigter',
-    component: ResigterEndUser,
+    name: 'register',
+    path: '/register',
+    component: SignUp,
     exact: false,
     type: ETYPE.USER,
   },
   {
-    name: 'forgotpass',
-    path: '/forgot-pass',
-    component: ForgotPasswordEndUser,
+    name: 'forgetpass',
+    path: '/forget-password',
+    component: ForgetPassword,
     exact: false,
     type: ETYPE.USER,
   },
@@ -87,36 +84,5 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     component: ChangePass,
     exact: false,
     type: ETYPE.USER,
-  },
-
-  // admin
-
-  {
-    name: 'Forget password',
-    path: '/admin/forget-password',
-    component: ForgetPass,
-    exact: true,
-    type: ETYPE.ADMIN,
-  },
-  {
-    name: 'login',
-    path: '/admin/login',
-    component: Login,
-    exact: true,
-    type: ETYPE.ADMIN,
-  },
-  {
-    name: 'Sign Up',
-    path: '/admin/sign-up',
-    component: SignUp,
-    exact: true,
-    type: ETYPE.ADMIN,
-  },
-  {
-    name: 'admin',
-    path: '/admin',
-    exact: true,
-    component: Dashboard,
-    type: ETYPE.ADMIN,
   },
 ];
