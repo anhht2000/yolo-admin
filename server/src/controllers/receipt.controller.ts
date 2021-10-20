@@ -2,7 +2,7 @@ import { ReceiptProduct } from './../models/receiptProduct.entity';
 import { data } from './../seed/seed';
 import { Option } from './../models/option.entity';
 import { User } from './../models/user.entity';
-import { Receipt } from './../models/receipt.entity';
+import { Receipt, statusReceipt } from './../models/receipt.entity';
 import { ProductOption } from './../models/productOption.entity';
 import { NextFunction, Request, Response } from 'express';
 import { getManager, getRepository, In } from 'typeorm';
@@ -113,6 +113,23 @@ class ReceiptController {
       res.status(500).json({
         success: false,
         message: 'Tạo hóa đơn thất bại',
+      });
+    }
+  }
+  public async changeStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { receiptId } = req.params;
+      const { status } = req.query;
+      await getManager().update(Receipt, receiptId, { status: status as statusReceipt });
+
+      res.status(200).json({
+        success: true,
+        message: 'Sửa trạng thái hóa đơn thành công',
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Sửa trạng thái hóa đơn thất bại',
       });
     }
   }
