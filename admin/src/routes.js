@@ -3,6 +3,7 @@ import ManageUser from './views/pages/pageManageUser/ManageUser'
 import AddFormProduct from './views/pages/product/AddFormProduct'
 import EditFormProduct from './views/pages/product/EditFormProduct'
 import Product from './views/pages/product/Product'
+import ProductForm from './views/pages/product/ProductForm'
 import ProductOption from './views/pages/productOption/ProductOption'
 import Receipt from './views/pages/receipt/Receipt'
 
@@ -108,6 +109,7 @@ const routes = [
   { path: '/product/option', name: 'Tùy chọn', component: ProductOption, exact: true },
   { path: '/product', name: 'Sản phẩm', component: Product, exact: true },
   { path: '/product/add', name: 'Thêm sản phẩm', component: AddFormProduct, exact: true },
+  { path: '/product/test', name: 'Tạo mới-sửa sản phẩm', component: ProductForm, exact: true },
   { path: '/product/:slug', name: 'Sửa sản phẩm', component: EditFormProduct, exact: true },
   { path: '/enduser', name: 'Quản lý tài khoản người dùng', component: ManageUser, exact: true },
   { path: '/receipt', name: 'Danh sách hóa đơn', component: Receipt, exact: true },
