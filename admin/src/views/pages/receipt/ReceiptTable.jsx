@@ -68,11 +68,12 @@ export default function ReceiptTable({ data }) {
                         size="sm"
                         defaultValue={e?.status}
                         name={e?.id}
+                        className="select__status"
                         onChange={handleChangeSelect}
                       >
-                        <option value="success">Success</option>
-                        <option value="processing">Processing</option>
-                        <option value="cancel">Cancel</option>
+                        <option value="success">Thành công</option>
+                        <option value="processing">Đang xử lý</option>
+                        <option value="cancel">Bị hủy</option>
                       </CFormSelect>
                     </CTableDataCell>
                   </CTableRow>
