@@ -1,13 +1,27 @@
 import { CCard, CCardBody, CCardFooter, CCardHeader } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
+import { toast } from 'react-toastify'
 import { imgLogo } from 'src/assets'
+import productApi from 'src/config/productApi'
 import { validateDe, validateName, validatePrice } from 'src/helper/CheckData'
+import { actionGetOption, getOption, getOptionValue } from 'src/redux/slice/productSlice'
 
 export default function ProductForm() {
+  const history = useHistory()
   const [values, setValues] = useState({})
   const [error, setError] = useState({})
+  const [numberAttri, setNumberAttri] = useState(0)
+  const [currentOption, setCurrentOption] = useState([])
+  const [variant, setVariant] = useState({})
+  const [label, setLabel] = useState([])
   const [acceptFile, setAcceptFile] = useState([])
+  const dispatch = useDispatch()
+  const option = useSelector(getOption)
+  const optionValue = useSelector(getOptionValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -19,7 +33,49 @@ export default function ProductForm() {
       setAcceptFile([...acceptFile, ...Accept])
     },
   })
+  const toCapitalize = useCallback(function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }, [])
 
+  const handleChangeLabel = ({ target }) => {
+    const { id } = target
+    let isCheck = label.includes(id)
+    if (isCheck) {
+      setLabel((prev) => prev.filter((e) => e !== id))
+    } else {
+      setLabel((prev) => [...prev, id])
+    }
+  }
+  const handleCheckbox = ({ target }) => {
+    const { name, value } = target
+
+    if (!variant.hasOwnProperty(`${name}`)) {
+      setVariant((prev) => {
+        return { ...prev, [name]: [] }
+      })
+      setVariant((prev) => {
+        return { ...prev, [name]: [...prev[name], value] }
+      })
+    } else {
+      setVariant((prev) => {
+        if (prev[name].includes(value)) {
+          return { ...prev, [name]: prev[name].filter((e) => e !== value) }
+        } else return { ...prev, [name]: [...prev[name], value] }
+      })
+    }
+  }
+  const handleClickAddAttribute = () => {
+    if (numberAttri + 1 <= option.length) {
+      setNumberAttri(numberAttri + 1)
+      setCurrentOption(option?.slice(0, numberAttri + 1))
+    }
+  }
+  const handleRemoveAttribute = (option) => {
+    if (numberAttri - 1 >= 0) {
+      setNumberAttri(numberAttri - 1)
+      setCurrentOption(currentOption.filter((item) => item.id !== option.id))
+    }
+  }
   const handleRemoveImage = (image) => {
     const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
     setAcceptFile(newArrImage)
@@ -57,11 +113,37 @@ export default function ProductForm() {
     }
     setError((prev) => {
       if (Object.values(prev).every((e) => e === '')) {
-        console.log('OK', values, acceptFile)
+        const formdata = new FormData()
+        acceptFile.forEach((item) => {
+          formdata.append('allImg', item)
+        })
+        formdata.append('name', values.name)
+        formdata.append('price', values.price)
+        formdata.append('description', values.description)
+        formdata.append('status', values.status)
+        formdata.append('label', label)
+        formdata.append('option', JSON.stringify(variant))
+        callApi(formdata)
       }
       return prev
     })
   }
+  const callApi = useCallback(
+    async (formdata) => {
+      const data = await productApi.createProduct(formdata)
+
+      if (data?.status === 200) {
+        toast.success('Thêm sản phẩm thành công')
+        history.push('/product')
+      } else {
+        toast.error('Thêm sản phẩm thất bại')
+      }
+    },
+    [history],
+  )
+  useEffect(() => {
+    dispatch(actionGetOption())
+  }, [dispatch])
   return (
     <div className="row">
       <div className="col-md-9">
@@ -72,15 +154,16 @@ export default function ProductForm() {
                 Tên sản phẩm
               </label>
               <input
-                className="form-control"
                 placeholder="Nhập tên sản phẩm"
                 name="name"
                 type="text"
+                value={values?.name}
+                className={Boolean(error.name) ? 'input__err form-control' : 'form-control'}
                 id="name"
                 onMouseDown={handleRemoveErr}
                 onChange={handleChange}
               />
-              <small className="charcounter">(120 character(s) remain)</small>
+              <span className={'text__err'}>{error?.name}</span>
             </div>
 
             <div className="form-group mb-3">
@@ -88,29 +171,33 @@ export default function ProductForm() {
                 Giá tiền
               </label>
               <input
-                className="form-control"
+                className={Boolean(error.price) ? 'input__err form-control' : 'form-control'}
                 placeholder="Giá tiền"
                 name="price"
                 type="text"
+                value={values?.price}
                 id="price"
                 onMouseDown={handleRemoveErr}
                 onChange={handleChange}
               />
+              <span className={'text__err'}>{error?.price}</span>
             </div>
 
             <div className="form-group mb-3">
-              <label htmlFor="description" className="control-label">
+              <label htmlFor="description" className="control-label required">
                 Miêu tả
               </label>
               <textarea
-                className="form-control"
+                className={Boolean(error.description) ? 'input__err form-control' : 'form-control'}
                 rows="4"
                 cols="50"
                 name="description"
                 id="description"
+                value={values?.description}
                 onMouseDown={handleRemoveErr}
                 onChange={handleChange}
               ></textarea>
+              <span className={'text__err'}>{error?.description}</span>
             </div>
           </div>
         </div>
@@ -118,10 +205,79 @@ export default function ProductForm() {
         <CCard>
           <CCardHeader className="d-flex justify-content-between align-items-center">
             <p>Thuộc tính</p>
-            <p id="add__attribute">Thêm thuộc tính</p>
           </CCardHeader>
           <CCardBody>
-            <p className="text-secondary">Ấn vào thêm thuộc tính để chọn thuộc tính cho sản phẩm</p>
+            {currentOption.length === 0 && (
+              <p className="text-secondary">
+                Ấn vào thêm thuộc tính để chọn thuộc tính cho sản phẩm
+              </p>
+            )}
+            <div className="list-product-attribute-wrap">
+              <div className="list-product-attribute-wrap-detail">
+                {currentOption.length > 0 &&
+                  currentOption.map((option) => {
+                    return (
+                      <div className="product-attribute-set-item" key={option.id}>
+                        <div className="row">
+                          <div className="col-md-4 col-sm-6">
+                            <div className="form-group mb-3">
+                              <label className="text-title-field">Attribute name</label>
+                              <select className="next-input product-select-attribute-item" disabled>
+                                <option value="">{toCapitalize(option?.name)}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-md-5 col-sm-6">
+                            <div className="form-group mb-3">
+                              <label className="text-title-field">Value</label>
+                              <div className="product-select-attribute-item-value-wrap">
+                                {optionValue[option.id].length > 0 &&
+                                  optionValue[option.id].map((optValue) => {
+                                    return (
+                                      <span key={optValue.id}>
+                                        <input
+                                          type="checkbox"
+                                          name={option.id}
+                                          value={optValue.id}
+                                          checked={variant[option.id]?.includes(
+                                            String(optValue.id),
+                                          )}
+                                          onChange={handleCheckbox}
+                                        />
+                                        {toCapitalize(optValue.name)}
+                                      </span>
+                                    )
+                                  })}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-3 col-sm-6 product-set-item-delete-action">
+                            <div className="form-group mb-3">
+                              <label className="text-title-field">&nbsp;</label>
+                              <div className="icon__container">
+                                <span
+                                  className="btn btn-danger "
+                                  onClick={() => {
+                                    handleRemoveAttribute(option)
+                                  }}
+                                >
+                                  <i className="bx bx-trash icon__delete-attribute"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+              <span
+                className="btn btn-light text-primary btn-trigger-add-attribute-item hidden"
+                onClick={handleClickAddAttribute}
+              >
+                Add more attribute
+              </span>
+            </div>
           </CCardBody>
         </CCard>
 
@@ -197,7 +353,13 @@ export default function ProductForm() {
                 <i className="bx bx-save"></i> Lưu
               </button>
               &nbsp;
-              <button name="submit" value="apply" className="btn btn-secondary text-light">
+              <button
+                name="submit"
+                className="btn btn-secondary text-light"
+                onClick={() => {
+                  history.push('/product')
+                }}
+              >
                 <i className="bx bxs-x-circle"></i> Hủy bỏ
               </button>
             </div>
@@ -207,7 +369,7 @@ export default function ProductForm() {
         <div className="widget meta-boxes">
           <div className="widget-title">
             <h5>
-              <label htmlFor="status" className="control-label required" aria-required="true">
+              <label htmlFor="status" className="control-label " aria-required="true">
                 Trạng thái
               </label>
             </h5>
@@ -219,10 +381,11 @@ export default function ProductForm() {
                 id="status"
                 name="status"
                 aria-invalid="false"
+                onChange={handleChange}
               >
                 <option value="published">Công khai</option>
                 <option value="draft">Bản thảo</option>
-                <option value="pending">Ẩn</option>
+                <option value="pending">Riêng tư</option>
               </select>
               <span className="svg-next-icon svg-next-icon-size-16">
                 <i className="bx bx-chevron-down"></i>
@@ -257,15 +420,15 @@ export default function ProductForm() {
           <div className="widget-body">
             <ul>
               <li>
-                <input type="checkbox" id="bestsell" />
+                <input type="checkbox" id="bestsell" onChange={handleChangeLabel} />
                 <label htmlFor="bestsell">Bán chạy</label>
               </li>
               <li>
-                <input type="checkbox" id="popular" />
+                <input type="checkbox" id="popular" onChange={handleChangeLabel} />
                 <label htmlFor="popular">Phổ biến</label>
               </li>
               <li>
-                <input type="checkbox" id="new" />
+                <input type="checkbox" id="new" onChange={handleChangeLabel} />
                 <label htmlFor="new">Mới nhất</label>
               </li>
             </ul>

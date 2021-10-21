@@ -104,12 +104,14 @@ class ProductController {
     const processManager = await getConnection().createQueryRunner();
     processManager.startTransaction();
     try {
-      const { name, description, price, option } = request.body;
+      const { name, description, price, option, status, label } = request.body;
 
       const product = new Product();
       product.name = name;
       product.price = price;
       product.description = description;
+      product.status = status;
+      product.label = label;
       await processManager.manager.save(product);
 
       const optionVariant = JSON.parse(option);

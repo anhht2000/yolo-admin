@@ -6,6 +6,8 @@ const initialState = {
   currentPage: 1,
   totalPage: 3,
   currentProduct: {},
+  option: [],
+  optionValue: {},
 }
 
 const productSlice = createSlice({
@@ -68,6 +70,17 @@ const productSlice = createSlice({
       state.totalPage = 3
       state.currentPage = 1
     },
+    actionGetOption: (state, action) => {
+      state.loading = false
+    },
+    actionGetOptionSuccess: (state, action) => {
+      state.loading = false
+      state.optionValue = Object.assign({}, action.payload.filter)
+      state.option = action.payload.helper
+    },
+    actionGetOptionFail: (state, action) => {
+      state.loading = false
+    },
   },
 })
 
@@ -84,6 +97,9 @@ export const {
   actionSortProduct,
   actionSortProductSuccess,
   actionSortProductFail,
+  actionGetOption,
+  actionGetOptionSuccess,
+  actionGetOptionFail,
 } = productSlice.actions
 
 //selector
@@ -92,6 +108,8 @@ export const getProduct = (state) => state.product.data
 export const getCurrentPage = (state) => state.product.currentPage
 export const getTotalPage = (state) => state.product.totalPage
 export const getCurrentProduct = (state) => state.product.currentProduct
+export const getOption = (state) => state.product.option
+export const getOptionValue = (state) => state.product.optionValue
 
 //reducer
 const productReducer = productSlice.reducer

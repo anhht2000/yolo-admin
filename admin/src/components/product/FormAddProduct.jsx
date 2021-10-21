@@ -135,7 +135,8 @@ export default function FormAddProduct({ type, initialValue }) {
             formdata.append('price', values.price || '')
             formdata.append('description', values.description || '')
             formdata.append('option', JSON.stringify(variantSend))
-            callApi(formdata)
+            console.log('variant', variantSend)
+            // callApi(formdata)
           }
           return prev
         })
