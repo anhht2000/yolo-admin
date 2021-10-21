@@ -234,7 +234,7 @@ export default function ProductForm() {
                                 {optionValue[option.id].length > 0 &&
                                   optionValue[option.id].map((optValue) => {
                                     return (
-                                      <span key={optValue.id}>
+                                      <span key={optValue.id} className="me-4">
                                         <input
                                           type="checkbox"
                                           name={option.id}
@@ -275,7 +275,7 @@ export default function ProductForm() {
                 className="btn btn-light text-primary btn-trigger-add-attribute-item hidden"
                 onClick={handleClickAddAttribute}
               >
-                Add more attribute
+                Thêm thuộc tính
               </span>
             </div>
           </CCardBody>
