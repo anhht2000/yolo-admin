@@ -151,13 +151,14 @@ input[type='checkbox'] {
   position: relative;
 }
 .list-images.gallery-images-wrapper ul.list-gallery-media-images > li {
+  margin-right: 0.5rem;
   cursor: pointer;
   display: inline-block;
   float: none;
   height: 150px;
   position: relative;
   vertical-align: middle;
-  width: 145px;
+  width: 138px;
 }
 .list-photo-hover-overlay {
   background: rgba(49, 55, 61, 0.75);

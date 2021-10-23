@@ -9,13 +9,17 @@ import { imgLogo } from 'src/assets'
 import productApi from 'src/config/productApi'
 import { validateDe, validateName, validatePrice } from 'src/helper/CheckData'
 import { actionGetOption, getOption, getOptionValue } from 'src/redux/slice/productSlice'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
-export default function ProductForm() {
+export default function ProductForm({ initialValue }) {
   const history = useHistory()
   const [values, setValues] = useState({})
   const [error, setError] = useState({})
+  const [description, setDescription] = useState('')
   const [numberAttri, setNumberAttri] = useState(0)
   const [currentOption, setCurrentOption] = useState([])
+  const [deleteFile, setDeleteFile] = useState([])
   const [variant, setVariant] = useState({})
   const [label, setLabel] = useState([])
   const [acceptFile, setAcceptFile] = useState([])
@@ -78,11 +82,14 @@ export default function ProductForm() {
   }
   const handleRemoveImage = (image) => {
     const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
+    if (image.id)
+      setDeleteFile([...deleteFile, { id: image.id.toString(), filePath: image.filePath }])
     setAcceptFile(newArrImage)
   }
   const handleChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
+    console.log('zo day')
   }
   const handleRemoveErr = ({ target }) => {
     const { name } = target
@@ -93,7 +100,7 @@ export default function ProductForm() {
   }
   const handleSubmit = async () => {
     const checkName = validateName(values?.name)
-    const checkDe = validateDe(values?.description)
+    const checkDe = validateDe(description)
     const checkPrice = validatePrice(values.price)
 
     if (!checkName) {
@@ -122,30 +129,75 @@ export default function ProductForm() {
         formdata.append('description', values.description)
         formdata.append('status', values.status)
         formdata.append('label', label)
+        formdata.append('imageDelete', JSON.stringify(deleteFile))
         formdata.append('option', JSON.stringify(variant))
-        callApi(formdata)
+
+        if (initialValue) {
+          callApi(formdata, initialValue?.id)
+        } else {
+          callApi(formdata)
+        }
       }
       return prev
     })
   }
-  const callApi = useCallback(
-    async (formdata) => {
-      const data = await productApi.createProduct(formdata)
+  const callApi = useCallback(async (formdata, id) => {
+    let data = {}
+    if (initialValue) {
+      data = await productApi.updateProduct(id, formdata)
+    } else {
+      data = await productApi.createProduct(formdata)
+    }
 
-      if (data?.status === 200) {
-        toast.success('Thêm sản phẩm thành công')
-        history.push('/product')
-      } else {
-        toast.error('Thêm sản phẩm thất bại')
-      }
-    },
-    [history],
-  )
+    if (data?.status === 200) {
+      toast.success('Thao tác sản phẩm thành công')
+      history.push('/product')
+    } else {
+      toast.error('Thao tác sản phẩm thất bại')
+    }
+  }, [])
   useEffect(() => {
     dispatch(actionGetOption())
   }, [dispatch])
+  useEffect(() => {
+    if (initialValue && Object.keys(initialValue).length > 0) {
+      const { name, price, description, status, productImg, label, productOption } = initialValue
+      setValues({ name, price, description, status })
+      if (productImg) {
+        const dtTest = productImg.map((e) => ({
+          id: e.id,
+          preview: process.env.REACT_APP_API_URL + e?.imgPath,
+          name: e?.name,
+          filePath: e?.imgPath,
+        }))
+        setAcceptFile(dtTest)
+      }
+      if (label) {
+        const _label = label.split(',')
+        setLabel(_label)
+      }
+      if (productOption) {
+        let iniVariant = {}
+        productOption.forEach((e) => {
+          if (!iniVariant.hasOwnProperty(e.option.id)) {
+            iniVariant = { ...iniVariant, [e.option.id]: [] }
+            iniVariant[e.option.id].push(String(e.optionValue.id))
+          } else {
+            iniVariant = {
+              ...iniVariant,
+              [e.option.id]: [...iniVariant[e.option.id], String(e.optionValue.id)],
+            }
+          }
+        })
+        setVariant(iniVariant)
+        setNumberAttri(Object.keys(iniVariant).length)
+        setCurrentOption(option?.slice(0, Object.keys(iniVariant).length))
+      }
+    }
+  }, [initialValue])
   return (
     <div className="row">
+      {console.log('init', numberAttri)}
       <div className="col-md-9">
         <div className="main-form">
           <div className="form-body">
@@ -187,7 +239,29 @@ export default function ProductForm() {
               <label htmlFor="description" className="control-label required">
                 Miêu tả
               </label>
-              <textarea
+              {console.log('data', values)}
+              <CKEditor
+                editor={ClassicEditor}
+                data={values?.description}
+                onReady={(editor) => {
+                  const data = editor.getData()
+                  console.log(values)
+
+                  setValues({ ...values, description: data })
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData()
+                  console.log(values)
+                  setValues({ ...values, description: data })
+                }}
+                // onBlur={(event, editor) => {
+                //   console.log('Blur.', editor)
+                // }}
+                // onFocus={(event, editor) => {
+                //   console.log('Focus.', editor)
+                // }}
+              />
+              {/* <textarea
                 className={Boolean(error.description) ? 'input__err form-control' : 'form-control'}
                 rows="4"
                 cols="50"
@@ -196,7 +270,7 @@ export default function ProductForm() {
                 value={values?.description}
                 onMouseDown={handleRemoveErr}
                 onChange={handleChange}
-              ></textarea>
+              ></textarea> */}
               <span className={'text__err'}>{error?.description}</span>
             </div>
           </div>
@@ -381,6 +455,7 @@ export default function ProductForm() {
                 id="status"
                 name="status"
                 aria-invalid="false"
+                value={values?.status}
                 onChange={handleChange}
               >
                 <option value="published">Công khai</option>
@@ -420,15 +495,30 @@ export default function ProductForm() {
           <div className="widget-body">
             <ul>
               <li>
-                <input type="checkbox" id="bestsell" onChange={handleChangeLabel} />
+                <input
+                  type="checkbox"
+                  id="bestsell"
+                  checked={label.includes('bestsell')}
+                  onChange={handleChangeLabel}
+                />
                 <label htmlFor="bestsell">Bán chạy</label>
               </li>
               <li>
-                <input type="checkbox" id="popular" onChange={handleChangeLabel} />
+                <input
+                  type="checkbox"
+                  id="popular"
+                  checked={label.includes('popular')}
+                  onChange={handleChangeLabel}
+                />
                 <label htmlFor="popular">Phổ biến</label>
               </li>
               <li>
-                <input type="checkbox" id="new" onChange={handleChangeLabel} />
+                <input
+                  type="checkbox"
+                  id="new"
+                  checked={label.includes('new')}
+                  onChange={handleChangeLabel}
+                />
                 <label htmlFor="new">Mới nhất</label>
               </li>
             </ul>
