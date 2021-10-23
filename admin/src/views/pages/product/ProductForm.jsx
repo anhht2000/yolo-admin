@@ -100,17 +100,11 @@ export default function ProductForm({ initialValue }) {
   }
   const handleSubmit = async () => {
     const checkName = validateName(values?.name)
-    const checkDe = validateDe(description)
     const checkPrice = validatePrice(values.price)
 
     if (!checkName) {
       setError((prev) => {
         return { ...prev, name: 'Bạn phải nhập tên sản phẩm' }
-      })
-    }
-    if (!checkDe) {
-      setError((prev) => {
-        return { ...prev, description: 'Bạn phải nhập miêu tả sản phẩm' }
       })
     }
     if (!checkPrice) {
@@ -126,7 +120,7 @@ export default function ProductForm({ initialValue }) {
         })
         formdata.append('name', values.name)
         formdata.append('price', values.price)
-        formdata.append('description', values.description)
+        formdata.append('description', description)
         formdata.append('status', values.status)
         formdata.append('label', label)
         formdata.append('imageDelete', JSON.stringify(deleteFile))
@@ -236,42 +230,23 @@ export default function ProductForm({ initialValue }) {
             </div>
 
             <div className="form-group mb-3">
-              <label htmlFor="description" className="control-label required">
+              <label htmlFor="description" className="control-label ">
                 Miêu tả
               </label>
-              {console.log('data', values)}
+              {console.log('data', values, description)}
               <CKEditor
+                className="test"
                 editor={ClassicEditor}
                 data={values?.description}
                 onReady={(editor) => {
                   const data = editor.getData()
-                  console.log(values)
-
-                  setValues({ ...values, description: data })
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData()
                   console.log(values)
-                  setValues({ ...values, description: data })
+                  setDescription(data)
                 }}
-                // onBlur={(event, editor) => {
-                //   console.log('Blur.', editor)
-                // }}
-                // onFocus={(event, editor) => {
-                //   console.log('Focus.', editor)
-                // }}
               />
-              {/* <textarea
-                className={Boolean(error.description) ? 'input__err form-control' : 'form-control'}
-                rows="4"
-                cols="50"
-                name="description"
-                id="description"
-                value={values?.description}
-                onMouseDown={handleRemoveErr}
-                onChange={handleChange}
-              ></textarea> */}
-              <span className={'text__err'}>{error?.description}</span>
             </div>
           </div>
         </div>
