@@ -12,10 +12,5 @@ export const createUpdateRuleProduct = [
     .withMessage('Giá phải là kí tự vd: 123456...')
     .notEmpty()
     .withMessage('Bạn phải nhập giá sản phẩm'),
-  body('description')
-    .isString()
-    .withMessage('Miêu tả phải là kí tự ')
-    .notEmpty()
-    .withMessage('Bạn phải nhập miêu tả'),
   ValidateData,
 ];

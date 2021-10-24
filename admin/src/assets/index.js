@@ -8,6 +8,7 @@ import * as logo from './png/logo/Logo.png'
 import * as logo_2 from './png/logo/Logo-2.png'
 import * as favicon from './png/logo/favicon.png'
 import * as logo_yolo from './png/logo/Logo-yolo.png'
+import * as placeholder from './png/logo/placeholder.png'
 
 // ProductImport
 import * as product_01_image_01 from './png/products/product-01 (1).jpg'
@@ -48,6 +49,7 @@ export const imgLogo = {
   logo_2: logo_2.default,
   favicon: favicon.default,
   logo_yolo: logo_yolo.default,
+  placeholder: placeholder.default,
 }
 
 export const imgProduct = {

@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import LayoutContainer from '../../../layout/HomeLayout/LayoutContainer';
 import {
   actionLoadTop,
+  getLoading,
   getTopNewProduct,
   getTopPopularProduct,
   getTopSellProduct,
