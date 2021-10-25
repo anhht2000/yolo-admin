@@ -102,16 +102,21 @@ class AdminController {
       console.log('tét', typeof token, token);
 
       if (!token) {
-        res.status(500).send({
+        return res.status(500).send({
           success: false,
           message: 'Đổi mật khẩu thất bại',
         });
       }
-
-      await jwt.verify(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUdWFuIEFuaCIsInN1YiI6InR1YW5hbmhjeDIwMDBAZ21haWwuY29tIiwiaWF0IjoxNjM1MTQ1NzYzNDExLCJleHAiOjE2MzQ0NTQ1NjM0MTF9.7wbCZynfoN2TxSuuzzzpJTExOoItAlUNtRHtnmw6TaM',
-        String(process.env.SCREET_KEY)
+      console.log(
+        'check',
+        token ===
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUdWFuIEFuaCIsInN1YiI6InR1YW5hbmhjeDIwMDBAZ21haWwuY29tIiwiaWF0IjoxNjM1MTQ1NzYzNDExLCJleHAiOjE2MzQ0NTQ1NjM0MTF9.7wbCZynfoN2TxSuuzzzpJTExOoItAlUNtRHtnmw6TaM'
       );
+
+      // await jwt.verify(
+      //   ,
+      //   String(process.env.SCREET_KEY)
+      // );
       // const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
       // let hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
       // const user = await getRepository(Admin)
@@ -121,14 +126,14 @@ class AdminController {
       //   .where('user.username = :uSSname', { uSSname: `${String(sub)}` })
       //   .execute();
 
-      res.status(200).send({
+      return res.status(200).send({
         success: true,
         message: 'Đổi mật khẩu thành công',
       });
     } catch (error) {
       console.log('e', error);
 
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Đổi mật khẩu thất bại',
       });
