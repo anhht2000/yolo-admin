@@ -15,14 +15,25 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { useHistory } from 'react-router'
-import { validateEmail, validateName, validatePass } from '../../../helper/CheckData'
+import { useHistory, useParams } from 'react-router'
+import {
+  validateConfirm,
+  validateEmail,
+  validateName,
+  validatePass,
+} from '../../../helper/CheckData'
 import adminApi from 'src/config/adminApi'
 import { toast } from 'react-toastify'
 
-const Login = () => {
+const ChangePass = () => {
   const history = useHistory()
+  const { token } = useParams()
   const [isShowPass, setIsShowPass] = useState(false)
+  const [isShowConfirm, setIsShowConfirm] = useState(false)
+  const tokenStore = localStorage.getItem('token_forget')
+  if (!token || token !== tokenStore) {
+    history.push('/login')
+  }
   const [values, setValues] = useState({})
   const [errors, setErrors] = useState({})
   const handleChange = ({ target }) => {
@@ -41,41 +52,40 @@ const Login = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    const checkEmail = validateEmail(values?.username)
     const checkPass = validatePass(values?.password)
+    const checConfirm = validateConfirm(values?.confirm, values?.password)
+    console.log('chec', checkPass, checConfirm)
 
-    if (!checkEmail) {
-      setErrors((prev) => {
-        return { ...prev, username: 'Email không được để trống hoặc sai dữ liệu' }
-      })
-    }
     if (!checkPass) {
       setErrors((prev) => {
         return { ...prev, password: 'Mật khẩu không được để trống' }
       })
     }
+    if (!checConfirm) {
+      setErrors((prev) => {
+        return { ...prev, confirm: 'Xác nhận mật khẩu không chính xác' }
+      })
+    }
     setErrors((prev) => {
       if (Object.values(prev).every((e) => e === '')) {
-        callApi(values)
+        callApi(values, token)
       }
       return prev
     })
   }
   const callApi = useCallback(
-    async (value) => {
+    async (value, token) => {
       try {
-        const data = await adminApi.login(value)
+        const data = await adminApi.changePass(value, token)
 
         if (data?.status === 200) {
-          localStorage.setItem('token', data?.data?.data)
-          toast.success('Đăng nhập thành công')
-          history.push('/')
+          history.push('/login')
+          toast.success('Đổi mật khẩu thành công')
         } else {
-          toast.error('Đăng nhập thất bại')
+          toast.error('Đổi mật khẩu thất bại')
         }
       } catch (error) {
-        toast.error('Đăng nhập thất bại')
+        toast.error('Đổi mật khẩu thất bại')
       }
     },
     [history],
@@ -89,26 +99,9 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={handleSubmit}>
-                    <h1>Đăng nhập</h1>
-                    <p className="text-medium-emphasis">Đăng nhập vào tài khoản của bạn</p>
+                    <h3>Thay đổi mật khẩu</h3>
+                    <p className="text-medium-emphasis">Nhập mật khẩu mới của bạn</p>
                     <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
-                      </CInputGroupText>
-                      <CFormInput
-                        name="username"
-                        placeholder="Nhập tên người dùng"
-                        autoComplete="username"
-                        value={values.username}
-                        onChange={handleChange}
-                        onMouseDown={handleRemoveErr}
-                        className={errors.username ? 'is-invalid' : ''}
-                      />
-                      {errors?.username && (
-                        <p className="text-danger error__text">{errors.username}</p>
-                      )}
-                    </CInputGroup>
-                    <CInputGroup className="mb-4">
                       <CInputGroupText
                         onClick={() => setIsShowPass(!isShowPass)}
                         className="cursor-pointer"
@@ -119,7 +112,7 @@ const Login = () => {
                         name="password"
                         type={isShowPass ? 'password' : 'text'}
                         placeholder="Nhập mật khẩu"
-                        value={values.password}
+                        value={values?.password}
                         onMouseDown={handleRemoveErr}
                         className={errors.password ? 'is-invalid' : ''}
                         autoComplete="current-password"
@@ -129,19 +122,40 @@ const Login = () => {
                         <p className="text-danger error__text">{errors.password}</p>
                       )}
                     </CInputGroup>
+                    <CInputGroup className="mb-4">
+                      <CInputGroupText
+                        onClick={() => setIsShowConfirm(!isShowConfirm)}
+                        className="cursor-pointer"
+                      >
+                        <CIcon icon={cilLockLocked} />
+                      </CInputGroupText>
+                      <CFormInput
+                        name="confirm"
+                        type={isShowConfirm ? 'password' : 'text'}
+                        placeholder="Nhập lại mật khẩu"
+                        value={values?.confirm}
+                        onMouseDown={handleRemoveErr}
+                        className={errors.confirm ? 'is-invalid' : ''}
+                        autoComplete="current-confirm"
+                        onChange={handleChange}
+                      />
+                      {errors?.confirm && (
+                        <p className="text-danger error__text">{errors.confirm}</p>
+                      )}
+                    </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
                         <CButton color="primary" className="px-4" type="submit">
-                          Đăng nhập
+                          Xác nhận
                         </CButton>
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton
-                          color="link"
-                          className="px-0"
-                          onClick={() => history.push('/forget-password')}
+                          color="secondary text-light"
+                          className="px-4"
+                          onClick={() => history.push('/login')}
                         >
-                          Quên mật khẩu?
+                          Hủy bỏ
                         </CButton>
                       </CCol>
                     </CRow>
@@ -164,4 +178,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ChangePass

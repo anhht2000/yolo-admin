@@ -20,6 +20,7 @@ export default function ChangePass() {
     history.push('/login');
   }
   const [isShowPass, setIsShowPass] = useState(false);
+  const [isShowConfirm, setIsShowConfirm] = useState(false);
   const {
     register,
     handleSubmit,
@@ -93,7 +94,7 @@ export default function ChangePass() {
         <div className="form-outline mb-3 ">
           <div className={'position-relative'}>
             <input
-              type={isShowPass ? 'text' : 'password'}
+              type={isShowConfirm ? 'text' : 'password'}
               id="form3Example5"
               {...register('confirm')}
               defaultValue={getValues('confirm')}
@@ -103,18 +104,18 @@ export default function ChangePass() {
               }
               placeholder="Xác nhận mật khẩu"
             />
-            {isShowPass ? (
+            {isShowConfirm ? (
               <i
                 className="fa fa-eye-slash pass__icon"
                 onClick={() => {
-                  setIsShowPass(false);
+                  setIsShowConfirm(false);
                 }}
               />
             ) : (
               <i
                 className="fa fa-eye pass__icon"
                 onClick={() => {
-                  setIsShowPass(true);
+                  setIsShowConfirm(true);
                 }}
               />
             )}

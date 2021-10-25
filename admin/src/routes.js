@@ -1,4 +1,7 @@
 import React from 'react'
+import ForgetPassword from './views/pages/forgetPass/ForgetPassword'
+import ChangePass from './views/pages/login/ChangePasss'
+import Login from './views/pages/login/Login'
 import ManageUser from './views/pages/pageManageUser/ManageUser'
 import AddFormProduct from './views/pages/product/AddFormProduct'
 import EditFormProduct from './views/pages/product/EditFormProduct'

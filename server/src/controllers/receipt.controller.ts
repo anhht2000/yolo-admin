@@ -10,6 +10,7 @@ import { Product } from '../models/product.entity';
 import { CommonConfig } from '.';
 import { OptionValue } from '../models/optionValue.entity';
 import { ReceiptOptionProduct } from '../models/receiptOptionsProduct.entity';
+import * as jwt from 'jsonwebtoken';
 
 class ReceiptController {
   public async getAllReceipt(req: Request, res: Response, next: NextFunction) {
@@ -56,10 +57,14 @@ class ReceiptController {
     try {
       const { uId } = req.query;
       const request = JSON.parse(req.body.data);
+      const authHeader: string = req.headers['authorization'] as string;
+      const token = authHeader?.split(' ')[1] as string;
+      const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+
       let total = 0;
       let receipt;
 
-      const user = await getManager().findOne(User, { where: { id: uId } });
+      const user = await getManager().findOne(User, { where: { username: sub } });
       request.forEach((item: any) => {
         total += item?.quanlity * item?.unitPrice;
       });
