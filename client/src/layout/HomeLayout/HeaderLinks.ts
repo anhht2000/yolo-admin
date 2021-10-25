@@ -13,10 +13,11 @@ export const HeaderLinks: IHeaderLink[] = [
 interface IHeaderIcons {
   path: string,
   className: string,
+  isCheck?: boolean
 }
 
 export const HeaderIcons: IHeaderIcons[] = [
   { path:'/',className:'bx bx-search' },
-  { path:'/list_product_add',className:'bx bx-shopping-bag' },
+  { path:'/list_product_add',className:'bx bx-shopping-bag', isCheck: true },
   { path:'/',className:'bx bx-user' }
 ];

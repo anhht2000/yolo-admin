@@ -3,7 +3,8 @@ import { useLayoutEffect } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { FormatMoney } from '../../lib/FunctHelper';
-
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { actionPlusTotalProducts } from '../../redux/reducers/productDetail.reducer';
 interface IProductDetailProps {
   source: any;
   toggleOverLay: () => void;
@@ -19,6 +20,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   //static data
   const [active, setActive] = useState(false);
   const [seller, setSeller] = useState(false);
+  const dispatch = useAppDispatch();
   const toggleActive = () => {
     setSeller(!seller);
     toggleOverLay();
@@ -39,7 +41,61 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
     setNumber(number - 1);
   };
   const saveToLocal = () => {
-    localStorage.setItem('cartProduct', JSON.stringify(props.source));
+    dispatch(actionPlusTotalProducts(number));
+    const product = props.source
+    let optionSize
+    let optionColor
+    let size: any, color: any
+    product.option.forEach((op:any) => {
+      if(op.name === "Size") {
+        size = op.OptionVal.find((e:any) => e.name === optionVal['Size'])
+        optionSize = {
+          id: op.id,
+          name: op.name,
+          OptionVal: size
+        }
+      } else {
+        color = op.OptionVal.find((e:any) => e.name === optionVal['Color'])
+        optionColor = {
+          id: op.id,
+          name: op.name,
+          OptionVal: color
+        }
+      }
+    })
+    const options = [optionSize, optionColor]
+    const data = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      productImg: product.productImg,
+      options: options,
+    }
+    const productStorage = {
+      quantity: number,
+      data: data
+    }
+
+    const cartProductsLocalStorage = localStorage.getItem('cartProducts')
+    if(cartProductsLocalStorage === null) {
+      localStorage.setItem('cartProducts', JSON.stringify([productStorage]));
+    } else {
+      let dataProducts = JSON.parse(cartProductsLocalStorage)
+      let isCheck = false
+      dataProducts.forEach((e:any) => {
+        if(JSON.stringify(e.data).includes(JSON.stringify(data))) {
+          isCheck = true
+          e.quantity += number
+          localStorage.setItem('cartProducts', JSON.stringify(dataProducts))
+        } else {
+          return
+        }
+      })
+      dataProducts.push(productStorage)
+      if(!isCheck) {
+        localStorage.setItem('cartProducts', JSON.stringify(dataProducts))
+      }
+    }
     toggleActive();
   };
 

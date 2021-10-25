@@ -57,6 +57,21 @@
       z-index: 99;
       cursor: pointer;
     }
+    &-shop {
+      display: block;
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+      border: 1px solid blue;
+      border-radius: 50%;
+      top: 2px;
+      right: -8px;
+      background-color: blue;
+      color: white;
+    }
   }
 
   &__logo{

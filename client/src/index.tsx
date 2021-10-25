@@ -10,6 +10,10 @@ import { createTheme, CssBaseline } from '@material-ui/core';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect } from 'react';
+import { useAppDispatch } from './hooks/reduxHooks';
+import { actionPlusTotalProducts } from './redux/reducers/productDetail.reducer';
+import { number } from 'yup/lib/locale';
 
 export const theme = createTheme({
   palette: {
@@ -29,6 +33,18 @@ export const theme = createTheme({
 });
 
 const AppRouter = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const cartProductsLocalStorage = localStorage.getItem('cartProducts')
+    let number = 0
+    if(cartProductsLocalStorage !== null) {
+      let dataProducts = JSON.parse(cartProductsLocalStorage)
+      dataProducts.forEach((e:any) => {
+        number += e.quantity
+      })
+    }
+    dispatch(actionPlusTotalProducts(number))
+  },[])
   return (
     <Router>
       <Switch>

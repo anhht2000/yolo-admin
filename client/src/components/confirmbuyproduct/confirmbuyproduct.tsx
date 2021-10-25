@@ -23,7 +23,7 @@ const Confirmbuyproduct = (props: PropConfirm) => {
         </div>
       </div>
       <div className="container_confirmbuy_bt">
-        <NavLink exact to={"/list_pay_product"}>
+        {/* <NavLink exact to={"/list_pay_product"}> */}
           <button
             type="button"
             onClick={ordered}
@@ -31,7 +31,7 @@ const Confirmbuyproduct = (props: PropConfirm) => {
           >
             ĐẶT HÀNG
           </button>
-        </NavLink>
+        {/* </NavLink> */}
       </div>
       <div className="container_confirmbuy_bt">
         <NavLink exact to={"/product"}>

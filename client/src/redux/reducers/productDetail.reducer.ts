@@ -1,9 +1,11 @@
+import { RootState } from './../store';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   product: {},
   cardContent: [],
   loading: false,
+  total: 0
 }
 
 const ProductDetailsSlice = createSlice({
@@ -31,9 +33,13 @@ const ProductDetailsSlice = createSlice({
     getCardContentFail(state) {
       state.loading = false
     },
+    actionPlusTotalProducts: (state, action) => {
+      state.total += action.payload
+    }
   }
 })
 
 
-export const { getProduct, getProductSuccess, getProductFail } = ProductDetailsSlice.actions;
+export const { getProduct, getProductSuccess, getProductFail, actionPlusTotalProducts } = ProductDetailsSlice.actions;
+export const getTotalProducts = (state: RootState) => state.productDetails.total
 export default ProductDetailsSlice.reducer;

@@ -2,3 +2,4 @@
 /ormconfig.json
 /server/public/
 /server/.env
+.DS_Store
