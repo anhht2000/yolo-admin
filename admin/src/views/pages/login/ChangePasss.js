@@ -110,7 +110,7 @@ const ChangePass = () => {
                       </CInputGroupText>
                       <CFormInput
                         name="password"
-                        type={isShowPass ? 'password' : 'text'}
+                        type={isShowPass ? 'text' : 'password'}
                         placeholder="Nhập mật khẩu"
                         value={values?.password}
                         onMouseDown={handleRemoveErr}
@@ -131,7 +131,7 @@ const ChangePass = () => {
                       </CInputGroupText>
                       <CFormInput
                         name="confirm"
-                        type={isShowConfirm ? 'password' : 'text'}
+                        type={isShowConfirm ? 'text' : 'password'}
                         placeholder="Nhập lại mật khẩu"
                         value={values?.confirm}
                         onMouseDown={handleRemoveErr}
