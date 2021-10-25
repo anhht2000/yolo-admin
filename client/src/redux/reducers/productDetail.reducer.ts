@@ -34,6 +34,8 @@ const ProductDetailsSlice = createSlice({
       state.loading = false
     },
     actionPlusTotalProducts: (state, action) => {
+      console.log(action.payload);
+
       state.total += action.payload
     }
   }

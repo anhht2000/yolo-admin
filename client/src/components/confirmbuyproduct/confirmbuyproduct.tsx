@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 interface PropConfirm {
   count?: number;
   countmoney?: any;
-  ordered?: () => {} | any;
+  ordered?: any;
   continue_shopping?: () => {} | any;
 }
 const Confirmbuyproduct = (props: PropConfirm) => {

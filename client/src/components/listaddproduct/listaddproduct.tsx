@@ -103,6 +103,12 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
     saveToLocal();
   }, [number]);
 
+  useEffect(() => {
+    setNumber(product.quantity);
+    SetCurrentNumber(product.quantity)
+    setCurrentTotalProduct(product.quantity)
+  }, [product]);
+
   return (
     <div className="contaiber_listadd align-items-center">
       <div className="contaiber_listadd_left">
