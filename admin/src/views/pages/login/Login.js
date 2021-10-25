@@ -103,7 +103,9 @@ const Login = () => {
                         onMouseDown={handleRemoveErr}
                         className={errors.username ? 'is-invalid' : ''}
                       />
-                      <p className="text-danger error__text">{errors.username}</p>
+                      {errors?.username && (
+                        <p className="text-danger error__text">{errors.username}</p>
+                      )}
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -119,7 +121,9 @@ const Login = () => {
                         autoComplete="current-password"
                         onChange={handleChange}
                       />
-                      <p className="text-danger error__text">{errors.password}</p>
+                      {errors?.password && (
+                        <p className="text-danger error__text">{errors.password}</p>
+                      )}
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>

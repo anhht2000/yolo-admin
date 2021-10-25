@@ -113,7 +113,9 @@ const ChangePass = () => {
                         autoComplete="current-password"
                         onChange={handleChange}
                       />
-                      <p className="text-danger error__text">{errors.password}</p>
+                      {errors?.password && (
+                        <p className="text-danger error__text">{errors.password}</p>
+                      )}
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -129,7 +131,9 @@ const ChangePass = () => {
                         autoComplete="current-confirm"
                         onChange={handleChange}
                       />
-                      <p className="text-danger error__text">{errors.confirm}</p>
+                      {errors?.confirm && (
+                        <p className="text-danger error__text">{errors.confirm}</p>
+                      )}
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>

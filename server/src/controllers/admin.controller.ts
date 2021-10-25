@@ -94,12 +94,11 @@ class AdminController {
       });
     }
   }
-  public async changePass(req: Request, res: Response, next: NextFunction) {
+  async changePass(req: Request, res: Response, next: NextFunction) {
     try {
       const { password } = req.body;
       const authHeader: string = req.headers['authorization'] as string;
       const token = authHeader?.split(' ')[1] as string;
-      console.log('tét', typeof token, token);
 
       if (!token) {
         return res.status(500).send({
@@ -107,31 +106,22 @@ class AdminController {
           message: 'Đổi mật khẩu thất bại',
         });
       }
-      console.log(
-        'check',
-        token ===
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUdWFuIEFuaCIsInN1YiI6InR1YW5hbmhjeDIwMDBAZ21haWwuY29tIiwiaWF0IjoxNjM1MTQ1NzYzNDExLCJleHAiOjE2MzQ0NTQ1NjM0MTF9.7wbCZynfoN2TxSuuzzzpJTExOoItAlUNtRHtnmw6TaM'
-      );
 
-      // await jwt.verify(
-      //   ,
-      //   String(process.env.SCREET_KEY)
-      // );
-      // const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
-      // let hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
-      // const user = await getRepository(Admin)
-      //   .createQueryBuilder('user')
-      //   .update()
-      //   .set({ password: hash })
-      //   .where('user.username = :uSSname', { uSSname: `${String(sub)}` })
-      //   .execute();
+      const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+      let hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
+      const user = await getRepository(Admin)
+        .createQueryBuilder('admin')
+        .update()
+        .set({ password: hash })
+        .where('admin.username = :uSSname', { uSSname: `${String(sub)}` })
+        .execute();
 
       return res.status(200).send({
         success: true,
         message: 'Đổi mật khẩu thành công',
       });
     } catch (error) {
-      console.log('e', error);
+      console.log('er', error);
 
       return res.status(500).send({
         success: false,
