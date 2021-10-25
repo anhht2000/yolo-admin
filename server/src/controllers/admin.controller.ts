@@ -1,6 +1,6 @@
 import { CommonConfig } from './index';
 import { Admin } from './../models/admin.entity';
-import { getManager } from 'typeorm';
+import { getManager, getRepository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
@@ -80,7 +80,7 @@ class AdminController {
         from: `"Admin System 👻"${process.env.USER_GMAIL}`,
         to: `${username}`,
         subject: 'Confirm forget password ✔',
-        text: `Click this link to change password: ${process.env.HOST}/change-pass/${token}`,
+        text: `Click this link to change password: ${process.env.HOST}/#/change-pass/${token}`,
       });
       return res.status(200).json({
         success: true,
@@ -91,6 +91,46 @@ class AdminController {
       return res.status(500).json({
         success: false,
         message: 'Gửi mail thất bại',
+      });
+    }
+  }
+  public async changePass(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { password } = req.body;
+      const authHeader: string = req.headers['authorization'] as string;
+      const token = authHeader?.split(' ')[1] as string;
+      console.log('tét', typeof token, token);
+
+      if (!token) {
+        res.status(500).send({
+          success: false,
+          message: 'Đổi mật khẩu thất bại',
+        });
+      }
+
+      await jwt.verify(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUdWFuIEFuaCIsInN1YiI6InR1YW5hbmhjeDIwMDBAZ21haWwuY29tIiwiaWF0IjoxNjM1MTQ1NzYzNDExLCJleHAiOjE2MzQ0NTQ1NjM0MTF9.7wbCZynfoN2TxSuuzzzpJTExOoItAlUNtRHtnmw6TaM',
+        String(process.env.SCREET_KEY)
+      );
+      // const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+      // let hash = await bcrypt.hash(password, CommonConfig.DEFAUTL_SALT);
+      // const user = await getRepository(Admin)
+      //   .createQueryBuilder('user')
+      //   .update()
+      //   .set({ password: hash })
+      //   .where('user.username = :uSSname', { uSSname: `${String(sub)}` })
+      //   .execute();
+
+      res.status(200).send({
+        success: true,
+        message: 'Đổi mật khẩu thành công',
+      });
+    } catch (error) {
+      console.log('e', error);
+
+      res.status(500).send({
+        success: false,
+        message: 'Đổi mật khẩu thất bại',
       });
     }
   }

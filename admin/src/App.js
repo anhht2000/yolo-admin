@@ -4,6 +4,7 @@ import './scss/style.scss'
 import ForgetPassword from './views/pages/forgetPass/ForgetPassword'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+import ChangePass from './views/pages/login/ChangePasss'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -35,9 +36,9 @@ class App extends Component {
             />
             <Route
               exact
-              path="/register"
-              name="Register Page"
-              render={(props) => <Register {...props} />}
+              path="/change-pass/:token"
+              name="Change Password Page"
+              render={(props) => <ChangePass {...props} />}
             />
             <Route exact path="/404" name="Page 404" render={(props) => <Page404 {...props} />} />
             <Route exact path="/500" name="Page 500" render={(props) => <Page500 {...props} />} />

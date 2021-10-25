@@ -17,8 +17,11 @@ axiosClient.interceptors.request.use((config) => {
   return config
 })
 
-axiosClient.interceptors.response.use((response) => {
-  return response
-})
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {},
+)
 
 export default axiosClient
