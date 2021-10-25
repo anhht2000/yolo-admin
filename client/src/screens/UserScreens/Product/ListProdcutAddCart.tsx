@@ -1,45 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
 import ConfirmBuyProduct from "../../../components/confirmbuyproduct/confirmbuyproduct";
 import ListAddProduct from "../../../components/listaddproduct/listaddproduct";
 import { NavLink } from "react-router-dom";
+import { useAppDispatch } from '../../../hooks/reduxHooks';
+import { actionPlusTotalProducts } from '../../../redux/reducers/productDetail.reducer';
+import productDetailApi from '../../../core/productDetailApi';
+import { toast } from 'react-toastify';
+
 const ListProdcutAddCart = () => {
-  const data_list = JSON.parse(
-    localStorage.getItem("cartProduct") as string
-  ) as {
-    title: string;
-    image01: string;
-    variant: string[];
-    variant_value: string[];
-    price: string;
-    number: number;
-  }[];
+  const products = JSON.parse(
+    localStorage.getItem("cartProducts") as string
+  ) as any[];
+  const dispatch = useAppDispatch();
   const [countPrice, setCountPrice] = useState(0);
-  const [data, setData] = useState(data_list);
+  const [data, setData] = useState(products);
   const [countProduct, setCountProduct] = useState(0);
   const handleCountPrice = () => {
-    const Price: number[] = [];
+    let count = 0
     if (data.length !== 0) {
-      data.map((e: any) => {
-        return Price.push(parseInt(e.price) * parseInt(e.number));
-      });
-    } else return Price.push(0);
-    const count = Price.reduce(function (total, number) {
-      return total + number;
-    }, 0);
+      data.forEach((e: any) => {
+        count += e.data.price * e.quantity
+      })
+    } else return count
     setCountPrice(count);
   };
   const handleCountProduct = () => {
-    const CountProduct: number[] = [];
+    let count = 0
     if (data.length !== 0) {
-      data.map((e: any) => {
-        return CountProduct.push(parseInt(e.number));
-      });
-    } else return CountProduct.push(0);
-    const count = CountProduct.reduce(function (total, number) {
-      return total + number;
-    }, 0);
+      data.forEach((e: any) => {
+        count += e.quantity
+      })
+    } else return count = 0
     setCountProduct(count);
   };
   const reloadCountProduct = (Number: number) => {
@@ -57,19 +50,52 @@ const ListProdcutAddCart = () => {
   const setCountProductUpdateSubtract = (Number: number) => {
     setCountProduct(countProduct - Number);
   };
-  const handleOrder = () => {};
+
+  const handleOrder = useCallback(async () => {
+    let productsCart: any[] = []
+    products.forEach((e:any) => {
+      let keyOption: any[] = []
+      let keyOptionVal: any[] = []
+      if(e.data.options) {
+        e.data.options.forEach((t:any) => {
+          keyOption.push(t.id)
+          keyOptionVal.push(t.OptionVal.id)
+        })
+      }
+      let optionVal: any = {}
+      for(let i = 0; i < keyOption.length; i ++ ) {
+        optionVal[keyOption[i]] = keyOptionVal[i]
+      }
+      let p = {
+        id: e.data.id,
+        name: e.data.name,
+        quanlity: e.quantity,
+        unitPrice: e.data.price,
+        option: optionVal
+      }
+      productsCart.push(p)
+
+    })
+    const data = await productDetailApi.postAddToCart(productsCart);
+    if (data?.status === 200) {
+      toast.success('Đặt hàng thành công');
+    } else {
+      toast.error('Đặt hàng thất bại');
+    }
+  }, []);
   const handleContinue = () => {};
-  const deleteProduct = (title: string, Index: number) => {
-    if (data_list.length > 0) {
-      const Data = data_list.filter((item, index) => {
-        if (index === 0) {
+  const deleteProduct = (product:any) => {
+    if (products.length > 0) {
+      products.forEach((e:any, index:number) => {
+        if(JSON.stringify(product.data) === JSON.stringify(e.data)) {
+          products.splice(index, 1)
           setCountProduct(0);
           setCountPrice(0);
         }
-        return index !== Index;
-      });
-      setData(Data);
-      localStorage.setItem("cartProduct", JSON.stringify(Data));
+      })
+      dispatch(actionPlusTotalProducts(-product.quantity))
+      setData(products);
+      localStorage.setItem("cartProducts", JSON.stringify(products))
     }
   };
   useEffect(() => {
@@ -79,7 +105,7 @@ const ListProdcutAddCart = () => {
   return (
     <LayoutContainer>
       <div className="container_listprodcutadd">
-        <div className="container_listprodcutadd_leftconfirm">
+        <div className={`${countProduct > 0 ? '' : 'd-none'} container_listprodcutadd_leftconfirm`}>
           <ConfirmBuyProduct
             count={countProduct}
             countmoney={`${countPrice}`}
@@ -87,18 +113,14 @@ const ListProdcutAddCart = () => {
             continue_shopping={handleContinue}
           />
         </div>
-        <div className="container_listprodcutadd_right">
+        <div className={`${countProduct > 0 ? '' : 'w-100'} container_listprodcutadd_right`}>
           {data.length !== 0 ? (
-            data.map((e, index) => (
+            data.map((product, index) => (
               <div key={index}>
                 <ListAddProduct
-                  image01={e.image01}
-                  title={e.title}
-                  variant_value={e.variant_value}
-                  price={e.price}
-                  count={e.number}
+                  product={product}
                   deleteProduct={() => {
-                    deleteProduct(e.title, index);
+                    deleteProduct(product);
                   }}
                   setPriceUpdate={setPlusPrice}
                   setSubtractPrice={setSubtractPrice}

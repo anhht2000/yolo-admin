@@ -2,31 +2,46 @@
     display: flex;
     width: 100%;
     margin-bottom: 2em;
+    justify-content: space-between;
+
+    @media screen and (max-width: 767.98px) {
+        display: block;
+    }
     &_left {
         padding-left: 2em;
-        width: 60%;
         display: flex;
+
+        @media screen and (max-width: 767.98px) {
+            justify-content: space-between;
+            padding-right: 0;
+            padding-left: 0;
+            margin-bottom: 2rem;
+        }
         &-img {
             width: 28%;
             padding: auto
         }
         &-title {
-            padding-top: 5em;
             padding-left: 2em;
-            width: 60%;
         }
     }
+    &_color {
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        border: 1px solid rgba(32, 31, 31, 0.3);
+    }
     &_right {
-        width: 40%;
         display: flex;
-        gap: 4rem;
-        height: 10%;
-        &-title {
-            padding-top: 5em;
+        align-items: center;
+        gap: 2rem;
+        &-price {
+            width: 15rem;
+            text-align: end;
         }
         &-option {
             display: flex;
-            padding-top: 5em;
             &-bt {
                 text-align: center;
                 width: 10rem;
@@ -34,15 +49,18 @@
                 border: none;
                 border-top: 1px solid gray;
                 border-bottom: 1px solid gray;
+
+                @media screen and (max-width: 575.98px) {
+                    width: 7rem;
+                }
             }
             i {
                 border: 1px solid gray;
-                line-height: 2rem;
+                line-height: 2.5rem;
                 cursor: pointer;
             }
         }
         &-ic {
-            margin-top: 5em;
             height: 1.2em;
             width: 1.2em
         }

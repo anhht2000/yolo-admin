@@ -1,41 +1,46 @@
     .container_listprodcutadd {
         display: flex;
-        padding: 1.5em;
         width: 100%;
-        @media screen and (max-width: 1100px) {
+        min-height: 65vh;
+        
+        @media screen and (max-width: 991.98px) {
             display: block;
-            // overflow: scroll
         }
         &_leftconfirm {
             width: 30%;
             position: relative;
             height: 16em;
             margin-top: 3em;
-            background-color: white;
+            // background-color: white;
             box-shadow: 0px 0px 2rem 1px #d6d6d6;
-            @media screen and (max-width: 1100px) {
-                position: fixed;
-                display: none;
-                z-index: 99;
-                width: 95%;
-                bottom: 16em
+            @media screen and (max-width: 991.98px) {
+                margin-top: 1em;
+                background-color: #fafafa;
+                display: block;
+                width: 100%;
             }
         }
         &_right {
             width: 70%;
             padding: 1em;
             position: relative;
+            @media screen and (max-width: 991.98px) {
+                width: 100%;           
+            }
             &-Error {
-                padding: 4em;
+                text-align: center;
+                padding: 4em 0;
                 font-size: 1.2em;
                 font-weight: bold;
                 height: 100%;
                 &-bt {
                     font-size: 1.0em;
-                    width: 40%;
-                    margin-left: 6em;
+                    // width: 40%;
                     margin-top: 1.0em;
-                    height: 1.5em
+                    padding: .5rem 1rem;
+                    background-color: #5d78ff;
+                    color: white;
+                    border: 1px solid #5d78ff;
                 }
             }
         }
