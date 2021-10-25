@@ -118,7 +118,7 @@ class UserController {
       const user = await getManager().find(User, { where: { username: username } });
 
       if (user.length === 0) {
-        res.status(500).send({
+        return res.status(500).send({
           success: false,
           message: 'Gửi mail thất bại',
         });
@@ -147,13 +147,13 @@ class UserController {
         subject: 'Confirm forget password ✔',
         text: `Click this link to change password: ${process.env.HOST}/change-pass/${token}`,
       });
-      res.status(200).send({
+      return res.status(200).send({
         success: true,
         message: 'Gửi mail thành công',
         data: token,
       });
     } catch (error) {
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Gửi mail thất bại',
       });
