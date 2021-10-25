@@ -165,7 +165,7 @@ class UserController {
       const authHeader: string = req.headers['authorization'] as string;
       const token = authHeader?.split(' ')[1];
       if (!token) {
-        res.status(500).send({
+        return res.status(500).send({
           success: false,
           message: 'Đổi mật khẩu thất bại',
         });
@@ -179,12 +179,12 @@ class UserController {
         .where('user.username = :uSSname', { uSSname: `${String(sub)}` })
         .execute();
 
-      res.status(200).send({
+      return res.status(200).send({
         success: true,
         message: 'Đổi mật khẩu thành công',
       });
     } catch (error) {
-      res.status(500).send({
+      return res.status(500).send({
         success: false,
         message: 'Đổi mật khẩu thất bại',
       });

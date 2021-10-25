@@ -28,6 +28,8 @@ import { toast } from 'react-toastify'
 const ChangePass = () => {
   const history = useHistory()
   const { token } = useParams()
+  const [isShowPass, setIsShowPass] = useState(false)
+  const [isShowConfirm, setIsShowConfirm] = useState(false)
   const tokenStore = localStorage.getItem('token_forget')
   if (!token || token !== tokenStore) {
     history.push('/login')
@@ -100,12 +102,15 @@ const ChangePass = () => {
                     <h3>Thay đổi mật khẩu</h3>
                     <p className="text-medium-emphasis">Nhập mật khẩu mới của bạn</p>
                     <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
+                      <CInputGroupText
+                        onClick={() => setIsShowPass(!isShowPass)}
+                        className="cursor-pointer"
+                      >
+                        <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
                         name="password"
-                        type="password"
+                        type={isShowPass ? 'password' : 'text'}
                         placeholder="Nhập mật khẩu"
                         value={values?.password}
                         onMouseDown={handleRemoveErr}
@@ -118,12 +123,15 @@ const ChangePass = () => {
                       )}
                     </CInputGroup>
                     <CInputGroup className="mb-4">
-                      <CInputGroupText>
+                      <CInputGroupText
+                        onClick={() => setIsShowConfirm(!isShowConfirm)}
+                        className="cursor-pointer"
+                      >
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
                         name="confirm"
-                        type="password"
+                        type={isShowConfirm ? 'password' : 'text'}
                         placeholder="Nhập lại mật khẩu"
                         value={values?.confirm}
                         onMouseDown={handleRemoveErr}

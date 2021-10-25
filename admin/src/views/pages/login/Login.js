@@ -22,6 +22,7 @@ import { toast } from 'react-toastify'
 
 const Login = () => {
   const history = useHistory()
+  const [isShowPass, setIsShowPass] = useState(false)
   const [values, setValues] = useState({})
   const [errors, setErrors] = useState({})
   const handleChange = ({ target }) => {
@@ -108,12 +109,15 @@ const Login = () => {
                       )}
                     </CInputGroup>
                     <CInputGroup className="mb-4">
-                      <CInputGroupText>
+                      <CInputGroupText
+                        onClick={() => setIsShowPass(!isShowPass)}
+                        className="cursor-pointer"
+                      >
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
                         name="password"
-                        type="password"
+                        type={isShowPass ? 'password' : 'text'}
                         placeholder="Nhập mật khẩu"
                         value={values.password}
                         onMouseDown={handleRemoveErr}
