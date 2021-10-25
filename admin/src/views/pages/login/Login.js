@@ -117,7 +117,7 @@ const Login = () => {
                       </CInputGroupText>
                       <CFormInput
                         name="password"
-                        type={isShowPass ? 'password' : 'text'}
+                        type={isShowPass ? 'text' : 'password'}
                         placeholder="Nhập mật khẩu"
                         value={values.password}
                         onMouseDown={handleRemoveErr}
