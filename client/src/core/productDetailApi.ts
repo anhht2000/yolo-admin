@@ -16,7 +16,7 @@ const productDetailApi = {
   postAddToCart: (data:any) => {
     const url = '/receipts';
     return AxiosClient.post(url, {
-      params: data,
+      data: data,
     });
   },
 
