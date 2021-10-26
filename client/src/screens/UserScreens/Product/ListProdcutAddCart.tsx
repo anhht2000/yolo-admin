@@ -69,8 +69,8 @@ const ListProdcutAddCart = () => {
       let p = {
         id: e.data.id,
         name: e.data.name,
-        quanlity: e.quantity,
-        unitPrice: e.data.price,
+        quantity: e.quantity,
+        price: e.data.price,
         option: optionVal
       }
       productsCart.push(p)
