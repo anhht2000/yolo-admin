@@ -81,11 +81,14 @@ class ReceiptController {
 
       for (const data of request) {
         const receiptProduct = new ReceiptProduct();
+        // const product = await getManager().findOne(Product, { where: { id: data.id } });
+
         if (receipt) {
           receiptProduct.receipt = receipt;
           receiptProduct.pruductName = data.name;
-          receiptProduct.quanlity = data.quantity;
+          receiptProduct.quanlity = data.quanlity;
           receiptProduct.unitPrice = data.price;
+          receiptProduct.productId = data.id;
           await getManager().save(receiptProduct);
         }
 
@@ -93,23 +96,29 @@ class ReceiptController {
         const variants = [];
         for (const opt in data.option) {
           options.push(opt);
-          for (const dt of data.option[opt]) {
-            variants.push(dt);
-          }
+          variants.push(data.option[opt]);
         }
+
         const optionsEntity = await getManager().find(Option, { where: { id: In(options) } });
         const variantEntity = await getManager().find(OptionValue, { where: { id: In(variants) } });
         for (const id in data.option) {
-          for (const dt of data.option[id]) {
-            dataTemp.push({
-              productName: data.name,
-              productOptionName: optionsEntity.find((item) => item.id === parseInt(id))?.name,
-              productOptionValue: variantEntity.find((item) => item.id === parseInt(dt))?.name,
-              receiptProduct: receiptProduct,
-            });
-          }
+          // for (const dt of data.option[id]) {
+          //   dataTemp.push({
+          //     productName: data.name,
+          //     productOptionName: optionsEntity.find((item) => item.id === parseInt(id))?.name,
+          //     productOptionValue: variantEntity.find((item) => item.id === parseInt(dt))?.name,
+          //     receiptProduct: receiptProduct,
+          //   });
+          // }
+          dataTemp.push({
+            productName: data.name,
+            productOptionName: optionsEntity.find((item) => item.id === parseInt(id))?.name,
+            productOptionValue: variantEntity.find((item) => item.id === parseInt(data.option[id]))?.name,
+            receiptProduct: receiptProduct,
+          });
         }
       }
+
       await getManager().save(ReceiptOptionProduct, dataTemp);
 
       res.status(200).json({
@@ -117,6 +126,8 @@ class ReceiptController {
         message: 'Tạo hóa đơn thành công',
       });
     } catch (error) {
+      console.log('err', error);
+
       res.status(500).json({
         success: false,
         message: 'Tạo hóa đơn thất bại',
