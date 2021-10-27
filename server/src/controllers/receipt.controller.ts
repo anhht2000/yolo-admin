@@ -74,7 +74,6 @@ class ReceiptController {
         receipt.description = '';
         receipt.address = user.address;
         receipt.totalPrice = total;
-
         await getManager().save(receipt);
       }
       const dataTemp = [];
