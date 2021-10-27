@@ -92,11 +92,13 @@ const ProductOption = () => {
               />
             </CCardBody>
             <CCardHeader className="flex_option">
-              <Pagination
-                currentPage={options.page?.currentPage}
-                totalPage={options.page?.totalPage}
-                changeData={getOptionApi}
-              />
+              {options.data?.length > 0 && (
+                <Pagination
+                  currentPage={options.page?.currentPage}
+                  totalPage={options.page?.totalPage}
+                  changeData={getOptionApi}
+                />
+              )}
             </CCardHeader>
             {viewOption && (
               <CCardHeader>
