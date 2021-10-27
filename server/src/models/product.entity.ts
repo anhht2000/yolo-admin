@@ -17,7 +17,7 @@ export class Product extends Common {
   @Column()
   name: string;
 
-  @Column()
+  @Column('varchar', { length: 1000 })
   description: string;
 
   @Column()

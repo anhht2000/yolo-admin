@@ -1,20 +1,19 @@
-import { CCard, CCardBody, CCardFooter, CCardHeader } from '@coreui/react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { CCard, CCardBody, CCardHeader } from '@coreui/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { toast } from 'react-toastify'
 import { imgLogo } from 'src/assets'
 import productApi from 'src/config/productApi'
-import { validateDe, validateName, validatePrice } from 'src/helper/CheckData'
+import { validateName, validatePrice } from 'src/helper/CheckData'
 import { actionGetOption, getOption, getOptionValue } from 'src/redux/slice/productSlice'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default function ProductForm({ initialValue }) {
   const history = useHistory()
-  const [values, setValues] = useState({})
+  const [values, setValues] = useState({ status: 'draft' })
   const [error, setError] = useState({})
   const [description, setDescription] = useState('')
   const [numberAttri, setNumberAttri] = useState(0)
@@ -29,6 +28,7 @@ export default function ProductForm({ initialValue }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
+      setError({ ...error, image: '' })
       var Accept = acceptedFiles.map((item) => {
         return Object.assign(item, {
           preview: URL.createObjectURL(item),
@@ -52,7 +52,6 @@ export default function ProductForm({ initialValue }) {
   }
   const handleCheckbox = ({ target }) => {
     const { name, value } = target
-
     if (!variant.hasOwnProperty(`${name}`)) {
       setVariant((prev) => {
         return { ...prev, [name]: [] }
@@ -69,6 +68,7 @@ export default function ProductForm({ initialValue }) {
     }
   }
   const handleClickAddAttribute = () => {
+    setError({ ...error, variant: '' })
     if (numberAttri + 1 <= option.length) {
       setNumberAttri(numberAttri + 1)
       setCurrentOption(option?.slice(0, numberAttri + 1))
@@ -78,6 +78,7 @@ export default function ProductForm({ initialValue }) {
     if (numberAttri - 1 >= 0) {
       setNumberAttri(numberAttri - 1)
       setCurrentOption(currentOption.filter((item) => item.id !== option.id))
+      setVariant(delete variant[option.id])
     }
   }
   const handleRemoveImage = (image) => {
@@ -89,7 +90,6 @@ export default function ProductForm({ initialValue }) {
   const handleChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
-    console.log('zo day')
   }
   const handleRemoveErr = ({ target }) => {
     const { name } = target
@@ -99,6 +99,7 @@ export default function ProductForm({ initialValue }) {
     })
   }
   const handleSubmit = async () => {
+    console.log('variant', Object.keys(variant).length < 1)
     const checkName = validateName(values?.name)
     const checkPrice = validatePrice(values.price)
 
@@ -110,6 +111,16 @@ export default function ProductForm({ initialValue }) {
     if (!checkPrice) {
       setError((prev) => {
         return { ...prev, price: 'Bạn phải nhập giá là kiểu số ' }
+      })
+    }
+    if (Object.keys(variant).length < 1) {
+      setError((prev) => {
+        return { ...prev, variant: 'Bạn phải chọn ít nhất là 1 thuộc tính ' }
+      })
+    }
+    if (acceptFile.length < 1) {
+      setError((prev) => {
+        return { ...prev, image: 'Bạn phải chọn ít nhất là 1 ảnh  ' }
       })
     }
     setError((prev) => {
@@ -191,8 +202,8 @@ export default function ProductForm({ initialValue }) {
   }, [initialValue])
   return (
     <div className="row">
-      {console.log('init', numberAttri)}
-      <div className="col-md-9">
+      {console.log('err', error)}
+      <div className="col-lg-9">
         <div className="main-form">
           <div className="form-body">
             <div className="form-group mb-3">
@@ -253,9 +264,9 @@ export default function ProductForm({ initialValue }) {
 
         <CCard>
           <CCardHeader className="d-flex justify-content-between align-items-center">
-            <p>Thuộc tính</p>
+            <p className="required">Thuộc tính</p>
           </CCardHeader>
-          <CCardBody>
+          <CCardBody className={error.variant ? 'card-err' : ''}>
             {currentOption.length === 0 && (
               <p className="text-secondary">
                 Ấn vào thêm thuộc tính để chọn thuộc tính cho sản phẩm
@@ -328,13 +339,16 @@ export default function ProductForm({ initialValue }) {
               </span>
             </div>
           </CCardBody>
+          <CCardBody>
+            {error.variant && <span className="text__err">{error.variant}</span>}
+          </CCardBody>
         </CCard>
 
         <CCard className="mt-3">
           <CCardHeader className="d-flex justify-content-between align-items-center">
-            <p>Ảnh</p>
+            <p className="required">Ảnh</p>
           </CCardHeader>
-          <CCardBody>
+          <CCardBody className={error.image ? 'card-err' : ''}>
             <div className="gallery-images-wrapper list-images">
               <label htmlFor="input__add-img" className="w-100">
                 {acceptFile.length < 1 && (
@@ -377,14 +391,17 @@ export default function ProductForm({ initialValue }) {
                 </ul>
               )}
 
-              <label htmlFor="input__add-img">
-                <p className="text-primary fs-7">Thêm ảnh</p>
-              </label>
+              {acceptFile.length > 0 && (
+                <label htmlFor="input__add-img">
+                  <p className="text-primary fs-7">Thêm ảnh</p>
+                </label>
+              )}
             </div>
           </CCardBody>
+          <CCardBody>{error.image && <span className="text__err">{error.image}</span>}</CCardBody>
         </CCard>
       </div>
-      <div className="col-md-3 right-sidebar">
+      <div className="col-lg-3 right-sidebar mt-4 mt-lg-0 d-flex flex-lg-column flex-column-reverse">
         <div className="widget meta-boxes form-actions form-actions-default action-horizontal">
           <div className="widget-title">
             <h5>
