@@ -1,10 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Icon } from "../../assets/index";
-import { FormatMoney } from "../../lib/FunctHelper";
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Icon } from '../../assets/index';
+import { FormatMoney } from '../../lib/FunctHelper';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { actionPlusTotalProducts, getTotalProducts } from '../../redux/reducers/productDetail.reducer';
 interface PropListAdd {
-  product?: any
+  product?: any;
   deleteProduct?: any;
   countmoney?: any;
   setPriceUpdate: (price: number) => void;
@@ -15,7 +15,7 @@ interface PropListAdd {
 }
 const Listaddproduct: React.FC<PropListAdd> = (props) => {
   const dispatch = useAppDispatch();
-  const totalProductInCart = useAppSelector(getTotalProducts)
+  const totalProductInCart = useAppSelector(getTotalProducts);
 
   const {
     product,
@@ -27,34 +27,34 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
     reloadCountProduct,
   } = props;
 
-  let size, color
-  product.data.options.forEach((e:any) => {
-    if(e.name === 'Size') {
-      size = e.OptionVal.name
-    } else if(e.name === 'Color') {
-      color = e.OptionVal.name
+  let size, color;
+  product.data.options.forEach((e: any) => {
+    if (e?.name === 'Size') {
+      size = e?.OptionVal.name;
+    } else if (e?.name === 'Color') {
+      color = e?.OptionVal.name;
     }
-  })
+  });
 
   const [currentNumber, SetCurrentNumber] = useState<number>(product.quantity as number);
-  const data = JSON.parse(localStorage.getItem("cartProducts") as string) as any[];
+  const data = JSON.parse(localStorage.getItem('cartProducts') as string) as any[];
   const [number, setNumber] = useState<number>(product.quantity as number);
   const [currentTotalProduct, setCurrentTotalProduct] = useState<number>(product.quantity as number);
 
   const saveToLocal = () => {
-    const totalProductPlus = number - currentTotalProduct
-    dispatch(actionPlusTotalProducts(totalProductPlus))
+    const totalProductPlus = number - currentTotalProduct;
+    dispatch(actionPlusTotalProducts(totalProductPlus));
     if (data) {
       let flag = false;
       let temp = data.map((e) => {
         if (JSON.stringify(product.data) === JSON.stringify(e.data)) {
           flag = true;
-          e = {...e, quantity: number}
+          e = { ...e, quantity: number };
         }
         return e;
       });
       if (flag) {
-        localStorage.setItem("cartProducts", JSON.stringify([...temp]));
+        localStorage.setItem('cartProducts', JSON.stringify([...temp]));
       }
     }
   };
@@ -63,17 +63,15 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
       setNumber(1);
       SetCurrentNumber(1);
     } else {
-      setCurrentTotalProduct(number)
+      setCurrentTotalProduct(number);
       setNumber(parseInt(e.target.value));
-      setPriceUpdate(
-        (parseInt(e.target.value) - currentNumber) * parseInt(product.data.price as string)
-      );
+      setPriceUpdate((parseInt(e.target.value) - currentNumber) * parseInt(product.data.price as string));
       SetCurrentNumber(parseInt(e.target.value));
     }
     handleReload(parseInt(e.target.value), currentNumber);
   };
   const plusClick = () => {
-    setCurrentTotalProduct(number)
+    setCurrentTotalProduct(number);
     setNumber(number + 1);
     setPriceUpdate(parseInt(product.data.price as string));
     setCountProductUpdatePlus(1);
@@ -81,7 +79,7 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
   };
   const minusClick = () => {
     if (number - 1 < 1) return;
-    setCurrentTotalProduct(number)
+    setCurrentTotalProduct(number);
     setNumber(number - 1);
     setSubtractPrice(parseInt(product.data.price as string));
     setCountProductUpdateSubtract(1);
@@ -105,8 +103,8 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
 
   useEffect(() => {
     setNumber(product.quantity);
-    SetCurrentNumber(product.quantity)
-    setCurrentTotalProduct(product.quantity)
+    SetCurrentNumber(product.quantity);
+    setCurrentTotalProduct(product.quantity);
   }, [product]);
 
   return (
@@ -115,16 +113,14 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
         <img
           src={`${process.env.REACT_APP_API_URL}${product.data.productImg[0].imgPath}`}
           alt="img-list1"
-          className="contaiber_listadd_left-img"
-        ></img>
+          className="contaiber_listadd_left-img"></img>
         <label className="contaiber_listadd_left-title d-flex align-items-center">
-          {product.data.name}-{<span className="contaiber_listadd_color" style={{backgroundColor: color}}></span>}-{size}
+          {product.data.name}-
+          {<span className="contaiber_listadd_color" style={{ backgroundColor: color }}></span>}-{size}
         </label>
       </div>
       <div className="contaiber_listadd_right">
-        <span className="contaiber_listadd_right-price">
-          {FormatMoney(product.data.price as string)}
-        </span>
+        <span className="contaiber_listadd_right-price">{FormatMoney(product.data.price as string)}</span>
         <div className="contaiber_listadd_right-option">
           <i className="bx bx-minus" onClick={minusClick}></i>
           <input
@@ -135,11 +131,7 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
           />
           <i className="bx bx-plus" onClick={plusClick}></i>
         </div>
-        <img
-          src={Icon.Ic_delete}
-          onClick={deleteProduct}
-          className="contaiber_listadd_right-ic"
-        ></img>
+        <img src={Icon.Ic_delete} onClick={deleteProduct} className="contaiber_listadd_right-ic"></img>
       </div>
     </div>
   );

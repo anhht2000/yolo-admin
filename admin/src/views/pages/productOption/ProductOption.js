@@ -33,7 +33,9 @@ const ProductOption = () => {
 
   const updateOptionApi = async (data) => {
     try {
-      const response = await updateProductOption(data.name, data.id)
+      console.log('api', data)
+
+      const response = await updateProductOption(data.name, data.meta, data.id)
       setOptions({
         ...options,
         data: options['data'].map((option) => {

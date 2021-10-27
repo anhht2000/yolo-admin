@@ -55,24 +55,26 @@ class ReceiptController {
   }
   public async createReceipt(req: Request, res: Response, next: NextFunction) {
     try {
-      const request = JSON.parse(req.body.data);
+      const request = req.body;
       const authHeader: string = req.headers['authorization'] as string;
       const token = authHeader?.split(' ')[1] as string;
       const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
-      // const sub = 'tuananhcx2000@gmail.com';
 
       let total = 0;
       let receipt;
 
       const user = await getManager().findOne(User, { where: { username: sub } });
       request.forEach((item: any) => {
-        total += item?.quantity * item?.price;
+        total += item.quanlity * item.price;
       });
 
       if (user) {
         receipt = new Receipt();
         receipt.user = user;
+        receipt.description = '';
+        receipt.address = user.address;
         receipt.totalPrice = total;
+
         await getManager().save(receipt);
       }
       const dataTemp = [];
