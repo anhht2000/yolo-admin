@@ -1,8 +1,11 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Icon } from '../../assets/index';
-import { FormatMoney } from '../../lib/FunctHelper';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { actionPlusTotalProducts, getTotalProducts } from '../../redux/reducers/productDetail.reducer';
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Icon } from "../../assets";
+import { FormatMoney } from "../../lib/FunctHelper";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import {
+  actionPlusTotalProducts,
+  getTotalProducts,
+} from "../../redux/reducers/productDetail.reducer";
 interface PropListAdd {
   product?: any;
   deleteProduct?: any;
@@ -29,17 +32,23 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
 
   let size, color;
   product.data.options.forEach((e: any) => {
-    if (e?.name === 'Size') {
-      size = e?.OptionVal.name;
-    } else if (e?.name === 'Color') {
-      color = e?.OptionVal.name;
+    if (e.name === "Size") {
+      size = e.OptionVal.name;
+    } else if (e.name === "Color") {
+      color = e.OptionVal.name;
     }
   });
 
-  const [currentNumber, SetCurrentNumber] = useState<number>(product.quantity as number);
-  const data = JSON.parse(localStorage.getItem('cartProducts') as string) as any[];
+  const [currentNumber, SetCurrentNumber] = useState<number>(
+    product.quantity as number
+  );
+  const data = JSON.parse(
+    localStorage.getItem("cartProducts") as string
+  ) as any[];
   const [number, setNumber] = useState<number>(product.quantity as number);
-  const [currentTotalProduct, setCurrentTotalProduct] = useState<number>(product.quantity as number);
+  const [currentTotalProduct, setCurrentTotalProduct] = useState<number>(
+    product.quantity as number
+  );
 
   const saveToLocal = () => {
     const totalProductPlus = number - currentTotalProduct;
@@ -65,7 +74,10 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
     } else {
       setCurrentTotalProduct(number);
       setNumber(parseInt(e.target.value));
-      setPriceUpdate((parseInt(e.target.value) - currentNumber) * parseInt(product.data.price as string));
+      setPriceUpdate(
+        (parseInt(e.target.value) - currentNumber) *
+          parseInt(product.data.price as string)
+      );
       SetCurrentNumber(parseInt(e.target.value));
     }
     handleReload(parseInt(e.target.value), currentNumber);
@@ -108,30 +120,45 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
   }, [product]);
 
   return (
-    <div className="contaiber_listadd align-items-center">
-      <div className="contaiber_listadd_left">
+    <div className="container_listadd align-items-center">
+      <div className="container_listadd_left">
         <img
           src={`${process.env.REACT_APP_API_URL}${product.data.productImg[0].imgPath}`}
           alt="img-list1"
-          className="contaiber_listadd_left-img"></img>
-        <label className="contaiber_listadd_left-title d-flex align-items-center">
+          className="container_listadd_left-img"
+        />
+        <label className="container_listadd_left-title d-flex align-items-center">
           {product.data.name}-
-          {<span className="contaiber_listadd_color" style={{ backgroundColor: color }}></span>}-{size}
+          {
+            <span
+              className="container_listadd_color"
+              style={{ backgroundColor: color }}
+            >
+
+            </span>
+          }
+          -{size}
         </label>
       </div>
-      <div className="contaiber_listadd_right">
-        <span className="contaiber_listadd_right-price">{FormatMoney(product.data.price as string)}</span>
-        <div className="contaiber_listadd_right-option">
-          <i className="bx bx-minus" onClick={minusClick}></i>
+      <div className="container_listadd_right">
+        <span className="container_listadd_right-price">
+          {FormatMoney(product.data.price as string)}
+        </span>
+        <div className="container_listadd_right-option">
+          <i className="bx bx-minus" onClick={minusClick} />
           <input
             type="text"
             value={number}
             onChange={setInputChange}
-            className="contaiber_listadd_right-option-bt"
+            className="container_listadd_right-option-bt"
           />
-          <i className="bx bx-plus" onClick={plusClick}></i>
+          <i className="bx bx-plus" onClick={plusClick} />
         </div>
-        <img src={Icon.Ic_delete} onClick={deleteProduct} className="contaiber_listadd_right-ic"></img>
+        <img
+          src={Icon.Ic_delete}
+          onClick={deleteProduct}
+          className="container_listadd_right-ic"
+         alt='icon'/>
       </div>
     </div>
   );

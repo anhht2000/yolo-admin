@@ -1,10 +1,13 @@
-import React, { ChangeEvent } from 'react';
-import { useLayoutEffect } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { FormatMoney } from '../../lib/FunctHelper';
-import { useAppDispatch } from '../../hooks/reduxHooks';
-import { actionPlusTotalProducts } from '../../redux/reducers/productDetail.reducer';
+import React, { ChangeEvent } from "react";
+import { useLayoutEffect } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { FormatMoney } from "../../lib/FunctHelper";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { actionPlusTotalProducts } from "../../redux/reducers/productDetail.reducer";
+import {Modal} from "@material-ui/core";
+import {toast} from "react-toastify";
 interface IProductDetailProps {
   source: any;
   toggleOverLay: () => void;
@@ -13,7 +16,7 @@ interface IProductDetailProps {
 const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const { source, toggleOverLay } = props;
   //data for send
-  const [imgCore, setImgCore] = useState<string>('');
+  const [imgCore, setImgCore] = useState<string>("");
   const [optionVal, setOptionVal] = useState<{ [a: string]: string }>({});
   const [number, setNumber] = useState<number>(1);
 
@@ -40,62 +43,64 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
     if (number - 1 < 1) return;
     setNumber(number - 1);
   };
+
   const saveToLocal = () => {
     dispatch(actionPlusTotalProducts(number));
-    const product = props.source
-    let optionSize
-    let optionColor
-    let size: any, color: any
-    product.option.forEach((op:any) => {
-      if(op.name === "Size") {
-        size = op.OptionVal.find((e:any) => e.name === optionVal['Size'])
+    const product = props.source;
+    let optionSize;
+    let optionColor;
+    let size: any, color: any;
+    product.option.forEach((op: any) => {
+      if (op.name === "Size") {
+        size = op.OptionVal.find((e: any) => e.name === optionVal["Size"]);
         optionSize = {
           id: op.id,
           name: op.name,
-          OptionVal: size
-        }
+          OptionVal: size,
+        };
       } else {
-        color = op.OptionVal.find((e:any) => e.name === optionVal['Color'])
+        color = op.OptionVal.find((e: any) => e.name === optionVal["Color"]);
         optionColor = {
           id: op.id,
           name: op.name,
-          OptionVal: color
-        }
+          OptionVal: color,
+        };
       }
-    })
-    const options = [optionSize, optionColor]
+    });
+    const options = [optionSize, optionColor];
     const data = {
       id: product.id,
       name: product.name,
       price: product.price,
       productImg: product.productImg,
       options: options,
-    }
+    };
     const productStorage = {
       quantity: number,
-      data: data
-    }
+      data: data,
+    };
 
-    const cartProductsLocalStorage = localStorage.getItem('cartProducts')
-    if(cartProductsLocalStorage === null) {
-      localStorage.setItem('cartProducts', JSON.stringify([productStorage]));
+    const cartProductsLocalStorage = localStorage.getItem("cartProducts");
+    if (cartProductsLocalStorage === null) {
+      localStorage.setItem("cartProducts", JSON.stringify([productStorage]));
     } else {
-      let dataProducts = JSON.parse(cartProductsLocalStorage)
-      let isCheck = false
-      dataProducts.forEach((e:any) => {
-        if(JSON.stringify(e.data).includes(JSON.stringify(data))) {
-          isCheck = true
-          e.quantity += number
-          localStorage.setItem('cartProducts', JSON.stringify(dataProducts))
+      let dataProducts = JSON.parse(cartProductsLocalStorage);
+      let isCheck = false;
+      dataProducts.forEach((e: any) => {
+        if (JSON.stringify(e.data).includes(JSON.stringify(data))) {
+          isCheck = true;
+          e.quantity += number;
+          localStorage.setItem("cartProducts", JSON.stringify(dataProducts));
         } else {
-          return
+          return;
         }
-      })
-      dataProducts.push(productStorage)
-      if(!isCheck) {
-        localStorage.setItem('cartProducts', JSON.stringify(dataProducts))
+      });
+      dataProducts.push(productStorage);
+      if (!isCheck) {
+        localStorage.setItem("cartProducts", JSON.stringify(dataProducts));
       }
     }
+    toast.success('Sản phẩm đã được thêm vào giỏ hàng')
     toggleActive();
   };
 
@@ -131,37 +136,52 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
       <div className="product-detail__core-img">
         <img src={`${process.env.REACT_APP_API_URL}${imgCore}`} alt="coreimg" />
       </div>
-      <div className={`product-detail__price-option ${seller ? 'active' : ''}`}>
-        <i className="bx bx-x product-detail__price-option--mb-icon" onClick={toggleActive}></i>
+      <div className={`product-detail__price-option ${seller ? "active" : ""}`}>
+        <i
+          className="bx bx-x product-detail__price-option--mb-icon"
+          onClick={toggleActive}
+        />
         <div className="product-detail__price-option--title">{source.name}</div>
-        <div className="product-detail__price-option--price">{source.price && FormatMoney(source.price)}</div>
+        <div className="product-detail__price-option--price">
+          {source.price && FormatMoney(source.price)}
+        </div>
         {source.option?.map((item: any, index: string) => (
           <div key={index}>
             <div className="price-option__title">{item.name}</div>
-            {item.meta === 'text' && (
+            {item.meta === "text" && (
               <div className="product-detail__price-option--circle">
                 {item.OptionVal.map((temp: any, key: string) => (
                   <div
-                    className={`circle ${optionVal[`${item.name}`] === temp.name ? 'active' : ''}`}
+                    className={`circle ${
+                      optionVal[`${item.name}`] === temp.name ? "active" : ""
+                    }`}
                     onClick={() => {
                       setOptionVal({ ...optionVal, [item.name]: temp.name });
                     }}
-                    key={key}>
+                    key={key}
+                  >
                     <div className="circle-content">{temp.name}</div>
                   </div>
                 ))}
               </div>
             )}
-            {item.meta === 'color' && (
+            {item.meta === "color" && (
               <div className="product-detail__price-option--circle">
                 {item.OptionVal.map((temp: any, key: string) => (
                   <div
-                    className={`circle ${optionVal[`${item.name}`] === temp.name ? 'active' : ''}`}
+                    className={`circle ${
+                      optionVal[`${item.name}`] === temp.name ? "active" : ""
+                    }`}
                     onClick={() => {
                       setOptionVal({ ...optionVal, [item.name]: temp.name });
                     }}
-                    key={key}>
-                    <div className="circle-content" style={{ backgroundColor: temp.name }}></div>
+                    key={key}
+                  >
+                    <div
+                      className="circle-content"
+                      style={{ backgroundColor: temp.name }}
+                    >
+                    </div>
                   </div>
                 ))}
               </div>
@@ -170,15 +190,22 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         ))}
         <div className="price-option__title">Số Lượng</div>
         <div className="product-detail__price-option--number">
-          <i className="bx bx-minus" onClick={minusClick}></i>
+          <i className="bx bx-minus" onClick={minusClick} />
           <input type="text" value={number} onChange={setInputChange} />
-          <i className="bx bx-plus" onClick={plusClick}></i>
+          <i className="bx bx-plus" onClick={plusClick} />
         </div>
         <div className="product-detail__price-option--button">
           <div className="product-detail--btn" onClick={saveToLocal}>
             Thêm vào giỏ
           </div>
-          <div className="product-detail--btn">Mua ngay</div>
+          <NavLink
+            className="product-detail--btn text-white"
+            onClick={saveToLocal}
+            exact
+            to="/list_product_add"
+          >
+            Mua ngay
+          </NavLink>
         </div>
       </div>
       <div className="product-detail__helper-mb">
@@ -187,17 +214,24 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
         </div>
       </div>
       <div className="product-detail__description">
-        <div className="product-detail__description--header">Chi tiết sản phẩm</div>
-        <div className={`product-detail__description--content ${active ? '' : 'active'}`}>
-          {source.description}
+        <div className="product-detail__description--header">
+          Chi tiết sản phẩm
+        </div>
+        <div
+          dangerouslySetInnerHTML={{ __html: source.description }}
+          className={`product-detail__description--content ${
+            active ? "" : "active"
+          }`}
+        >
         </div>
         <div className="product-detail__btn-wapper">
           <div
             className="product-detail--btn"
             onClick={() => {
               setActive(!active);
-            }}>
-            {active ? 'Thu gọn' : 'Mở rộng'}
+            }}
+          >
+            {active ? "Thu gọn" : "Mở rộng"}
           </div>
         </div>
       </div>
