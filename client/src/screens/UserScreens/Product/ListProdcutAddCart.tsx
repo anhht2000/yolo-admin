@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useCallback } from 'react';
-import LayoutContainer from '../../../layout/HomeLayout/LayoutContainer';
-import ConfirmBuyProduct from '../../../components/confirmbuyproduct/confirmbuyproduct';
-import ListAddProduct from '../../../components/listaddproduct/listaddproduct';
-import { NavLink } from 'react-router-dom';
-import { useAppDispatch } from '../../../hooks/reduxHooks';
-import { actionPlusTotalProducts } from '../../../redux/reducers/productDetail.reducer';
-import productDetailApi from '../../../core/productDetailApi';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState, useCallback } from "react";
+import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
+import ConfirmBuyProduct from "../../../components/confirmbuyproduct/confirmbuyproduct";
+import ListAddProduct from "../../../components/listaddproduct/listaddproduct";
+import { NavLink } from "react-router-dom";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { actionPlusTotalProducts } from "../../../redux/reducers/productDetail.reducer";
+import productDetailApi from "../../../core/productDetailApi";
+import { toast } from "react-toastify";
 
 const ListProdcutAddCart = () => {
   const products = JSON.parse(localStorage.getItem('cartProducts') as string) as any[];
@@ -15,6 +15,7 @@ const ListProdcutAddCart = () => {
   const [countPrice, setCountPrice] = useState(0);
   const [data, setData] = useState(products);
   const [countProduct, setCountProduct] = useState(0);
+  const [isSuccess, setIsSuccess] = useState(false);
   const handleCountPrice = () => {
     let count = 0;
     if (data.length !== 0) {
@@ -51,13 +52,15 @@ const ListProdcutAddCart = () => {
 
   const handleOrder = useCallback(async () => {
     let productsCart: any[] = [];
+    let totalProducts: number = 0;
     products.forEach((e: any) => {
+      totalProducts += e.quantity;
       let keyOption: any[] = [];
       let keyOptionVal: any[] = [];
       if (e.data.options) {
         e.data.options.forEach((t: any) => {
-          keyOption.push(t?.id);
-          keyOptionVal.push(t?.OptionVal?.id);
+          keyOption.push(t.id);
+          keyOptionVal.push(t.OptionVal.id);
         });
       }
       let optionVal: any = {};
@@ -75,9 +78,14 @@ const ListProdcutAddCart = () => {
     });
     const data = await productDetailApi.postAddToCart(productsCart);
     if (data?.status === 200) {
-      toast.success('Đặt hàng thành công');
+      setIsSuccess(true);
+      toast.success("Đặt hàng thành công");
+      dispatch(actionPlusTotalProducts(-totalProducts));
+      setData([]);
+      setCountProduct(0);
+      localStorage.setItem("cartProducts", JSON.stringify([]));
     } else {
-      toast.error('Đặt hàng thất bại');
+      toast.error("Đặt hàng thất bại");
     }
   }, []);
   const handleContinue = () => {};
@@ -92,17 +100,24 @@ const ListProdcutAddCart = () => {
       });
       dispatch(actionPlusTotalProducts(-product.quantity));
       setData(products);
-      localStorage.setItem('cartProducts', JSON.stringify(products));
+      localStorage.setItem("cartProducts", JSON.stringify(products));
     }
   };
   useEffect(() => {
     handleCountPrice();
     handleCountProduct();
   }, [data]);
+  useEffect(() => {
+    setIsSuccess(false);
+  }, []);
   return (
     <LayoutContainer>
       <div className="container_listprodcutadd">
-        <div className={`${countProduct > 0 ? '' : 'd-none'} container_listprodcutadd_leftconfirm`}>
+        <div
+          className={`${
+            countProduct > 0 ? "" : "d-none"
+          } container_listprodcutadd_leftconfirm`}
+        >
           <ConfirmBuyProduct
             count={countProduct}
             countmoney={`${countPrice}`}
@@ -110,7 +125,11 @@ const ListProdcutAddCart = () => {
             continue_shopping={handleContinue}
           />
         </div>
-        <div className={`${countProduct > 0 ? '' : 'w-100'} container_listprodcutadd_right`}>
+        <div
+          className={`${
+            countProduct > 0 ? "" : "w-100"
+          } container_listprodcutadd_right`}
+        >
           {data.length !== 0 ? (
             data.map((product, index) => (
               <div key={index}>
@@ -128,14 +147,33 @@ const ListProdcutAddCart = () => {
               </div>
             ))
           ) : (
-            <div className="container_listprodcutadd_right-Error">
-              <label>Hiện bạn chưa có sản phẩm nào trong giỏ hàng</label>
-              <div>
-                <NavLink exact to={'/product'}>
-                  <button className="container_listprodcutadd_right-Error-bt">TIẾP TỤC MUA SẮM</button>
-                </NavLink>
+            <>
+              <i
+                className={
+                  isSuccess
+                    ? "bx bx-check-circle display-1 text-success d-block text-center"
+                    : ""
+                }
+              ></i>
+              <div
+                className={`${
+                  isSuccess ? "pt-1" : ""
+                } container_listprodcutadd_right-Error`}
+              >
+                <label>
+                  {isSuccess
+                    ? "ĐẶT HÀNG THÀNH CÔNG"
+                    : "Hiện bạn chưa có sản phẩm nào trong giỏ hàng"}
+                </label>
+                <div>
+                  <NavLink exact to={"/product"}>
+                    <button className="container_listprodcutadd_right-Error-bt">
+                      TIẾP TỤC MUA SẮM
+                    </button>
+                  </NavLink>
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
