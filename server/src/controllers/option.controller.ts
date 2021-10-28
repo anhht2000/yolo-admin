@@ -37,7 +37,7 @@ class OptionController {
   }
   public async createOption(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, meta } = req.body as { name: string, meta: string };
+      const { name, meta } = req.body as { name: string; meta: string };
       const optionRep = await getConnection()
         .createQueryBuilder()
         .insert()
@@ -70,12 +70,14 @@ class OptionController {
     const queryRunner = getConnection().createQueryRunner();
     queryRunner.startTransaction();
     try {
-      await queryRunner.manager.delete(OptionValue, { option: id });
       await queryRunner.manager.delete(Option, { id: id });
-      res.send({ data: [] });
+      await queryRunner.manager.delete(OptionValue, { option: id });
+      res.status(200).send({ data: [] });
       queryRunner.commitTransaction();
     } catch (error) {
-      res.send({ message: error });
+      console.log('err', error);
+
+      res.status(500).send({ message: error });
       queryRunner.rollbackTransaction();
     } finally {
       queryRunner.release();
@@ -84,26 +86,25 @@ class OptionController {
 
   public async getAllOptionWithVariant(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await getManager().find(Option, { relations: ['optionValue'] })
+      const data = await getManager().find(Option, { relations: ['optionValue'] });
 
       res.send({
         success: true,
-        data: data
-      })
-
+        data: data,
+      });
     } catch (error) {
-      res.send({ message: error })
+      res.send({ message: error });
     }
   }
 
   public async updateOption(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params as { id: string };
-      const { name , meta } = req.body as { name: string, meta: string };
+      const { name, meta } = req.body as { name: string; meta: string };
       await getConnection()
         .createQueryBuilder()
         .update(Option)
-        .set({ name: name, meta: meta === 'color' ? Emeta.COLOR : Emeta.TEXT})
+        .set({ name: name, meta: meta === 'color' ? Emeta.COLOR : Emeta.TEXT })
         .where('id = :id', { id: id })
         .execute();
 

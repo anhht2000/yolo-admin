@@ -13,12 +13,10 @@ const productDetailApi = {
       params: { sortBy: 'name', order: desc, limit: loadProduct },
     });
   },
-  postAddToCart: (data:any) => {
+  postAddToCart: (data: any) => {
     const url = '/receipts';
-    return AxiosClient.post(url, {
-      data: data,
-    });
-  },
 
+    return AxiosClient.post(url, data);
+  },
 };
 export default productDetailApi;

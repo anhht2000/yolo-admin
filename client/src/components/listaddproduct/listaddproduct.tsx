@@ -63,7 +63,7 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
         return e;
       });
       if (flag) {
-        localStorage.setItem("cartProducts", JSON.stringify([...temp]));
+        localStorage.setItem('cartProducts', JSON.stringify([...temp]));
       }
     }
   };

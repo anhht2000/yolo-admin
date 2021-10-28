@@ -33,7 +33,9 @@ const ProductOption = () => {
 
   const updateOptionApi = async (data) => {
     try {
-      const response = await updateProductOption(data.name, data.id)
+      console.log('api', data)
+
+      const response = await updateProductOption(data.name, data.meta, data.id)
       setOptions({
         ...options,
         data: options['data'].map((option) => {
@@ -90,11 +92,13 @@ const ProductOption = () => {
               />
             </CCardBody>
             <CCardHeader className="flex_option">
-              <Pagination
-                currentPage={options.page?.currentPage}
-                totalPage={options.page?.totalPage}
-                changeData={getOptionApi}
-              />
+              {options.data?.length > 0 && (
+                <Pagination
+                  currentPage={options.page?.currentPage}
+                  totalPage={options.page?.totalPage}
+                  changeData={getOptionApi}
+                />
+              )}
             </CCardHeader>
             {viewOption && (
               <CCardHeader>

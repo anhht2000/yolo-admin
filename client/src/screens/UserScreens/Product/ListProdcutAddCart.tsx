@@ -10,9 +10,7 @@ import productDetailApi from "../../../core/productDetailApi";
 import { toast } from "react-toastify";
 
 const ListProdcutAddCart = () => {
-  const products = JSON.parse(
-    localStorage.getItem("cartProducts") as string
-  ) as any[];
+  const products = JSON.parse(localStorage.getItem('cartProducts') as string) as any[];
   const dispatch = useAppDispatch();
   const [countPrice, setCountPrice] = useState(0);
   const [data, setData] = useState(products);
@@ -72,7 +70,7 @@ const ListProdcutAddCart = () => {
       let p = {
         id: e.data.id,
         name: e.data.name,
-        quantity: e.quantity,
+        quanlity: e.quantity,
         price: e.data.price,
         option: optionVal,
       };
