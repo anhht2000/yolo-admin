@@ -101,14 +101,7 @@ export default function ProductTable(props) {
           </CTableBody>
         </CTable>
       </CCardBody>
-      {/* <CCardHeader className="flex_option">
-              <Pagination
-                currentPage={options.page?.currentPage}
-                totalPage={options.page?.totalPage}
-                changeData={getOptionApi}
-              />
-            </CCardHeader> */}
-      {products && (
+      {products.length > 0 && (
         <Pagination currentPage={currentPage} totalPage={totalPage} changeData={changePage} />
       )}
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>

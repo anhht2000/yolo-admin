@@ -13,12 +13,14 @@ export const createProductOption = async ({ name, meta }) => {
 }
 
 export const deleteProductOption = async (id) => {
+  console.log('api', id)
+
   const data = await axiosClient.delete(`/options/${id}`)
 
   return data
 }
 
-export const updateProductOption = async ({ name, meta }, id) => {
+export const updateProductOption = async (name, meta, id) => {
   const data = await axiosClient.put(`/options/${id}`, { name: name, meta: meta })
 
   return data
