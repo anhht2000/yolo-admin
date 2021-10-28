@@ -1,5 +1,6 @@
+import { ReceiptProduct } from './receiptProduct.entity';
 import { ProductOption } from './productOption.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
 import { ProductImg } from './productImg.entity';
 import { Common } from './helper/common.helper';
 
@@ -17,7 +18,7 @@ export class Product extends Common {
   @Column()
   name: string;
 
-  @Column()
+  @Column('varchar', { length: 1000 })
   description: string;
 
   @Column()
@@ -34,4 +35,7 @@ export class Product extends Common {
 
   @OneToMany(() => ProductOption, (productOption) => productOption.product)
   productOption: ProductOption[];
+
+  // @OneToOne(() => ReceiptProduct, (receiptProduct) => receiptProduct.product)
+  // receiptProduct: ReceiptProduct;
 }
