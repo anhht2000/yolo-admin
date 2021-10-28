@@ -15,9 +15,13 @@ import * as jwt from 'jsonwebtoken';
 class ReceiptController {
   public async getAllReceipt(req: Request, res: Response, next: NextFunction) {
     try {
-      const { uId, page, limit } = req.query;
+      const { all, page, limit } = req.query;
       const _page = Number(page) || CommonConfig.DEFAUT_PAGE;
       const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
+      const authHeader: string = req.headers['authorization'] as string;
+      const token = authHeader?.split(' ')[1] as string;
+      const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+      // const sub = 'tuananhcx2000@gmail.com';
 
       let condition: any = {
         skip: (_page - 1) * _limit,
@@ -31,10 +35,16 @@ class ReceiptController {
         ],
       };
 
-      if (uId) {
+      if (Boolean(all)) {
+        if (!sub) {
+          return res.status(500).json({
+            success: false,
+            message: 'Lấy hóa đơn thất bại',
+          });
+        }
         condition['where'] = {
           user: {
-            id: uId,
+            username: sub,
           },
         };
       }
@@ -42,7 +52,7 @@ class ReceiptController {
       let data = await getManager().findAndCount(Receipt, condition);
       let _total = Math.ceil(data[1] / _limit);
 
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: 'Lấy hóa đơn thành công',
         data: data[0],

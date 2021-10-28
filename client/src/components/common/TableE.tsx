@@ -1,8 +1,20 @@
+import moment from 'moment';
 import React from 'react';
+import { useHistory } from 'react-router';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { actionSetCurrentReceipt } from '../../redux/reducers/order.reducer';
 
-interface Props {}
+interface Props {
+  data: any[];
+}
 
-export const TableE = (props: Props) => {
+export const TableE = ({ data }: Props) => {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const handleClickView = (data: any) => {
+    dispatch(actionSetCurrentReceipt(data));
+    history.push('/detail');
+  };
   return (
     <div className="ps-section__right">
       <div className="ps-section__header">
@@ -21,17 +33,28 @@ export const TableE = (props: Props) => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>#MF-10000051</td>
-                <td>Oct 28, 2021 09:10</td>
-                <td>$493.89</td>
-                <td>
-                  <span className="label-warning status-label">Pending</span>
-                </td>
-                <td>
-                  <span className="ps-btn ps-btn--sm ps-btn--small">Xem</span>
-                </td>
-              </tr>
+              {data.length > 0 &&
+                data.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                      <td>#{item.id}</td>
+                      <td>{moment(item.createDate).format('DD-MM-YYYY hh:mm:ss')}</td>
+                      <td>{item.totalPrice} VND</td>
+                      <td>
+                        <span className="label-warning status-label">{item.status}</span>
+                      </td>
+                      <td>
+                        <span
+                          className="ps-btn ps-btn--sm ps-btn--small"
+                          onClick={() => {
+                            handleClickView(item);
+                          }}>
+                          Xem
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
