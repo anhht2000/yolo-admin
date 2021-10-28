@@ -1,11 +1,12 @@
-import { RootState } from './../store';
+import { RootState } from '../store';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   product: {},
   cardContent: [],
   loading: false,
-  total: 0
+  total: 0,
+  isModal: false
 }
 
 const ProductDetailsSlice = createSlice({
@@ -34,10 +35,8 @@ const ProductDetailsSlice = createSlice({
       state.loading = false
     },
     actionPlusTotalProducts: (state, action) => {
-      console.log(action.payload);
-
       state.total += action.payload
-    }
+    },
   }
 })
 

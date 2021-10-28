@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCurrentPage, getAllProduct } from '../../redux/reducers/product.reducer';
+import {Modal} from "@material-ui/core";
 
 interface PaginationProps {
   totalPage: number;
