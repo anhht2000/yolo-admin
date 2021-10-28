@@ -22,7 +22,13 @@ class ReceiptController {
       let condition: any = {
         skip: (_page - 1) * _limit,
         take: _limit,
-        relations: ['receiptProducts', 'user', 'receiptProducts.receiptOptionProducts'],
+        relations: [
+          'receiptProducts',
+          'user',
+          'receiptProducts.receiptOptionProducts',
+          'receiptProducts.product',
+          'receiptProducts.product.productImg',
+        ],
       };
 
       if (uId) {
@@ -80,14 +86,14 @@ class ReceiptController {
 
       for (const data of request) {
         const receiptProduct = new ReceiptProduct();
-        // const product = await getManager().findOne(Product, { where: { id: data.id } });
+        const product = await getManager().findOne(Product, { where: { id: data.id } });
 
-        if (receipt) {
+        if (receipt && product) {
           receiptProduct.receipt = receipt;
           receiptProduct.pruductName = data.name;
           receiptProduct.quanlity = data.quanlity;
           receiptProduct.unitPrice = data.price;
-          receiptProduct.productId = data.id;
+          receiptProduct.product = [product];
           await getManager().save(receiptProduct);
         }
 
