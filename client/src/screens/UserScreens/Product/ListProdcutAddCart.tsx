@@ -3,8 +3,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import LayoutContainer from "../../../layout/HomeLayout/LayoutContainer";
 import ConfirmBuyProduct from "../../../components/confirmbuyproduct/confirmbuyproduct";
 import ListAddProduct from "../../../components/listaddproduct/listaddproduct";
-import { NavLink } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
+import {NavLink, useHistory, useLocation} from "react-router-dom";
+import { useAppDispatch ,useAppSelector } from "../../../hooks/reduxHooks";
 import { actionPlusTotalProducts } from "../../../redux/reducers/productDetail.reducer";
 import productDetailApi from "../../../core/productDetailApi";
 import { toast } from "react-toastify";
@@ -16,6 +16,11 @@ const ListProdcutAddCart = () => {
   const [data, setData] = useState(products);
   const [countProduct, setCountProduct] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
+  const lastLocation = useLocation()
+  const history = useHistory();
+  // const isLogin = useAppSelector(getLogin);
+  const isLogin = false
+
   const handleCountPrice = () => {
     let count = 0;
     if (data.length !== 0) {
@@ -51,6 +56,9 @@ const ListProdcutAddCart = () => {
   };
 
   const handleOrder = useCallback(async () => {
+    if (!isLogin) {
+      return history.push(`/login?redirectTo=${lastLocation.pathname}`)
+    }
     let productsCart: any[] = [];
     let totalProducts: number = 0;
     products.forEach((e: any) => {
@@ -85,7 +93,7 @@ const ListProdcutAddCart = () => {
       setCountProduct(0);
       localStorage.setItem("cartProducts", JSON.stringify([]));
     } else {
-      toast.error("Đặt hàng thất bại");
+      toast.error("Đặt hàng thất bại, xin vui lòng thử lại hoặc đăng nhập lại");
     }
   }, []);
   const handleContinue = () => {};

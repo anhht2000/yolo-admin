@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FormatMoney } from "../../lib/FunctHelper";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 import { actionPlusTotalProducts } from "../../redux/reducers/productDetail.reducer";
-import {Modal} from "@material-ui/core";
 import {toast} from "react-toastify";
 interface IProductDetailProps {
   source: any;
@@ -24,6 +23,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const [active, setActive] = useState(false);
   const [seller, setSeller] = useState(false);
   const dispatch = useAppDispatch();
+
   const toggleActive = () => {
     setSeller(!seller);
     toggleOverLay();
