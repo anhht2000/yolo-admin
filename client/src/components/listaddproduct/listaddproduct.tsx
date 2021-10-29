@@ -30,15 +30,6 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
     reloadCountProduct,
   } = props;
 
-  let size, color;
-  product.data.options.forEach((e: any) => {
-    if (e.name === "Size") {
-      size = e.OptionVal.name;
-    } else if (e.name === "Color") {
-      color = e.OptionVal.name;
-    }
-  });
-
   const [currentNumber, SetCurrentNumber] = useState<number>(
     product.quantity as number
   );
@@ -128,16 +119,27 @@ const Listaddproduct: React.FC<PropListAdd> = (props) => {
           className="container_listadd_left-img"
         />
         <label className="container_listadd_left-title d-flex align-items-center">
-          {product.data.name}-
+          {product.data.name}{product.data.options.length > 0 && '-'}
           {
-            <span
-              className="container_listadd_color"
-              style={{ backgroundColor: color }}
-            >
+            product.data.options.map((option: any, index: number) => (
+              <div key={index} className="d-flex align-items-center">
+                {option.meta === 'color' &&
+                  (<>
+                      <span
+                        className="container_listadd_color"
+                        style={{ backgroundColor: option.OptionVal.name }}
+                      >
 
-            </span>
+                  </span>
+                      {index < product.data.options.length - 1 && '-'}
+                  </>)
+                }
+                {option.meta === 'text' &&
+                (<span>{option.OptionVal.name}{index < product.data.options.length - 1 && '-'}</span>)
+                }
+              </div>
+            ))
           }
-          -{size}
         </label>
       </div>
       <div className="container_listadd_right">

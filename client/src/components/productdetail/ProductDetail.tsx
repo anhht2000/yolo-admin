@@ -47,27 +47,20 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
   const saveToLocal = () => {
     dispatch(actionPlusTotalProducts(number));
     const product = props.source;
-    let optionSize;
-    let optionColor;
-    let size: any, color: any;
-    product.option.forEach((op: any) => {
-      if (op.name === "Size") {
-        size = op.OptionVal.find((e: any) => e.name === optionVal["Size"]);
-        optionSize = {
-          id: op.id,
-          name: op.name,
-          OptionVal: size,
-        };
-      } else {
-        color = op.OptionVal.find((e: any) => e.name === optionVal["Color"]);
-        optionColor = {
-          id: op.id,
-          name: op.name,
-          OptionVal: color,
-        };
+    let options: any[] = []
+    const keyOptionVal = Object.keys(optionVal)
+    keyOptionVal.forEach((e: any) => {
+      const h = product.option.find((t:any) => t.name === e)
+      const x = h.OptionVal.find((v: any) => v.name === optionVal[e])
+      const y = {
+        id: h.id,
+        name: h.name,
+        meta: h.meta,
+        OptionVal: x,
       }
-    });
-    const options = [optionSize, optionColor];
+      options.push(y)
+    })
+
     const data = {
       id: product.id,
       name: product.name,
@@ -150,7 +143,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
             <div className="price-option__title">{item.name}</div>
             {item.meta === "text" && (
               <div className="product-detail__price-option--circle">
-                {item.OptionVal.map((temp: any, key: string) => (
+                {item.OptionVal?.map((temp: any, key: string) => (
                   <div
                     className={`circle ${
                       optionVal[`${item.name}`] === temp.name ? "active" : ""
@@ -167,7 +160,7 @@ const ProductDetail: React.FC<IProductDetailProps> = (props) => {
             )}
             {item.meta === "color" && (
               <div className="product-detail__price-option--circle">
-                {item.OptionVal.map((temp: any, key: string) => (
+                {item.OptionVal?.map((temp: any, key: string) => (
                   <div
                     className={`circle ${
                       optionVal[`${item.name}`] === temp.name ? "active" : ""
