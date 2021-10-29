@@ -1,3 +1,5 @@
+import { DetailOrder } from './../screens/UserScreens/Order/DetailOrder';
+import { HistoryOrder } from './../screens/UserScreens/Order/HistoryOrder';
 import ForgotPasswordEndUser from '../screens/UserScreens/Auth/ForgotPassword';
 import ChangePass from '../screens/UserScreens/Authen/ChangePass';
 import ForgetPassword from '../screens/UserScreens/Authen/ForgetPassword';
@@ -82,6 +84,20 @@ export const AppRouterConfig: IAppRouterConfig[] = [
     name: 'Change pasword',
     path: '/change-pass/:token',
     component: ChangePass,
+    exact: false,
+    type: ETYPE.USER,
+  },
+  {
+    name: 'History Order',
+    path: '/history',
+    component: HistoryOrder,
+    exact: false,
+    type: ETYPE.USER,
+  },
+  {
+    name: 'Detail History Order',
+    path: '/detail',
+    component: DetailOrder,
     exact: false,
     type: ETYPE.USER,
   },
