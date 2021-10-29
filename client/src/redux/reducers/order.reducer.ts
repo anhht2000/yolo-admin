@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isLoading: false,
+  isLogin: false,
   data: [],
   currentReceipt: {},
   currentPage: 1,
@@ -25,16 +26,20 @@ const OrderSlice = createSlice({
     actionSetCurrentReceipt: (state, action) => {
       state.currentReceipt = action.payload;
     },
+    actionSetLogin(state, action) {
+      state.isLogin = action.payload;
+    },
   },
 });
 
 //action
-export const { actionGetReceiptUser, actionGetReceiptUserSuccess, actionSetCurrentReceipt } =
+export const { actionGetReceiptUser, actionGetReceiptUserSuccess, actionSetCurrentReceipt, actionSetLogin } =
   OrderSlice.actions;
 //selector
 export const getDataReceipt = (state: RootState) => state.order.data;
 export const getCurrentPageReceipt = (state: RootState) => state.order.currentPage;
 export const getCurrentReceipt = (state: RootState) => state.order.currentReceipt;
+export const getLogin = (state: RootState) => state.order.isLogin;
 //reducer
 const OrderReducer = OrderSlice.reducer;
 export default OrderReducer;

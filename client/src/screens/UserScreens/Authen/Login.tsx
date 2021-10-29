@@ -7,6 +7,8 @@ import AuthLayout from '../../../layout/AuthLayout/AuthLayout';
 import '../../../sass/components/_form.scss';
 import userApi, { ISignIn } from '../../../core/userApi';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { actionSetLogin } from '../../../redux/reducers/order.reducer';
 
 const schema = yup.object().shape({
   username: yup.string().email('Bạn phải nhập đúng định dạng email').required('Bạn phải nhập email'),
@@ -14,6 +16,7 @@ const schema = yup.object().shape({
 });
 export default function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [isShowPass, setIsShowPass] = useState(false);
   const {
     register,
@@ -35,9 +38,12 @@ export default function Login() {
       const data = await userApi.signIn(value);
       if (data?.status === 200) {
         localStorage.setItem('token', data?.data?.data);
+        localStorage.setItem('isLogin', JSON.stringify(true));
+        dispatch(actionSetLogin(true));
         toast.success('Đăng nhập thành công');
         history.push('/');
       } else {
+        dispatch(actionSetLogin(true));
         toast.error('Đăng nhập thất bại');
       }
     },
@@ -49,11 +55,6 @@ export default function Login() {
         <div className="d-flex flex-row align-items-center justify-content-center">
           <p className="lead fw-bold mb-3 me-3 fs-1">Đăng nhập</p>
         </div>
-
-        {/* <div className="divider d-flex align-items-center justify-content-center ">
-          <p className=" fw-bold my-5 mx-3 mb-0">Với</p>
-        </div> */}
-
         <div className="form-outline mb-4 mt-4">
           <input
             type="text"
