@@ -8,6 +8,7 @@ import { useAppDispatch ,useAppSelector } from "../../../hooks/reduxHooks";
 import { actionPlusTotalProducts } from "../../../redux/reducers/productDetail.reducer";
 import productDetailApi from "../../../core/productDetailApi";
 import { toast } from "react-toastify";
+import {getLogin} from "../../../redux/reducers/order.reducer";
 
 const ListProdcutAddCart = () => {
   const products = JSON.parse(localStorage.getItem('cartProducts') as string) as any[];
@@ -18,8 +19,7 @@ const ListProdcutAddCart = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const lastLocation = useLocation()
   const history = useHistory();
-  // const isLogin = useAppSelector(getLogin);
-  const isLogin = false
+  const isLogin = useAppSelector(getLogin);
 
   const handleCountPrice = () => {
     let count = 0;
