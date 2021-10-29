@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,25 +24,26 @@ export default function Login() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get("redirectTo");
+
   const handleMouseDown = ({ target }: any) => {
     clearErrors();
   };
-  const onSubmit = (data: any) => {
-    callApi(data);
+  const onSubmit =  async (data: any) => {
+     await callApi(data);
   };
-  const callApi = useCallback(
-    async (value: ISignIn) => {
+  const callApi = async (value: ISignIn) => {
       const data = await userApi.signIn(value);
       if (data?.status === 200) {
         localStorage.setItem('token', data?.data?.data);
         toast.success('Đăng nhập thành công');
-        history.push('/');
+        history.push( redirectTo == null ? "/" : redirectTo as any);
       } else {
         toast.error('Đăng nhập thất bại');
       }
-    },
-    [history]
-  );
+    };
   return (
     <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
