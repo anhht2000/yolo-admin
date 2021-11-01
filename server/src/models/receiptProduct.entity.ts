@@ -21,9 +21,6 @@ export class ReceiptProduct extends Common {
   @Column()
   unitPrice: number;
 
-  // @Column()
-  // productId: number;
-
   @ManyToOne(() => Receipt, (receipt: Receipt) => receipt.receiptProducts)
   receipt: Receipt;
 

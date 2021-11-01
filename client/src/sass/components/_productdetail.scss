@@ -1,7 +1,7 @@
 .check-modal {
   width: 340px;
   height: 180px;
-  border: 1px solid #343A40;
+  border: 1px solid #343a40;
   top: 50vh;
   right: 50%;
   transform: translateX(50%);
@@ -14,6 +14,7 @@
     @media screen and (max-width: 900px) {
       padding: 0 2rem;
       width: 20%;
+      height: 335px;
     }
     @media screen and (max-width: 564px) {
       width: 30%;
@@ -22,9 +23,15 @@
     width: 10%;
     display: flex;
     flex-direction: column;
+    height: 390px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      // width: 10px;
+      display: none;
+    }
     img {
       cursor: pointer;
-      width: 100%;
+      height: 130px;
       object-fit: contain;
     }
   }
@@ -147,6 +154,7 @@
 }
 
 .product-detail__helper-mb {
+  margin-top: 1.5rem;
   display: none;
   @media screen and (max-width: 900px) {
     width: 100%;

@@ -7,20 +7,21 @@
   padding: 2rem;
   &__mb-menu {
     display: none;
-    @media screen and (max-width:849px) {
+    @media screen and (max-width: 849px) {
       display: block;
       font-size: 2.5rem;
       cursor: pointer;
       padding-left: 0;
+      width: 50%;
     }
   }
 
   &__link {
-    @media screen and (max-width:850px) {
+    @media screen and (max-width: 850px) {
       position: absolute;
       flex-direction: column;
       top: 70%;
-      @media screen and (max-width:564px) {
+      @media screen and (max-width: 564px) {
         left: 2rem;
       }
       gap: 1rem;
@@ -42,17 +43,23 @@
     gap: 2rem;
     font-weight: 600;
     &-active {
-      color: blue!important;
+      color: blue !important;
     }
   }
 
   &__icon {
-    @media screen and (max-width:850px) {
-      display: none;
+    @media screen and (max-width: 850px) {
+      // width: 50%;
+      & li:first-child {
+        // display: none;
+      }
     }
     display: flex;
     gap: 2rem;
     font-size: 2.5rem;
+    padding: 0;
+    margin: 0;
+
     & li {
       z-index: 99;
       cursor: pointer;
@@ -74,12 +81,15 @@
     }
   }
 
-  &__logo{
+  &__logo {
+    @media only screen and (max-width: 830px) {
+      left: 35%;
+    }
     cursor: pointer;
     position: absolute;
-    top:50%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     &--img {
       width: 8rem;
     }
@@ -104,10 +114,10 @@
     }
 
     font-size: 1.2rem;
-    &:not(:last-child){
+    &:not(:last-child) {
       line-height: 2;
       & > div:hover {
-        &:not(:first-child){
+        &:not(:first-child) {
           color: blue;
           cursor: pointer;
         }
