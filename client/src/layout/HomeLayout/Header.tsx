@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { imgLogo } from '../../assets';
@@ -8,6 +8,7 @@ import { getTotalProducts } from '../../redux/reducers/productDetail.reducer';
 import { HeaderIcons, HeaderLinks } from './HeaderLinks';
 const Header = () => {
   const [dpmenu, setDpmenu] = useState(false);
+  const [user, setUser] = useState('');
   const totalProductInCart = useAppSelector(getTotalProducts);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -23,6 +24,11 @@ const Header = () => {
     if (window.innerWidth < 850) setDpmenu(false);
   }, []);
   const dpMenuToggle = () => setDpmenu(!dpmenu);
+
+  useEffect(() => {
+    const user = localStorage.getItem('user') || '';
+    setUser(user);
+  }, []);
   return (
     <div className="header">
       <i className="header__mb-menu bx bxs-grid-alt" onClick={dpMenuToggle}></i>
@@ -53,7 +59,7 @@ const Header = () => {
             <div className="info-user">
               <div className="d-flex align-items-center gap-2 ">
                 <img src="https://picsum.photos/id/237/200/300" alt="" className="img-avt" />
-                <span className="fs-5">tuananhcx2000@gmail.com</span>
+                <span className="fs-5">{user}</span>
               </div>
               <ul className="sub-avt">
                 <li className="sub-avt__item">

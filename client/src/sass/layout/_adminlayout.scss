@@ -152,11 +152,19 @@ $width: 25rem;
   flex-shrink: 1;
 }
 .info-user {
-  // max-width: 15rem;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // white-space: nowrap;
   position: relative;
+  @media only screen and (max-width: 700px) {
+    .gap-2 {
+      span {
+        display: none;
+      }
+    }
+  }
+  span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   &:hover {
     .sub-avt {
       display: block;
@@ -164,6 +172,10 @@ $width: 25rem;
   }
 }
 .sub-avt {
+  @media only screen and (max-width: 610px) {
+    left: -100%;
+    // min-width: 100px;
+  }
   display: none;
   position: absolute;
   top: 150%;
@@ -172,9 +184,13 @@ $width: 25rem;
   padding: 4px 15px;
   background-color: #fff;
   font-size: 1.4rem;
-  width: 100%;
   box-shadow: 2px 4px 6px 1px black;
   &::after {
+    @media only screen and (max-width: 610px) {
+      right: 18px;
+      left: unset;
+      top: -33%;
+    }
     content: '';
     position: absolute;
     top: -40%;

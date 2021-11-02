@@ -49,10 +49,10 @@ const ManageUser = () => {
           <CCard className="mb-4">
             <CCardHeader>
               <CRow className={'mt-2 flex_option'}>
-                <CCol xs="4">
+                <CCol xs="6" md="4">
                   <strong>Quản lý khách hàng</strong> <small>(khóa tài khoản khách ...)</small>
                 </CCol>
-                <CCol xs="4">
+                <CCol xs="6" md="4">
                   <CForm className="row g-0 position-relative">
                     <CCol xs="12">
                       <CFormInput

@@ -107,6 +107,7 @@ class UserController {
         success: true,
         message: 'Login successfully',
         data: token,
+        username: user.username,
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Login Fail' });

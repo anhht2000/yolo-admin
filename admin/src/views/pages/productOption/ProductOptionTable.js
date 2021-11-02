@@ -29,8 +29,12 @@ const ProductOptionTable = (props) => {
           <CTableHeaderCell scope="col">#</CTableHeaderCell>
           <CTableHeaderCell scope="col">Tên</CTableHeaderCell>
           <CTableHeaderCell scope="col">Loại</CTableHeaderCell>
-          <CTableHeaderCell scope="col">Ngày tạo</CTableHeaderCell>
-          <CTableHeaderCell scope="col">Ngày sửa</CTableHeaderCell>
+          <CTableHeaderCell scope="col" style={{ minWidth: '120px' }}>
+            Ngày tạo
+          </CTableHeaderCell>
+          <CTableHeaderCell scope="col" style={{ minWidth: '220px' }}>
+            Ngày sửa
+          </CTableHeaderCell>
           <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
         </CTableRow>
       </CTableHead>

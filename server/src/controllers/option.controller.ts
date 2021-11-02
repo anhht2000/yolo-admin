@@ -70,13 +70,11 @@ class OptionController {
     const queryRunner = getConnection().createQueryRunner();
     queryRunner.startTransaction();
     try {
-      await queryRunner.manager.delete(Option, { id: id });
       await queryRunner.manager.delete(OptionValue, { option: id });
+      await queryRunner.manager.delete(Option, { id: id });
       res.status(200).send({ data: [] });
       queryRunner.commitTransaction();
     } catch (error) {
-      console.log('err', error);
-
       res.status(500).send({ message: error });
       queryRunner.rollbackTransaction();
     } finally {

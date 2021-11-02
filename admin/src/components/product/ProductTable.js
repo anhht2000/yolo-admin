@@ -58,7 +58,9 @@ export default function ProductTable(props) {
               <CTableHeaderCell scope="col">Ảnh</CTableHeaderCell>
               <CTableHeaderCell scope="col">Tên</CTableHeaderCell>
               <CTableHeaderCell scope="col">Giá Tiền</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Ngày Tạo</CTableHeaderCell>
+              <CTableHeaderCell scope="col" style={{ minWidth: '120px' }}>
+                Ngày Tạo
+              </CTableHeaderCell>
               <CTableHeaderCell scope="col">Hành động</CTableHeaderCell>
             </CTableRow>
           </CTableHead>

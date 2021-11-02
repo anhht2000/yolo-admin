@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {Link, useHistory, useLocation} from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -29,27 +29,28 @@ export default function Login() {
   });
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const redirectTo = params.get("redirectTo");
+  const redirectTo = params.get('redirectTo');
 
   const handleMouseDown = ({ target }: any) => {
     clearErrors();
   };
-  const onSubmit =  async (data: any) => {
-     await callApi(data);
+  const onSubmit = async (data: any) => {
+    await callApi(data);
   };
   const callApi = async (value: ISignIn) => {
-      const data = await userApi.signIn(value);
-      if (data?.status === 200) {
-        localStorage.setItem('token', data?.data?.data);
-        localStorage.setItem('isLogin', JSON.stringify(true));
-        dispatch(actionSetLogin(true));
-        toast.success('Đăng nhập thành công');
-        history.push( redirectTo == null ? "/" : redirectTo as any);
-      } else {
-        dispatch(actionSetLogin(true));
-        toast.error('Đăng nhập thất bại');
-      }
-    };
+    const data = await userApi.signIn(value);
+    if (data?.status === 200) {
+      localStorage.setItem('token', data?.data?.data);
+      localStorage.setItem('user', data?.data?.username);
+      localStorage.setItem('isLogin', JSON.stringify(true));
+      dispatch(actionSetLogin(true));
+      toast.success('Đăng nhập thành công');
+      history.push(redirectTo == null ? '/' : (redirectTo as any));
+    } else {
+      dispatch(actionSetLogin(true));
+      toast.error('Đăng nhập thất bại');
+    }
+  };
   return (
     <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)}>

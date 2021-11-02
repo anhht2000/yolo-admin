@@ -48,8 +48,12 @@ export default function ReceiptTable({ data }) {
               <CTableHeaderCell scope="col">SĐT đặt hàng</CTableHeaderCell>
               <CTableHeaderCell scope="col">Địa chỉ</CTableHeaderCell>
               <CTableHeaderCell scope="col">Tổng tiền</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Ngày Tạo</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Trạng thái</CTableHeaderCell>
+              <CTableHeaderCell scope="col" style={{ minWidth: '120px' }}>
+                Ngày Tạo
+              </CTableHeaderCell>
+              <CTableHeaderCell scope="col" style={{ minWidth: '129px' }}>
+                Trạng thái
+              </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
