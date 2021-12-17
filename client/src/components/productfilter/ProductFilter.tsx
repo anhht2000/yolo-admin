@@ -25,6 +25,28 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
       <div className={`product-filter ${active ? '' : 'hidden'}`}>
         {helper &&
           helper.map((element, index) => {
+            if (element !== 'Color') {
+              return (
+                <div className="product-filter__header" key={index}>
+                  {capitalizeFirstLetter(element)}
+                  <div className="product-filter__content">
+                    {filter &&
+                      filter[element].map((e, index) => (
+                        <div className="product-filter__content-child" key={index}>
+                          <input
+                            type="checkbox"
+                            name={e.content}
+                            value={element}
+                            checked={e.use as boolean}
+                            onChange={onChange}
+                          />{' '}
+                          &nbsp; {capitalizeFirstLetter(e.content)}
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              );
+            }
             return (
               <div className="product-filter__header" key={index}>
                 {capitalizeFirstLetter(element)}
@@ -39,7 +61,16 @@ const ProductFilter: React.FC<IProductFilter> = (props) => {
                           checked={e.use as boolean}
                           onChange={onChange}
                         />{' '}
-                        &nbsp; {capitalizeFirstLetter(e.content)}
+                        &nbsp;{' '}
+                        <div
+                          style={{
+                            height: '17px',
+                            width: '20px',
+                            marginLeft: '5px',
+                            backgroundColor: `${e.content}`,
+                            borderRadius: '5px',
+                            border: '1px solid #777',
+                          }}></div>
                       </div>
                     ))}
                 </div>

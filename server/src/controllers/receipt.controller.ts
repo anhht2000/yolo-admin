@@ -20,7 +20,7 @@ class ReceiptController {
       const _limit = Number(limit) || CommonConfig.DEFAUT_PERPAGE;
       const authHeader: string = req.headers['authorization'] as string;
       const token = authHeader?.split(' ')[1] as string;
-      const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+
       // const sub = 'tuananhcx2000@gmail.com';
 
       let condition: any = {
@@ -36,6 +36,8 @@ class ReceiptController {
       };
 
       if (Boolean(all)) {
+        const { sub } = await jwt.verify(token, String(process.env.SCREET_KEY));
+
         if (!sub) {
           return res.status(500).json({
             success: false,

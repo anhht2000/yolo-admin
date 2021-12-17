@@ -8,7 +8,7 @@ export class ExpressConfig {
     app.use(json());
     app.use(urlencoded({ extended: true }));
     app.use(cors());
-    app.use(express.static(path.resolve(__dirname, '../../', 'public')))
+    app.use(express.static(path.resolve(__dirname, '../../', 'public')));
     RouterConstant.forEach((element) => {
       app.use(element.path, element.router);
     });

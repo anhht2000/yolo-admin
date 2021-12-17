@@ -6,7 +6,6 @@ dotenv.config();
 
 const Boostrap = async () => {
   const connect = await createConnection();
-  await connect.runMigrations();
   const app = express();
   new ExpressConfig(app);
 
