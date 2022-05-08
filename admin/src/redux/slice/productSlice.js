@@ -74,6 +74,8 @@ const productSlice = createSlice({
       state.loading = false
     },
     actionGetOptionSuccess: (state, action) => {
+      console.log('zooo', action)
+
       state.loading = false
       state.optionValue = Object.assign({}, action.payload.filter)
       state.option = action.payload.helper

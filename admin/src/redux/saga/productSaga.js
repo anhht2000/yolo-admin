@@ -59,10 +59,12 @@ export function* getOptionProductSaga() {
 
     let helper = []
     let optValue = {}
-    data.data?.forEach((e) => {
-      if (e.optionValue && e?.optionValue?.length > 0) {
+    console.log('data', data)
+
+    data.payload.data?.forEach((e) => {
+      if (e.values && e?.values?.length > 0) {
         helper.push(e)
-        optValue[e.id] = e.optionValue
+        optValue[e.id] = e.values
       }
     })
 

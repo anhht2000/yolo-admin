@@ -1,7 +1,13 @@
 import axiosClient from './axiosClient'
 
-export const getProductOption = async (page = 1, search = '', limit = '') => {
+export const getAllProductOption = async (page = 1, search = '', limit = '') => {
   const data = await axiosClient.get(`/options?page=${page}`)
+
+  return data
+}
+
+export const getProductOption = async () => {
+  const data = await axiosClient.get(`/admin/option`)
 
   return data
 }

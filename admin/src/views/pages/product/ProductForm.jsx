@@ -8,6 +8,7 @@ import { useHistory } from 'react-router'
 import { toast } from 'react-toastify'
 import { imgLogo } from 'src/assets'
 import productApi from 'src/config/productApi'
+import uploadApi from 'src/config/upload.api'
 import { validateName, validatePrice } from 'src/helper/CheckData'
 import { actionGetOption, getOption, getOptionValue } from 'src/redux/slice/productSlice'
 
@@ -19,6 +20,8 @@ export default function ProductForm({ initialValue }) {
   const [numberAttri, setNumberAttri] = useState(0)
   const [currentOption, setCurrentOption] = useState([])
   const [deleteFile, setDeleteFile] = useState([])
+  const [optionDatas, setOptionDatas] = useState([])
+
   const [variant, setVariant] = useState({})
   const [label, setLabel] = useState([])
   const [acceptFile, setAcceptFile] = useState([])
@@ -28,13 +31,25 @@ export default function ProductForm({ initialValue }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
-      setError({ ...error, image: '' })
-      var Accept = acceptedFiles.map((item) => {
-        return Object.assign(item, {
-          preview: URL.createObjectURL(item),
-        })
+      acceptedFiles.forEach(async (file) => {
+        const data = new FormData()
+        data.append('file', file)
+
+        const isUpload = await uploadApi.uploadFile(data)
+        if (isUpload.data?.success) {
+          setAcceptFile((prev) => {
+            return [...prev, isUpload.data.payload?.path?.slice(1)]
+          })
+        }
       })
-      setAcceptFile([...acceptFile, ...Accept])
+      setError({ ...error, image: '' })
+
+      // var Accept = acceptedFiles.map((item) => {
+      //   return Object.assign(item, {
+      //     preview: URL.createObjectURL(item),
+      //   })
+      // })
+      // setAcceptFile([...acceptFile, ...Accept])
     },
   })
   const toCapitalize = useCallback(function capitalizeFirstLetter(string) {
@@ -51,21 +66,36 @@ export default function ProductForm({ initialValue }) {
     }
   }
   const handleCheckbox = ({ target }) => {
-    const { name, value } = target
-    if (!variant.hasOwnProperty(`${name}`)) {
-      setVariant((prev) => {
-        return { ...prev, [name]: [] }
-      })
-      setVariant((prev) => {
-        return { ...prev, [name]: [...prev[name], value] }
-      })
+    let { name, value } = target
+    name=Number(name)
+    value=Number(value)
+
+    if (
+      optionDatas.findIndex((option) => option.valueId === value && option.optionId === name) !== -1
+    ) {
+      const optionIndex = optionDatas.findIndex(
+        (option) => option.valueId === value && option.optionId === name,
+      )
+      const data = [...optionDatas]
+      setOptionDatas([...data.slice(0, optionIndex), data.slice(optionIndex + 1)])
     } else {
-      setVariant((prev) => {
-        if (prev[name].includes(value)) {
-          return { ...prev, [name]: prev[name].filter((e) => e !== value) }
-        } else return { ...prev, [name]: [...prev[name], value] }
-      })
+      setOptionDatas([...optionDatas, { valueId: value, optionId: name }])
     }
+
+    // if (!variant.hasOwnProperty(`${name}`)) {
+    //   setVariant((prev) => {
+    //     return { ...prev, [name]: [] }
+    //   })
+    //   setVariant((prev) => {
+    //     return { ...prev, [name]: [...prev[name], value] }
+    //   })
+    // } else {
+    //   setVariant((prev) => {
+    //     if (prev[name].includes(value)) {
+    //       return { ...prev, [name]: prev[name].filter((e) => e !== value) }
+    //     } else return { ...prev, [name]: [...prev[name], value] }
+    //   })
+    // }
   }
   const handleClickAddAttribute = () => {
     setError({ ...error, variant: '' })
@@ -82,15 +112,21 @@ export default function ProductForm({ initialValue }) {
     }
   }
   const handleRemoveImage = (image) => {
-    const newArrImage = acceptFile.filter((item) => item.preview !== image.preview)
-    if (image.id)
-      setDeleteFile([...deleteFile, { id: image.id.toString(), filePath: image.filePath }])
+    const newArrImage = acceptFile.filter((item) => item !== image)
+    // if (image.id)
+    // setDeleteFile([...deleteFile, { id: image.id.toString(), filePath: image.filePath }])
     setAcceptFile(newArrImage)
   }
   const handleChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
   }
+
+  const handleChangeOptionInput = ({ target }) => {
+    const { name, value } = e.target
+    setValues({ ...values, [name]: value })
+  }
+
   const handleRemoveErr = ({ target }) => {
     const { name } = target
     setError({
@@ -99,7 +135,6 @@ export default function ProductForm({ initialValue }) {
     })
   }
   const handleSubmit = async () => {
-    console.log('variant', Object.keys(variant).length < 1)
     const checkName = validateName(values?.name)
     const checkPrice = validatePrice(values.price)
 
@@ -127,16 +162,15 @@ export default function ProductForm({ initialValue }) {
       if (Object.values(prev).every((e) => e === '')) {
         const formdata = new FormData()
         acceptFile.forEach((item) => {
-          formdata.append('allImg', item)
+          formdata.append('images', item)
         })
         formdata.append('name', values.name)
-        formdata.append('price', values.price)
         formdata.append('description', description)
         formdata.append('status', values.status)
         formdata.append('label', label)
-        formdata.append('imageDelete', JSON.stringify(deleteFile))
-        formdata.append('option', JSON.stringify(variant))
-
+        // formdata.append('imageDelete', JSON.stringify(deleteFile))
+        formdata.append('options', JSON.stringify(variant))
+        console.log(variant)
         if (initialValue) {
           callApi(formdata, initialValue?.id)
         } else {
@@ -164,45 +198,45 @@ export default function ProductForm({ initialValue }) {
   useEffect(() => {
     dispatch(actionGetOption())
   }, [dispatch])
-  useEffect(() => {
-    if (initialValue && Object.keys(initialValue).length > 0) {
-      const { name, price, description, status, productImg, label, productOption } = initialValue
-      setValues({ name, price, description, status })
-      if (productImg) {
-        const dtTest = productImg.map((e) => ({
-          id: e.id,
-          preview: process.env.REACT_APP_API_URL + e?.imgPath,
-          name: e?.name,
-          filePath: e?.imgPath,
-        }))
-        setAcceptFile(dtTest)
-      }
-      if (label) {
-        const _label = label.split(',')
-        setLabel(_label)
-      }
-      if (productOption) {
-        let iniVariant = {}
-        productOption.forEach((e) => {
-          if (!iniVariant.hasOwnProperty(e.option.id)) {
-            iniVariant = { ...iniVariant, [e.option.id]: [] }
-            iniVariant[e.option.id].push(String(e.optionValue.id))
-          } else {
-            iniVariant = {
-              ...iniVariant,
-              [e.option.id]: [...iniVariant[e.option.id], String(e.optionValue.id)],
-            }
-          }
-        })
-        setVariant(iniVariant)
-        setNumberAttri(Object.keys(iniVariant).length)
-        setCurrentOption(option?.slice(0, Object.keys(iniVariant).length))
-      }
-    }
-  }, [initialValue])
+
+  // useEffect(() => {
+  //   if (initialValue && Object.keys(initialValue).length > 0) {
+  //     const { name, price, description, status, productImg, label, productOption } = initialValue
+  //     setValues({ name, price, description, status })
+  //     if (productImg) {
+  //       const dtTest = productImg.map((e) => ({
+  //         id: e.id,
+  //         preview: process.env.REACT_APP_API_URL + e?.imgPath,
+  //         name: e?.name,
+  //         filePath: e?.imgPath,
+  //       }))
+  //       setAcceptFile(dtTest)
+  //     }
+  //     if (label) {
+  //       const _label = label.split(',')
+  //       setLabel(_label)
+  //     }
+  //     if (productOption) {
+  //       let iniVariant = {}
+  //       productOption.forEach((e) => {
+  //         if (!iniVariant.hasOwnProperty(e.option.id)) {
+  //           iniVariant = { ...iniVariant, [e.option.id]: [] }
+  //           iniVariant[e.option.id].push(String(e.optionValue.id))
+  //         } else {
+  //           iniVariant = {
+  //             ...iniVariant,
+  //             [e.option.id]: [...iniVariant[e.option.id], String(e.optionValue.id)],
+  //           }
+  //         }
+  //       })
+  //       setVariant(iniVariant)
+  //       setNumberAttri(Object.keys(iniVariant).length)
+  //       setCurrentOption(option?.slice(0, Object.keys(iniVariant).length))
+  //     }
+  //   }
+  // }, [initialValue])
   return (
     <div className="row">
-      {console.log('err', error)}
       <div className="col-lg-9">
         <div className="main-form">
           <div className="form-body">
@@ -244,7 +278,6 @@ export default function ProductForm({ initialValue }) {
               <label htmlFor="description" className="control-label ">
                 Miêu tả
               </label>
-              {console.log('data', values, description)}
               <CKEditor
                 className="test"
                 editor={ClassicEditor}
@@ -254,7 +287,6 @@ export default function ProductForm({ initialValue }) {
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData()
-                  console.log(values)
                   setDescription(data)
                 }}
               />
@@ -278,18 +310,18 @@ export default function ProductForm({ initialValue }) {
                   currentOption.map((option) => {
                     return (
                       <div className="product-attribute-set-item" key={option.id}>
-                        <div className="row">
-                          <div className="col-md-4 col-sm-6">
+                        <div className="row align-items-center">
+                          <div className="col-md-3 col-sm-6">
                             <div className="form-group mb-3">
-                              <label className="text-title-field">Attribute name</label>
+                              {/* <label className="text-title-field">Tên thuộc tính</label> */}
                               <select className="next-input product-select-attribute-item" disabled>
                                 <option value="">{toCapitalize(option?.name)}</option>
                               </select>
                             </div>
                           </div>
-                          <div className="col-md-5 col-sm-6">
+                          <div className="col-md-4 col-sm-6">
                             <div className="form-group mb-3">
-                              <label className="text-title-field">Value</label>
+                              {/* <label className="text-title-field">Giá trị</label> */}
                               <div className="product-select-attribute-item-value-wrap">
                                 {optionValue[option.id].length > 0 &&
                                   optionValue[option.id].map((optValue) => {
@@ -299,11 +331,26 @@ export default function ProductForm({ initialValue }) {
                                           type="checkbox"
                                           name={option.id}
                                           value={optValue.id}
-                                          checked={variant[option.id]?.includes(
-                                            String(optValue.id),
-                                          )}
+                                          checked={
+                                            optionDatas.findIndex(
+                                              (opt) =>
+                                                opt.valueId === optValue.id &&
+                                                opt.optionId === option.id,
+                                            ) !== -1
+                                          }
                                           onChange={handleCheckbox}
                                         />
+                                        {console.log(
+                                          'zooo',
+                                          optionDatas,
+                                          optValue.id,
+                                          option.id,
+                                          optionDatas.findIndex(
+                                            (opt) =>
+                                              opt.valueId === optValue.id &&
+                                              opt.optionId === option.id,
+                                          ) !== -1,
+                                        )}
                                         {toCapitalize(optValue.name)}
                                       </span>
                                     )
@@ -311,7 +358,33 @@ export default function ProductForm({ initialValue }) {
                               </div>
                             </div>
                           </div>
+
                           <div className="col-md-3 col-sm-6 product-set-item-delete-action">
+                            <div className="form-group mb-3">
+                              {/* <label
+                                htmlFor="price"
+                                className="text-title-field required"
+                                aria-required="true"
+                              >
+                                Giá tiền
+                              </label> */}
+                              <input
+                                className={
+                                  Boolean(error.price) ? 'input__err form-control' : 'form-control'
+                                }
+                                placeholder="Giá tiền"
+                                name="price"
+                                type="number"
+                                value={values?.price}
+                                id="price"
+                                onMouseDown={handleRemoveErr}
+                                onChange={handleChange}
+                              />
+                              <span className={'text__err'}>{error?.price}</span>
+                            </div>
+                          </div>
+
+                          <div className="col-md-2 col-sm-6 product-set-item-delete-action text-end">
                             <div className="form-group mb-3">
                               <label className="text-title-field">&nbsp;</label>
                               <div className="icon__container">
@@ -382,7 +455,11 @@ export default function ProductForm({ initialValue }) {
                         </div>
                         <div className="custom-image-box image-box">
                           <input type="hidden" className="image-data" />
-                          <img src={image.preview} className="preview_image" alt="" />
+                          <img
+                            src={process.env.REACT_APP_IMAGE_URL + image}
+                            className="preview_image"
+                            alt=""
+                          />
                           <div className="image-box-actions"></div>
                         </div>
                       </li>

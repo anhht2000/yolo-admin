@@ -18,27 +18,55 @@ import productApi from 'src/config/productApi'
 import { getAllOption } from 'src/config/productOptionAPI'
 import { fun } from 'src/data/FilterDataPage'
 import { validateDe, validateName, validatePrice } from 'src/helper/CheckData'
+import * as yup from 'yup'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import uploadApi from 'src/config/upload.api'
+
+const createSchema = () =>
+  yup.object().shape({
+    departure_date: yup
+      .string()
+      .nullable()
+      .transform((current, origin) => {
+        return current === '' ? null : moment(current).format('YYYY-MM-DD')
+      }),
+  })
 
 export default function FormAddProduct({ type, initialValue }) {
-  const [values, setValues] = useState({})
-  const [error, setError] = useState({})
-  const [acceptFile, setAcceptFile] = useState([])
-  const history = useHistory()
-  const isLoading = useSelector(getLoading)
-  const [selectData, setSelectData] = useState([])
-  const [selectForm, setSelectForm] = useState('default')
-  const [variantTemp, setVariantTemp] = useState([])
-  const [variantSend, setVariantSend] = useState({})
+  const schema = createSchema()
+  const [images, setImages] = useState([])
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    clearErrors,
+    watch,
+    getValues,
+    setValue,
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {},
+  })
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
-      var Files = Object.assign(acceptFile)
-      var Accept = acceptedFiles.map((item) => {
-        return Object.assign(item, {
-          preview: URL.createObjectURL(item),
-        })
+      acceptedFiles.forEach((file) => {
+        const data = new FormData()
+        data.append('file', file)
+
+        const isUpload = uploadApi.uploadFile(data)
+        console.log(isUpload)
       })
-      setAcceptFile([...Files, ...Accept])
+      // var Files = Object.assign(acceptFile)
+      // var Accept = acceptedFiles.map((item) => {
+      //   return Object.assign(item, {
+      //     preview: URL.createObjectURL(item),
+      //   })
+      // })
+      // setAcceptFile([...Files, ...Accept])
     },
   })
 
@@ -47,101 +75,6 @@ export default function FormAddProduct({ type, initialValue }) {
     setAcceptFile(newArrImage)
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setValues({ ...values, [name]: value })
-  }
-  const handleChangeOptionVariant = (e) => {
-    const data = variantTemp.find((item) => item.id === parseInt(e.target.name))
-    const temp = data.optionValue.find((item) => item.id === parseInt(e.target.value))
-    const newTemp = { ...temp, use: !temp.use }
-    const newData = {
-      ...data,
-      optionValue: data.optionValue.map((item) => (item.id === newTemp.id ? newTemp : item)),
-    }
-    setVariantTemp(variantTemp.map((item) => (newData.id === item.id ? newData : item)))
-
-    if (variantSend[e.target.name]) {
-      const data = variantSend[e.target.name].find((item) => item === e.target.value)
-      if (data) {
-        setVariantSend({
-          ...variantSend,
-          [e.target.name]: [
-            ...variantSend[e.target.name].filter((item) => item !== e.target.value),
-          ],
-        })
-        return
-      }
-      setVariantSend({
-        ...variantSend,
-        [e.target.name]: [...variantSend[e.target.name], e.target.value],
-      })
-      return
-    }
-    setVariantSend({
-      ...variantSend,
-      [e.target.name]: [e.target.value],
-    })
-  }
-
-  const LoadOptions = async () => {
-    try {
-      const { data } = await getAllOption()
-      await fun()
-      setSelectData(data.data)
-    } catch (error) {
-      toast.error(`System error`)
-    }
-  }
-
-  useEffect(() => {
-    LoadOptions()
-  }, [])
-  const handleRemoveErr = ({ target }) => {
-    const { name } = target
-    setError({
-      ...error,
-      [name]: '',
-    })
-  }
-  const handleSubmit = async () => {
-    try {
-      const checkName = validateName(values?.name)
-      const checkDe = validateDe(values?.description)
-      const checkPrice = validatePrice(values.price)
-
-      if (!checkName) {
-        setError((prev) => {
-          return { ...prev, name: 'Bạn phải nhập tên sản phẩm' }
-        })
-      }
-      if (!checkDe) {
-        setError((prev) => {
-          return { ...prev, description: 'Bạn phải nhập miêu tả sản phẩm' }
-        })
-      }
-      if (!checkPrice) {
-        setError((prev) => {
-          return { ...prev, price: 'Bạn phải nhập giá là kiểu số ' }
-        })
-      } else {
-        setError((prev) => {
-          if (Object.values(prev).every((e) => e === '')) {
-            const formdata = new FormData()
-            acceptFile.forEach((item) => {
-              formdata.append('allImg', item)
-            })
-            formdata.append('name', values.name || '')
-            formdata.append('price', values.price || '')
-            formdata.append('description', values.description || '')
-            formdata.append('option', JSON.stringify(variantSend))
-            callApi(formdata)
-          }
-          return prev
-        })
-      }
-    } catch (error) {}
-  }
   const callApi = useCallback(async (formdata) => {
     const data = await productApi.createProduct(formdata)
 
@@ -165,12 +98,11 @@ export default function FormAddProduct({ type, initialValue }) {
             id="name"
             name="name"
             placeholder="Vui lòng nhập tên sản phẩm"
-            className={Boolean(error.name) ? 'input__err' : ''}
-            onMouseDown={handleRemoveErr}
-            defaultValue={values?.name}
-            onChange={(e) => handleChange(e)}
+            className={!!errors?.name ? 'input__err' : ''}
+            {...register('name')}
+            onMouseDown={() => clearErrors('name')}
           />
-          <span className={'text__err'}>{error?.name}</span>
+          <span className={'text__err'}>{errors.name?.message}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">
@@ -181,14 +113,12 @@ export default function FormAddProduct({ type, initialValue }) {
           <CFormInput
             type="text"
             id="price"
-            onMouseDown={handleRemoveErr}
-            className={Boolean(error.price) ? 'input__err' : ''}
             placeholder="Vui lòng nhập giá sản phẩm"
-            name="price"
-            defaultValue={values?.price}
-            onChange={(e) => handleChange(e)}
+            className={!!errors.price ? 'input__err' : ''}
+            {...register('price')}
+            onMouseDown={() => clearErrors('price')}
           />
-          <span className={'text__err'}>{error?.price}</span>
+          <span className={'text__err'}>{errors.price?.message}</span>
         </CCol>
       </CRow>
       <CRow className="mb-3">
@@ -200,17 +130,16 @@ export default function FormAddProduct({ type, initialValue }) {
             type="text"
             id="description"
             placeholder="Vui lòng nhập miêu tả sản phẩm"
-            onMouseDown={handleRemoveErr}
-            className={Boolean(error.description) ? 'input__err' : ''}
-            name="description"
+            className={!!errors.description ? 'input__err' : ''}
+            {...register('description')}
+            onMouseDown={() => clearErrors('description')}
             multiple
-            defaultValue={values?.description}
             onChange={(e) => handleChange(e)}
           />
-          <span className={'text__err'}>{error?.description}</span>
+          <span className={'text__err'}>{errors.description?.message}</span>
         </CCol>
       </CRow>
-      <CRow className="mb-3">
+      {/* <CRow className="mb-3">
         <CFormLabel
           htmlFor="image"
           className="col-sm-2 col-form-label flex-grow-1"
@@ -279,7 +208,7 @@ export default function FormAddProduct({ type, initialValue }) {
                 ))}
             </CCol>
           </CRow>
-        ))}
+        ))} */}
       <CRow className="mb-3">
         <CFormLabel
           htmlFor="image"
@@ -296,13 +225,17 @@ export default function FormAddProduct({ type, initialValue }) {
             </div>
           </div>
           <div className="preview">
-            {acceptFile.map((item, index) => (
+            {images.map((item, index) => (
               <div key={index} className="preview__img__flex">
                 <div>
                   <i className="bx bx-x preview__icon" onClick={() => handleRemoveImage(item)} />
                 </div>
-                <img src={item.preview} alt={index} className="preview__img" />
-                <div className={'preview__title'}>{item.name}</div>
+                <img
+                  src={`${process.env.REACT_APP_IMAGE_URL}${item}`}
+                  alt={index}
+                  className="preview__img"
+                />
+                {/* <div className={'preview__title'}>{item.name}</div> */}
               </div>
             ))}
           </div>
@@ -310,7 +243,7 @@ export default function FormAddProduct({ type, initialValue }) {
       </CRow>
       <CRow className="text-center justify-content-center ">
         <CButton className="w-auto" onClick={handleSubmit}>
-          {isLoading && <CSpinner component="span" size="sm" />}
+          {/* {isLoading && <CSpinner component="span" size="sm" />} */}
           Lưu
         </CButton>
         <CButton
