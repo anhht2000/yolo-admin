@@ -74,13 +74,13 @@ export default function ProductTable(props) {
                       <img
                         style={{ height: '80px', width: '100px', objectFit: 'cover' }}
                         className="hei"
-                        src={process.env.REACT_APP_API_URL + e?.productImg[0]?.imgPath}
+                        src={process.env.REACT_APP_IMAGE_URL + e?.images[0]?.path}
                         alt=""
                       />
                     </CTableDataCell>
                     <CTableDataCell>{e.name}</CTableDataCell>
-                    <CTableDataCell className="row__table">{e.price}</CTableDataCell>
-                    <CTableDataCell>{formatDate(e?.createDate)}</CTableDataCell>
+                    <CTableDataCell className="row__table">{e.product_options[0]?.price}</CTableDataCell>
+                    <CTableDataCell>{formatDate(e?.created_at)}</CTableDataCell>
                     <CTableDataCell>
                       <CIcon
                         icon={cilPencil}
@@ -103,7 +103,7 @@ export default function ProductTable(props) {
           </CTableBody>
         </CTable>
       </CCardBody>
-      {products.length > 0 && (
+      {totalPage > 1 && (
         <Pagination currentPage={currentPage} totalPage={totalPage} changeData={changePage} />
       )}
       <CModal visible={visible.status} onDismiss={() => setVisible({ ...visible, status: false })}>

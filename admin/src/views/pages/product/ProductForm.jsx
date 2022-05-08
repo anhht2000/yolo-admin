@@ -26,8 +26,8 @@ export default function ProductForm({ initialValue }) {
   const [label, setLabel] = useState([])
   const [acceptFile, setAcceptFile] = useState([])
   const dispatch = useDispatch()
-  const option = useSelector(getOption)
-  const optionValue = useSelector(getOptionValue)
+  const options = useSelector(getOption)
+  const optionValues = useSelector(getOptionValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: ['image/*'],
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -67,8 +67,8 @@ export default function ProductForm({ initialValue }) {
   }
   const handleCheckbox = ({ target }) => {
     let { name, value } = target
-    name=Number(name)
-    value=Number(value)
+    name = Number(name)
+    value = Number(value)
 
     if (
       optionDatas.findIndex((option) => option.valueId === value && option.optionId === name) !== -1
@@ -81,27 +81,13 @@ export default function ProductForm({ initialValue }) {
     } else {
       setOptionDatas([...optionDatas, { valueId: value, optionId: name }])
     }
-
-    // if (!variant.hasOwnProperty(`${name}`)) {
-    //   setVariant((prev) => {
-    //     return { ...prev, [name]: [] }
-    //   })
-    //   setVariant((prev) => {
-    //     return { ...prev, [name]: [...prev[name], value] }
-    //   })
-    // } else {
-    //   setVariant((prev) => {
-    //     if (prev[name].includes(value)) {
-    //       return { ...prev, [name]: prev[name].filter((e) => e !== value) }
-    //     } else return { ...prev, [name]: [...prev[name], value] }
-    //   })
-    // }
   }
   const handleClickAddAttribute = () => {
     setError({ ...error, variant: '' })
-    if (numberAttri + 1 <= option.length) {
+    if (numberAttri + 1 <= options.length) {
       setNumberAttri(numberAttri + 1)
-      setCurrentOption(option?.slice(0, numberAttri + 1))
+      setCurrentOption(options?.slice(0, numberAttri + 1))
+      // setOptionDatas(options?.slice(0, numberAttri + 1).map(option=>({optionId:option?.id})))
     }
   }
   const handleRemoveAttribute = (option) => {
@@ -122,9 +108,20 @@ export default function ProductForm({ initialValue }) {
     setValues({ ...values, [name]: value })
   }
 
-  const handleChangeOptionInput = ({ target }) => {
-    const { name, value } = e.target
-    setValues({ ...values, [name]: value })
+  const handleChangeOptionInput = ({ target }, optionId) => {
+    const data = optionDatas.map((option) => {
+      console.log('1', option.id, optionId)
+      if (option.optionId === optionId) {
+        return { ...option, price: target.value }
+      } else return option
+    })
+    setOptionDatas(data)
+    // const optionIndex = optionDatas.findIndex(option.optionId === optionId)
+    // setOptionDatas([
+    //   ...optionDatas.slice(0, optionIndex),
+    //   { ...optionDatas[optionIndex], price: target.value },
+    //   optionDatas.slice(optionIndex + 1),
+    // ])
   }
 
   const handleRemoveErr = ({ target }) => {
@@ -143,14 +140,9 @@ export default function ProductForm({ initialValue }) {
         return { ...prev, name: 'Bạn phải nhập tên sản phẩm' }
       })
     }
-    if (!checkPrice) {
+    if (Object.keys(optionDatas).length < 1) {
       setError((prev) => {
-        return { ...prev, price: 'Bạn phải nhập giá là kiểu số ' }
-      })
-    }
-    if (Object.keys(variant).length < 1) {
-      setError((prev) => {
-        return { ...prev, variant: 'Bạn phải chọn ít nhất là 1 thuộc tính ' }
+        return { ...prev, optionDatas: 'Bạn phải chọn ít nhất là 1 thuộc tính ' }
       })
     }
     if (acceptFile.length < 1) {
@@ -160,21 +152,18 @@ export default function ProductForm({ initialValue }) {
     }
     setError((prev) => {
       if (Object.values(prev).every((e) => e === '')) {
-        const formdata = new FormData()
-        acceptFile.forEach((item) => {
-          formdata.append('images', item)
-        })
-        formdata.append('name', values.name)
-        formdata.append('description', description)
-        formdata.append('status', values.status)
-        formdata.append('label', label)
-        // formdata.append('imageDelete', JSON.stringify(deleteFile))
-        formdata.append('options', JSON.stringify(variant))
-        console.log(variant)
+        const data = {
+          ...values,
+          description,
+          label:label[0]||'NEW',
+          options: JSON.stringify(optionDatas),
+          images: JSON.stringify(acceptFile),
+        }
+        console.log('zooo', data)
         if (initialValue) {
-          callApi(formdata, initialValue?.id)
+          callApi(data, initialValue?.id)
         } else {
-          callApi(formdata)
+          callApi(data)
         }
       }
       return prev
@@ -258,23 +247,6 @@ export default function ProductForm({ initialValue }) {
             </div>
 
             <div className="form-group mb-3">
-              <label htmlFor="price" className="text-title-field required" aria-required="true">
-                Giá tiền
-              </label>
-              <input
-                className={Boolean(error.price) ? 'input__err form-control' : 'form-control'}
-                placeholder="Giá tiền"
-                name="price"
-                type="text"
-                value={values?.price}
-                id="price"
-                onMouseDown={handleRemoveErr}
-                onChange={handleChange}
-              />
-              <span className={'text__err'}>{error?.price}</span>
-            </div>
-
-            <div className="form-group mb-3">
               <label htmlFor="description" className="control-label ">
                 Miêu tả
               </label>
@@ -298,7 +270,7 @@ export default function ProductForm({ initialValue }) {
           <CCardHeader className="d-flex justify-content-between align-items-center">
             <p className="required">Thuộc tính</p>
           </CCardHeader>
-          <CCardBody className={error.variant ? 'card-err' : ''}>
+          <CCardBody className={error.optionDatas ? 'card-err' : ''}>
             {currentOption.length === 0 && (
               <p className="text-secondary">
                 Ấn vào thêm thuộc tính để chọn thuộc tính cho sản phẩm
@@ -323,8 +295,8 @@ export default function ProductForm({ initialValue }) {
                             <div className="form-group mb-3">
                               {/* <label className="text-title-field">Giá trị</label> */}
                               <div className="product-select-attribute-item-value-wrap">
-                                {optionValue[option.id].length > 0 &&
-                                  optionValue[option.id].map((optValue) => {
+                                {optionValues[option.id].length > 0 &&
+                                  optionValues[option.id].map((optValue) => {
                                     return (
                                       <span key={optValue.id} className="me-4">
                                         <input
@@ -340,17 +312,7 @@ export default function ProductForm({ initialValue }) {
                                           }
                                           onChange={handleCheckbox}
                                         />
-                                        {console.log(
-                                          'zooo',
-                                          optionDatas,
-                                          optValue.id,
-                                          option.id,
-                                          optionDatas.findIndex(
-                                            (opt) =>
-                                              opt.valueId === optValue.id &&
-                                              opt.optionId === option.id,
-                                          ) !== -1,
-                                        )}
+
                                         {toCapitalize(optValue.name)}
                                       </span>
                                     )
@@ -378,7 +340,7 @@ export default function ProductForm({ initialValue }) {
                                 value={values?.price}
                                 id="price"
                                 onMouseDown={handleRemoveErr}
-                                onChange={handleChange}
+                                onChange={(e) => handleChangeOptionInput(e, option.id)}
                               />
                               <span className={'text__err'}>{error?.price}</span>
                             </div>
@@ -413,7 +375,7 @@ export default function ProductForm({ initialValue }) {
             </div>
           </CCardBody>
           <CCardBody>
-            {error.variant && <span className="text__err">{error.variant}</span>}
+            {error.optionDatas && <span className="text__err">{error.optionDatas}</span>}
           </CCardBody>
         </CCard>
 

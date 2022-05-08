@@ -2,7 +2,7 @@ import AxiosClient from './axiosClient'
 
 const productApi = {
   getAll: (page) => {
-    const url = 'products/'
+    const url = 'admin/product'
 
     return AxiosClient.get(url, { params: { page: page || 1 } })
   },
@@ -12,7 +12,7 @@ const productApi = {
     return AxiosClient.get(url)
   },
   createProduct: (data) => {
-    const url = 'products/add/'
+    const url = 'admin/product'
 
     return AxiosClient.post(url, data)
   },
@@ -22,7 +22,7 @@ const productApi = {
     return AxiosClient.put(url, data)
   },
   deleteProduct: (id) => {
-    const url = 'products/delete/' + id
+    const url = 'admin/product/' + id
 
     return AxiosClient.delete(url)
   },

@@ -23,7 +23,7 @@ function* getAllProduct({ payload }) {
   try {
     const page = payload || 1
     const product = yield call(productApi.getAll, page)
-    yield put(actionGetAllProductSuccess(product.data))
+    yield put(actionGetAllProductSuccess(product.data?.payload))
   } catch (error) {
     yield put(actionGetAllProductFail())
   }

@@ -20,8 +20,8 @@ const productSlice = createSlice({
     actionGetAllProductSuccess: (state, action) => {
       state.loading = false
       state.data = action.payload.data
-      state.totalPage = action.payload.page.totalPage
-      state.currentPage = action.payload.page.currentPage
+      state.totalPage = action.payload.total
+      state.currentPage = action.payload.page
     },
     actionGetAllProductFail: (state, action) => {
       state.loading = false
