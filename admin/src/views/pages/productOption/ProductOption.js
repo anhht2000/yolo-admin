@@ -25,23 +25,16 @@ const ProductOption = () => {
   const getOptionApi = async (page = 1) => {
     try {
       const response = await getProductOption(page)
-      setOptions(response.data)
+      setOptions(response.data?.payload)
     } catch (err) {
-      toast.error(`Load page ${page} không thành công`)
+      toast.error(`Lấy dữ liệu thất bại`)
     }
   }
 
   const updateOptionApi = async (data) => {
     try {
-      console.log('api', data)
-
-      const response = await updateProductOption(data.name, data.meta, data.id)
-      setOptions({
-        ...options,
-        data: options['data'].map((option) => {
-          return option.id === response.data.data.id ? response.data.data : option
-        }),
-      })
+      await updateProductOption(data.name, data.meta, data.id)
+      getOptionApi()
       toast.info(`Update dữ liệu thành công!`)
     } catch (err) {
       toast.error(`Update thất bại`)
@@ -52,9 +45,9 @@ const ProductOption = () => {
     try {
       await deleteProductOption(id)
       getOptionApi()
-      toast.info(`Xóa dữ liệu thành công`)
+      toast.success(`Xóa dữ liệu thành công`)
     } catch (err) {
-      toast.error(`Proccess xóa gặp vấn đề`)
+      toast.error(`Xóa dữ liệu thất bại`)
     }
   }
 
@@ -62,8 +55,11 @@ const ProductOption = () => {
     try {
       await createProductOption({ name, meta })
       getOptionApi()
+      toast.success(`Thêm giá trị thuộc tính thành công`)
+
     } catch (err) {
-      toast.error(`System Error`)
+      toast.error(`Thêm giá trị thuộc tính thất bại`)
+
     }
   }
 
@@ -87,12 +83,12 @@ const ProductOption = () => {
                 setVisible={setVisible}
                 visible={visible}
                 setViewOption={setViewOption}
-                page={options.page?.currentPage}
-                perPage={options.page?.perPage}
+                page={options?.page}
+                perPage={options?.limit}
               />
             </CCardBody>
             <CCardHeader className="flex_option">
-              {options.data?.length > 0 && (
+              {options?.total > 1 && (
                 <Pagination
                   currentPage={options.page?.currentPage}
                   totalPage={options.page?.totalPage}

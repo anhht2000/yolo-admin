@@ -43,7 +43,7 @@ const OptionsModalAdd = (props) => {
         <CModalTitle>Thêm sản phẩm</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <h4>Tên Options</h4>
+        <h4>Tên thuộc tính</h4>
         <CFormInput
           value={name}
           onChange={(e) => {
@@ -52,7 +52,7 @@ const OptionsModalAdd = (props) => {
           type="text"
           placeholder="Ect... Kích Thước"
         />
-        <h4>Loại Options</h4>
+        <h4>Loại thuộc tính</h4>
         <CFormSelect
           aria-label="Default select example"
           value={meta}

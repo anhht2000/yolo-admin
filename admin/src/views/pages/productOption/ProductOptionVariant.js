@@ -32,11 +32,11 @@ const ProductOptionVariant = (props) => {
         const response = await createOptionVariant(variant, option.id)
         setOption({
           ...option,
-          optionValue: [...option['optionValue'], response.data.data],
+          values: response.data?.payload.values,
         })
-        toast.success(`Thêm dữ liệu thành công`)
+        toast.success(`Thêm gía trị của thuộc tính thành công`)
       } catch (error) {
-        toast.error(`Thêm variant bị lỗi rồi`)
+        toast.error(`Thêm gía trị của thuộc tính thất bại`)
       }
       setVariant('')
     }
@@ -47,11 +47,11 @@ const ProductOptionVariant = (props) => {
       await deleteOptionVariant(option.id, id)
       setOption({
         ...option,
-        optionValue: option['optionValue'].filter((item) => item.id !== id),
+        values: option['values'].filter((item) => item.id !== id),
       })
-      toast.success(`Xóa dữ liệu thành công`)
+      toast.success(`Xóa gía trị của thuộc tính thành công`)
     } catch (err) {
-      toast.error(`Xóa không thành công`)
+      toast.error(`Xóa gía trị của thuộc tính thất bại`)
     }
   }
 
@@ -60,13 +60,11 @@ const ProductOptionVariant = (props) => {
       const response = await updateOptionVariant(name, optionId, variantId)
       setOption({
         ...option,
-        optionValue: option['optionValue'].map((item) =>
-          item.id === response.data.data.id ? response.data.data : item,
-        ),
+        values: response.data?.payload.values,
       })
-      toast.success(`Update dữ liệu thành công`)
+      toast.success(`Cập nhật gía trị của thuộc tính thành công`)
     } catch (err) {
-      toast.error(`Update thất bại `)
+      toast.error(`Cập nhật gía trị của thuộc tính thất bại `)
     }
   }
 
@@ -81,7 +79,7 @@ const ProductOptionVariant = (props) => {
     <>
       <CAccordion activeItemKey={2}>
         <CAccordionItem itemKey={1}>
-          <CAccordionHeader>Variant Of Options: &quot; {option.name} &quot;</CAccordionHeader>
+          <CAccordionHeader>Giá trị của thuộc tính: &quot; {option.name} &quot;</CAccordionHeader>
           <CAccordionBody>
             <CForm className="row g-3">
               <CCol md={3}>
@@ -95,7 +93,7 @@ const ProductOptionVariant = (props) => {
                   onKeyPress={setPress}
                 />
               </CCol>
-              {option?.optionValue.map((item, index) => (
+              {option?.values.map((item, index) => (
                 <CCol
                   md={3}
                   key={index}

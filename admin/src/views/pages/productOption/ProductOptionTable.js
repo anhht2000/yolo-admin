@@ -22,6 +22,7 @@ const ProductOptionTable = (props) => {
     page,
     perPage,
   } = props
+
   return (
     <CTable hover>
       <CTableHead>
@@ -44,7 +45,7 @@ const ProductOptionTable = (props) => {
             <CTableRow align="middle" key={index}>
               <CTableHeaderCell scope="row">{(page - 1) * perPage + index + 1}</CTableHeaderCell>
               <CTableDataCell>{item.name}</CTableDataCell>
-              <CTableDataCell>{item.meta}</CTableDataCell>
+              <CTableDataCell>{item.type}</CTableDataCell>
               <CTableDataCell>{resetDateTime(item.createDate)}</CTableDataCell>
               <CTableDataCell>{resetDateTime(item.updateDate)}</CTableDataCell>
               <CTableDataCell>
@@ -71,6 +72,7 @@ const ProductOptionTable = (props) => {
                     icon={cilAperture}
                     onClick={() => {
                       setViewOption(item)
+
                     }}
                     className="me-2 icon-hover"
                     style={{ height: '15px', width: '15px' }}

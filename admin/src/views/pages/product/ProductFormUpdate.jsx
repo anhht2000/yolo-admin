@@ -12,7 +12,7 @@ import uploadApi from 'src/config/upload.api'
 import { validateName, validatePrice } from 'src/helper/CheckData'
 import { actionGetOption, getOption, getOptionValue } from 'src/redux/slice/productSlice'
 
-export default function ProductForm({ initialValue }) {
+export default function ProductFormUpdate({ initialValue }) {
   const history = useHistory()
   const [values, setValues] = useState({ status: 'draft' })
   const [error, setError] = useState({})
@@ -43,13 +43,6 @@ export default function ProductForm({ initialValue }) {
         }
       })
       setError({ ...error, image: '' })
-
-      // var Accept = acceptedFiles.map((item) => {
-      //   return Object.assign(item, {
-      //     preview: URL.createObjectURL(item),
-      //   })
-      // })
-      // setAcceptFile([...acceptFile, ...Accept])
     },
   })
   const toCapitalize = useCallback(function capitalizeFirstLetter(string) {
@@ -65,7 +58,6 @@ export default function ProductForm({ initialValue }) {
     //   setLabel((prev) => [...prev, id])
     // }
     setLabel(target.id)
-
   }
   const handleCheckbox = ({ target }) => {
     let { name, value } = target
@@ -101,10 +93,13 @@ export default function ProductForm({ initialValue }) {
     }
   }
   const handleRemoveImage = (image) => {
-    const newArrImage = acceptFile.filter((item) => item !== image)
-    // if (image.id)
-    // setDeleteFile([...deleteFile, { id: image.id.toString(), filePath: image.filePath }])
-    setAcceptFile(newArrImage)
+    if (typeof image === 'object') {
+      const newArrImage = acceptFile.filter((item) => item?.id !== image?.id)
+      setAcceptFile(newArrImage)
+    } else {
+      const newArrImage = acceptFile.filter((item) => item !== image)
+      setAcceptFile(newArrImage)
+    }
   }
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -161,7 +156,6 @@ export default function ProductForm({ initialValue }) {
           options: JSON.stringify(optionDatas),
           images: JSON.stringify(acceptFile),
         }
-        console.log('zooo', data)
         if (initialValue) {
           callApi(data, initialValue?.id)
         } else {
@@ -190,43 +184,42 @@ export default function ProductForm({ initialValue }) {
     dispatch(actionGetOption())
   }, [dispatch])
 
-  // useEffect(() => {
-  //   if (initialValue && Object.keys(initialValue).length > 0) {
-  //     console.log('zooodayne',initialValue)
+  useEffect(() => {
+    if (initialValue && Object.keys(initialValue).length > 0) {
+      console.log('zooodayne', initialValue)
 
-  //     const { name, description, status, images, label, product_options } = initialValue
-  //     if (label) {
-  //       const _label = label.split(',')
-  //       setLabel(label)
-  //     }
-  //     setValues({ name, description, status })
-  //     if (images) {
-  //       const dtTest = images.map((e) => ({
-  //         id: e.id,
-  //         path:e.path
-  //       }))
-  //       setAcceptFile(dtTest)
-  //     }
-
-  //     // if (productOption) {
-  //     //   let iniVariant = {}
-  //     //   productOption.forEach((e) => {
-  //     //     if (!iniVariant.hasOwnProperty(e.option.id)) {
-  //     //       iniVariant = { ...iniVariant, [e.option.id]: [] }
-  //     //       iniVariant[e.option.id].push(String(e.optionValue.id))
-  //     //     } else {
-  //     //       iniVariant = {
-  //     //         ...iniVariant,
-  //     //         [e.option.id]: [...iniVariant[e.option.id], String(e.optionValue.id)],
-  //     //       }
-  //     //     }
-  //     //   })
-  //     //   setVariant(iniVariant)
-  //     //   setNumberAttri(Object.keys(iniVariant).length)
-  //     //   setCurrentOption(option?.slice(0, Object.keys(iniVariant).length))
-  //     // }
-  //   }
-  // }, [initialValue])
+      const { name, description, status, images, label, product_options } = initialValue
+      if (label) {
+        const _label = label.split(',')
+        setLabel(label)
+      }
+      setValues({ name, description, status })
+      if (images) {
+        const dtTest = images.map((e) => ({
+          id: e.id,
+          path: e.path,
+        }))
+        setAcceptFile(dtTest)
+      }
+      if (product_options) {
+        let iniVariant = {}
+        let optionDt = []
+        product_options.forEach((e) => {
+          iniVariant = { ...iniVariant, [e.option?.id]: [] }
+          iniVariant[e.option.id].push(String(e.value?.id))
+          optionDt = [
+            ...optionDt,
+            { optionId: e.option.id, valueId: e.value.id, price: e.price, productOtionId: e.id },
+          ]
+        })
+        setOptionDatas(optionDt)
+        setVariant(iniVariant)
+        setNumberAttri(Object.keys(iniVariant).length)
+        setCurrentOption(options?.slice(0, Object.keys(iniVariant).length))
+      }
+    }
+  }, [initialValue])
+  console.log('curr', optionDatas)
   return (
     <div className="row">
       <div className="col-lg-9">
@@ -326,13 +319,6 @@ export default function ProductForm({ initialValue }) {
 
                           <div className="col-md-3 col-sm-6 product-set-item-delete-action">
                             <div className="form-group mb-3">
-                              {/* <label
-                                htmlFor="price"
-                                className="text-title-field required"
-                                aria-required="true"
-                              >
-                                Giá tiền
-                              </label> */}
                               <input
                                 className={
                                   Boolean(error.price) ? 'input__err form-control' : 'form-control'
@@ -340,8 +326,11 @@ export default function ProductForm({ initialValue }) {
                                 placeholder="Giá tiền"
                                 name="price"
                                 type="number"
-                                // value={values?.price}
-                                value={optionDatas?.[option.id]?.price}
+                                value={
+                                  optionDatas?.[
+                                    optionDatas.findIndex((e) => e.optionId == option.id)
+                                  ]?.price
+                                }
                                 id="price"
                                 onMouseDown={handleRemoveErr}
                                 onChange={(e) => handleChangeOptionInput(e, option.id)}
@@ -422,7 +411,11 @@ export default function ProductForm({ initialValue }) {
                         <div className="custom-image-box image-box">
                           <input type="hidden" className="image-data" />
                           <img
-                            src={process.env.REACT_APP_IMAGE_URL + image}
+                            src={
+                              typeof image === 'object'
+                                ? process.env.REACT_APP_IMAGE_URL + image.path
+                                : process.env.REACT_APP_IMAGE_URL + image
+                            }
                             className="preview_image"
                             alt=""
                           />
@@ -533,7 +526,7 @@ export default function ProductForm({ initialValue }) {
                 <label htmlFor="POPULAR">Phổ biến</label>
               </li>
               <li>
-                {console.log('labe', label)}
+                {console.log('labe',label)}
                 <input
                   type="checkbox"
                   id="NEW"

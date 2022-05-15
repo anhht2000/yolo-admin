@@ -7,7 +7,7 @@ const productApi = {
     return AxiosClient.get(url, { params: { page: page || 1 } })
   },
   getOne: (id) => {
-    const url = 'products/' + id
+    const url = 'admin/product/' + id
 
     return AxiosClient.get(url)
   },
@@ -17,7 +17,7 @@ const productApi = {
     return AxiosClient.post(url, data)
   },
   updateProduct: (id, data) => {
-    const url = 'products/edit/' + id
+    const url = 'admin/product/' + id
 
     return AxiosClient.put(url, data)
   },

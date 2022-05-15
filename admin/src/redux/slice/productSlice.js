@@ -34,7 +34,7 @@ const productSlice = createSlice({
     },
     actionGeOneProductSuccess: (state, action) => {
       state.loading = false
-      state.currentProduct = action.payload.data
+      state.currentProduct = action.payload?.product
     },
     actionGeOneProductFail: (state, action) => {
       state.loading = false
