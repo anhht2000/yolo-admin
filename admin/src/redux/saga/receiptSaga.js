@@ -7,7 +7,7 @@ import { actionGetAllReceipt, actionGetAllReceiptSuccess } from '../slice/receip
 function* handleGetAllReceipt({ payload }) {
   try {
     const { data } = yield call(receiptApi.getReceipts, payload)
-    yield put(actionGetAllReceiptSuccess(data))
+    yield put(actionGetAllReceiptSuccess(data?.payload))
   } catch (error) {
     yield put(actionGeOneProductFail())
     toast.error('Lỗi hệ thống')

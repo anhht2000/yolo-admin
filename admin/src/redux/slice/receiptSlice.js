@@ -17,8 +17,8 @@ const receiptSlice = createSlice({
     actionGetAllReceiptSuccess: (state, action) => {
       state.isLoading = false
       state.receipts = action.payload.data
-      state.totalPage = action.payload.page.totalPage
-      state.currentPage = action.payload.page.currentPage
+      state.totalPage = action.payload.page?.data
+      state.currentPage = action.payload.page.page
     },
     actionGetAllReceiptFail: (state, action) => {
       state.isLoading = false

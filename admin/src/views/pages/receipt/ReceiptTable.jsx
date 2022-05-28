@@ -11,6 +11,7 @@ import {
 } from '@coreui/react'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import Pagination from 'src/components/pagination/Pagination'
 import {
   actionGetAllReceipt,
@@ -35,8 +36,16 @@ export default function ReceiptTable({ data }) {
   }
   const handleChangeSelect = async ({ target }) => {
     const { value, name } = target
-    await receiptApi.changeStatusReceipts(name, value)
+    try {
+      const response = await receiptApi.changeStatusReceipts(name, value)
+      if (response.data?.success) {
+        toast.success('Đổi trạng thái hóa đơn thành công')
+      }
+    } catch {
+      toast.error('Đổi trạng thái hóa đơn thất bại')
+    }
   }
+
   return (
     <CCard>
       <CCardBody>
@@ -62,11 +71,16 @@ export default function ReceiptTable({ data }) {
                 return (
                   <CTableRow align="middle" key={index}>
                     <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                    <CTableDataCell>{e?.id}</CTableDataCell>
+                    <CTableDataCell>{e?.receipt_code}</CTableDataCell>
                     <CTableDataCell className="row__table">{e?.user?.phone}</CTableDataCell>
                     <CTableDataCell className="row__table">{e?.user?.address}</CTableDataCell>
-                    <CTableDataCell className="row__table">{e?.totalPrice}</CTableDataCell>
-                    <CTableDataCell>{formatDate(e?.createDate)}</CTableDataCell>
+                    <CTableDataCell className="row__table">
+                      {e?.total_price?.toLocaleString('it-IT', {
+                        style: 'currency',
+                        currency: 'VND',
+                      }) || 0}
+                    </CTableDataCell>
+                    <CTableDataCell>{formatDate(e?.created_at)}</CTableDataCell>
                     <CTableDataCell>
                       <CFormSelect
                         size="sm"
@@ -76,7 +90,7 @@ export default function ReceiptTable({ data }) {
                         onChange={handleChangeSelect}
                       >
                         <option value="success">Thành công</option>
-                        <option value="processing">Đang xử lý</option>
+                        <option value="waiting">Đang xử lý</option>
                         <option value="cancel">Bị hủy</option>
                       </CFormSelect>
                     </CTableDataCell>
@@ -86,7 +100,7 @@ export default function ReceiptTable({ data }) {
           </CTableBody>
         </CTable>
       </CCardBody>
-      {data && (
+      {totalPage > 1 && (
         <Pagination currentPage={currentPage} totalPage={totalPage} changeData={changePage} />
       )}
     </CCard>
