@@ -79,7 +79,12 @@ export default function ProductTable(props) {
                       />
                     </CTableDataCell>
                     <CTableDataCell>{e.name}</CTableDataCell>
-                    <CTableDataCell className="row__table">{e.product_options[0]?.price}</CTableDataCell>
+                    <CTableDataCell className="row__table">
+                      {e.product_options[0]?.price?.toLocaleString('it-IT', {
+                        style: 'currency',
+                        currency: 'VND',
+                      }) || 0}
+                    </CTableDataCell>
                     <CTableDataCell>{formatDate(e?.created_at)}</CTableDataCell>
                     <CTableDataCell>
                       <CIcon

@@ -152,6 +152,7 @@ export default function ProductFormUpdate({ initialValue }) {
         const data = {
           ...values,
           description,
+          number: Number(values.number),
           label: label || 'NEW',
           options: JSON.stringify(optionDatas),
           images: JSON.stringify(acceptFile),
@@ -193,7 +194,7 @@ export default function ProductFormUpdate({ initialValue }) {
         const _label = label.split(',')
         setLabel(label)
       }
-      setValues({ name, description, status })
+      setValues({ name, description, status, number: product_options[0].number })
       if (images) {
         const dtTest = images.map((e) => ({
           id: e.id,
@@ -219,7 +220,6 @@ export default function ProductFormUpdate({ initialValue }) {
       }
     }
   }, [initialValue])
-  console.log('curr', optionDatas)
   return (
     <div className="row">
       <div className="col-lg-9">
@@ -240,6 +240,23 @@ export default function ProductFormUpdate({ initialValue }) {
                 onChange={handleChange}
               />
               <span className={'text__err'}>{error?.name}</span>
+            </div>
+
+            <div className="form-group mb-3">
+              <label htmlFor="name" className="text-title-field required" aria-required="true">
+                Số lượng
+              </label>
+              <input
+                placeholder="Số lượng"
+                name="number"
+                type="text"
+                value={values?.number}
+                className={Boolean(error.number) ? 'input__err form-control' : 'form-control'}
+                id="number"
+                onMouseDown={handleRemoveErr}
+                onChange={handleChange}
+              />
+              <span className={'text__err'}>{error?.number}</span>
             </div>
 
             <div className="form-group mb-3">
@@ -526,7 +543,7 @@ export default function ProductFormUpdate({ initialValue }) {
                 <label htmlFor="POPULAR">Phổ biến</label>
               </li>
               <li>
-                {console.log('labe',label)}
+                {console.log('labe', label)}
                 <input
                   type="checkbox"
                   id="NEW"

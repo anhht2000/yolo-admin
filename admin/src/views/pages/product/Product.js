@@ -71,19 +71,19 @@ const Product = () => {
           <CCol xs={12} sm={8} className="text-end">
             <CForm className="row justify-content-sm-end mt-sm-0 mt-2">
               <CCol xs={6} sm="auto">
-                <CFormSelect name="createDate" onChange={(e) => handleSort(e)}>
+                <CFormSelect name="created_at" onChange={(e) => handleSort(e)}>
                   <option value="">Thời gian</option>
-                  <option value="0">Cũ nhất</option>
-                  <option value="1">Mới nhất</option>
+                  <option value="ASC">Cũ nhất</option>
+                  <option value="DESC">Mới nhất</option>
                 </CFormSelect>
               </CCol>
-              <CCol xs={6} sm="auto">
+              {/* <CCol xs={6} sm="auto">
                 <CFormSelect name="price" onChange={(e) => handleSort(e)}>
                   <option value="">Giá</option>
                   <option value="0">Thấp nhất</option>
                   <option value="1">Cao nhất</option>
                 </CFormSelect>
-              </CCol>
+              </CCol> */}
             </CForm>
           </CCol>
         </CRow>

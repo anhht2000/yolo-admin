@@ -6,14 +6,14 @@ const AppFooter = () => {
     <CFooter>
       <div>
         <a href="http://simstech.vn" target="_blank" rel="noopener noreferrer">
-          SimsTech
+          AnhTuanHoang
         </a>
         <span className="ms-1">&copy; 2021 creativeLabs.</span>
       </div>
       <div className="ms-auto">
         <span className="me-1">Powered by</span>
         <a href="http://simstech.vn" target="_blank" rel="noopener noreferrer">
-          SimsTech
+          AnhTuanHoang
         </a>
       </div>
     </CFooter>

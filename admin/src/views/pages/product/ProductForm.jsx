@@ -157,11 +157,11 @@ export default function ProductForm({ initialValue }) {
         const data = {
           ...values,
           description,
+          number: Number(values.number),
           label: label || 'NEW',
           options: JSON.stringify(optionDatas),
           images: JSON.stringify(acceptFile),
         }
-        console.log('zooo', data)
         if (initialValue) {
           callApi(data, initialValue?.id)
         } else {
@@ -247,6 +247,23 @@ export default function ProductForm({ initialValue }) {
                 onChange={handleChange}
               />
               <span className={'text__err'}>{error?.name}</span>
+            </div>
+
+            <div className="form-group mb-3">
+              <label htmlFor="name" className="text-title-field required" aria-required="true">
+                Số lượng
+              </label>
+              <input
+                placeholder="Số lượng"
+                name="number"
+                type="text"
+                value={values?.number}
+                className={Boolean(error.number) ? 'input__err form-control' : 'form-control'}
+                id="number"
+                onMouseDown={handleRemoveErr}
+                onChange={handleChange}
+              />
+              <span className={'text__err'}>{error?.number}</span>
             </div>
 
             <div className="form-group mb-3">

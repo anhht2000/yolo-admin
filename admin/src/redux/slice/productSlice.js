@@ -46,8 +46,8 @@ const productSlice = createSlice({
     actionSearchProductSuccess: (state, action) => {
       state.loading = false
       state.data = action.payload.data
-      state.totalPage = action.payload.page.totalPage
-      state.currentPage = action.payload.page.currentPage
+      state.totalPage = action.payload.total
+      state.currentPage = action.payload.page
     },
     actionSearchProductFail: (state, action) => {
       state.loading = false
@@ -61,8 +61,8 @@ const productSlice = createSlice({
     actionSortProductSuccess: (state, action) => {
       state.loading = false
       state.data = action.payload.data
-      state.totalPage = action.payload.page.totalPage
-      state.currentPage = action.payload.page.currentPage
+      state.totalPage = action.payload.total
+      state.currentPage = action.payload.page
     },
     actionSortProductFail: (state, action) => {
       state.loading = false
@@ -74,8 +74,6 @@ const productSlice = createSlice({
       state.loading = false
     },
     actionGetOptionSuccess: (state, action) => {
-      console.log('zooo', action)
-
       state.loading = false
       state.optionValue = Object.assign({}, action.payload.filter)
       state.option = action.payload.helper

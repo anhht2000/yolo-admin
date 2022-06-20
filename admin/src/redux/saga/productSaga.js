@@ -39,7 +39,7 @@ function* getOneProduct({ payload }) {
 function* searchProduct({ payload }) {
   try {
     const product = yield call(productApi.searchProduct, payload)
-    yield put(actionSearchProductSuccess(product.data))
+    yield put(actionSearchProductSuccess(product.data?.payload))
   } catch (error) {
     yield put(actionSearchProductFail())
   }
@@ -47,7 +47,7 @@ function* searchProduct({ payload }) {
 function* sortProduct({ payload }) {
   try {
     const product = yield call(productApi.sortProduct, payload.by, payload.order)
-    yield put(actionSortProductSuccess(product.data))
+    yield put(actionSortProductSuccess(product.data?.payload))
   } catch (error) {
     yield put(actionSortProductFail())
   }
