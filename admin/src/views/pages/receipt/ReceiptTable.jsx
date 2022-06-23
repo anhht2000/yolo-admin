@@ -100,6 +100,7 @@ export default function ReceiptTable({ data }) {
           </CTableBody>
         </CTable>
       </CCardBody>
+      {console.log('ttt',totalPage)}
       {totalPage > 1 && (
         <Pagination currentPage={currentPage} totalPage={totalPage} changeData={changePage} />
       )}

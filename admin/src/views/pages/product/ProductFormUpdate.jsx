@@ -187,7 +187,6 @@ export default function ProductFormUpdate({ initialValue }) {
 
   useEffect(() => {
     if (initialValue && Object.keys(initialValue).length > 0) {
-      console.log('zooodayne', initialValue)
 
       const { name, description, status, images, label, product_options } = initialValue
       if (label) {
@@ -215,11 +214,17 @@ export default function ProductFormUpdate({ initialValue }) {
         })
         setOptionDatas(optionDt)
         setVariant(iniVariant)
-        setNumberAttri(Object.keys(iniVariant).length)
-        setCurrentOption(options?.slice(0, Object.keys(iniVariant).length))
+        // setNumberAttri(Object.keys(iniVariant).length)
+        // setCurrentOption(options?.slice(0, Object.keys(iniVariant).length))
+
+        console.log('â', optionDt, iniVariant)
+
+        setNumberAttri(options.length + 1)
+        setCurrentOption(options)
       }
     }
-  }, [initialValue])
+  }, [initialValue, options])
+
   return (
     <div className="row">
       <div className="col-lg-9">
